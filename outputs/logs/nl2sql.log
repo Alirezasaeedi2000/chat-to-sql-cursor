@@ -1,0 +1,394 @@
+2025-09-07 12:12:36,716 INFO chromadb.telemetry.product.posthog: Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-09-07 12:12:37,188 ERROR chromadb.telemetry.product.posthog: Failed to send telemetry event ClientStartEvent: capture() takes 1 positional argument but 3 were given
+2025-09-07 12:12:37,207 ERROR chromadb.telemetry.product.posthog: Failed to send telemetry event ClientCreateCollectionEvent: capture() takes 1 positional argument but 3 were given
+2025-09-07 12:12:52,102 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 12:12:52,102 ERROR chromadb.telemetry.product.posthog: Failed to send telemetry event CollectionQueryEvent: capture() takes 1 positional argument but 3 were given
+2025-09-07 12:12:54,781 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-07 12:12:55,206 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-07 12:12:55,403 INFO query_processor: Executing SQL: SELECT COUNT(`employee`) FROM `employee` LIMIT 1;
+2025-09-07 12:13:05,657 INFO query_processor: Executing SQL: SELECT COUNT(`employee`) FROM `employee` LIMIT 1;
+2025-09-07 12:13:15,395 WARNING query_processor: Initial SQL failed, attempting repair: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'host' ([Errno 11001] getaddrinfo failed)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-09-07 12:13:15,567 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-07 12:13:15,707 INFO query_processor: Executing SQL: SELECT COUNT(`employee`) FROM `employee` LIMIT 50
+2025-09-07 12:13:25,933 INFO query_processor: Executing SQL: SELECT COUNT(`employee`) FROM `employee` LIMIT 50
+2025-09-07 12:13:35,668 ERROR query_processor: SQL repair failed: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'host' ([Errno 11001] getaddrinfo failed)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-09-07 12:16:31,716 INFO chromadb.telemetry.product.posthog: Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-09-07 12:16:31,828 ERROR chromadb.telemetry.product.posthog: Failed to send telemetry event ClientStartEvent: capture() takes 1 positional argument but 3 were given
+2025-09-07 12:16:31,830 ERROR chromadb.telemetry.product.posthog: Failed to send telemetry event ClientCreateCollectionEvent: capture() takes 1 positional argument but 3 were given
+2025-09-07 12:16:41,723 INFO chromadb.telemetry.product.posthog: Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-09-07 12:16:41,814 ERROR chromadb.telemetry.product.posthog: Failed to send telemetry event ClientStartEvent: capture() takes 1 positional argument but 3 were given
+2025-09-07 12:16:41,817 ERROR chromadb.telemetry.product.posthog: Failed to send telemetry event ClientCreateCollectionEvent: capture() takes 1 positional argument but 3 were given
+2025-09-07 12:16:48,358 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 12:16:48,359 ERROR chromadb.telemetry.product.posthog: Failed to send telemetry event CollectionQueryEvent: capture() takes 1 positional argument but 3 were given
+2025-09-07 12:16:48,529 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-07 12:16:48,940 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-07 12:16:49,119 INFO query_processor: Executing SQL: SELECT COUNT(`employee`) FROM `employee` LIMIT 1;
+2025-09-07 12:16:49,622 INFO query_processor: Executing SQL: SELECT COUNT(`employee`) FROM `employee` LIMIT 1;
+2025-09-07 12:16:49,623 WARNING query_processor: Initial SQL failed, attempting repair: (pymysql.err.OperationalError) (1045, "Access denied for user 'username'@'localhost' (using password: YES)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-09-07 12:16:49,735 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-07 12:16:49,870 INFO query_processor: Executing SQL: SELECT COUNT(`employee`) FROM `employee` LIMIT 50
+2025-09-07 12:16:50,385 INFO query_processor: Executing SQL: SELECT COUNT(`employee`) FROM `employee` LIMIT 50
+2025-09-07 12:16:50,388 ERROR query_processor: SQL repair failed: (pymysql.err.OperationalError) (1045, "Access denied for user 'username'@'localhost' (using password: YES)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-09-07 12:17:37,529 INFO chromadb.telemetry.product.posthog: Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-09-07 12:17:37,641 ERROR chromadb.telemetry.product.posthog: Failed to send telemetry event ClientStartEvent: capture() takes 1 positional argument but 3 were given
+2025-09-07 12:17:37,642 ERROR chromadb.telemetry.product.posthog: Failed to send telemetry event ClientCreateCollectionEvent: capture() takes 1 positional argument but 3 were given
+2025-09-07 12:17:44,877 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 12:17:44,878 ERROR chromadb.telemetry.product.posthog: Failed to send telemetry event CollectionQueryEvent: capture() takes 1 positional argument but 3 were given
+2025-09-07 12:17:45,051 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-07 12:17:45,484 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-07 12:17:45,646 INFO query_processor: Executing SQL: SELECT COUNT(`employee`) FROM `employee` LIMIT 1;
+2025-09-07 12:17:46,150 INFO query_processor: Executing SQL: SELECT COUNT(`employee`) FROM `employee` LIMIT 1;
+2025-09-07 12:17:46,152 WARNING query_processor: Initial SQL failed, attempting repair: (pymysql.err.OperationalError) (1045, "Access denied for user 'username'@'localhost' (using password: YES)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-09-07 12:17:46,303 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-07 12:17:46,437 INFO query_processor: Executing SQL: SELECT COUNT(`employee`) FROM `employee` LIMIT 50
+2025-09-07 12:17:46,941 INFO query_processor: Executing SQL: SELECT COUNT(`employee`) FROM `employee` LIMIT 50
+2025-09-07 12:17:46,957 ERROR query_processor: SQL repair failed: (pymysql.err.OperationalError) (1045, "Access denied for user 'username'@'localhost' (using password: YES)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-09-07 12:20:26,800 INFO chromadb.telemetry.product.posthog: Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-09-07 12:20:26,893 ERROR chromadb.telemetry.product.posthog: Failed to send telemetry event ClientStartEvent: capture() takes 1 positional argument but 3 were given
+2025-09-07 12:20:26,895 ERROR chromadb.telemetry.product.posthog: Failed to send telemetry event ClientCreateCollectionEvent: capture() takes 1 positional argument but 3 were given
+2025-09-07 12:20:28,971 INFO chromadb.telemetry.product.posthog: Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-09-07 12:20:29,063 ERROR chromadb.telemetry.product.posthog: Failed to send telemetry event ClientStartEvent: capture() takes 1 positional argument but 3 were given
+2025-09-07 12:20:29,064 ERROR chromadb.telemetry.product.posthog: Failed to send telemetry event ClientCreateCollectionEvent: capture() takes 1 positional argument but 3 were given
+2025-09-07 12:20:38,158 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 12:20:38,159 ERROR chromadb.telemetry.product.posthog: Failed to send telemetry event CollectionQueryEvent: capture() takes 1 positional argument but 3 were given
+2025-09-07 12:20:38,304 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-07 12:20:38,699 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-07 12:20:38,880 INFO query_processor: Executing SQL: SELECT COUNT(`employee`) FROM `employee` LIMIT 1;
+2025-09-07 12:20:39,384 INFO query_processor: Executing SQL: SELECT COUNT(`employee`) FROM `employee` LIMIT 1;
+2025-09-07 12:20:39,388 WARNING query_processor: Initial SQL failed, attempting repair: (pymysql.err.OperationalError) (1045, "Access denied for user 'root'@'localhost' (using password: YES)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-09-07 12:20:39,545 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-07 12:20:39,680 INFO query_processor: Executing SQL: SELECT COUNT(`employee`) FROM `employee` LIMIT 50
+2025-09-07 12:20:40,195 INFO query_processor: Executing SQL: SELECT COUNT(`employee`) FROM `employee` LIMIT 50
+2025-09-07 12:20:40,198 ERROR query_processor: SQL repair failed: (pymysql.err.OperationalError) (1045, "Access denied for user 'root'@'localhost' (using password: YES)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-09-07 12:21:17,202 INFO chromadb.telemetry.product.posthog: Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-09-07 12:21:17,300 ERROR chromadb.telemetry.product.posthog: Failed to send telemetry event ClientStartEvent: capture() takes 1 positional argument but 3 were given
+2025-09-07 12:21:17,302 ERROR chromadb.telemetry.product.posthog: Failed to send telemetry event ClientCreateCollectionEvent: capture() takes 1 positional argument but 3 were given
+2025-09-07 12:22:15,464 INFO chromadb.telemetry.product.posthog: Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-09-07 12:22:15,558 ERROR chromadb.telemetry.product.posthog: Failed to send telemetry event ClientStartEvent: capture() takes 1 positional argument but 3 were given
+2025-09-07 12:22:15,560 ERROR chromadb.telemetry.product.posthog: Failed to send telemetry event ClientCreateCollectionEvent: capture() takes 1 positional argument but 3 were given
+2025-09-07 12:22:15,663 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 12:22:15,762 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 12:22:15,803 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 12:22:15,863 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 12:22:15,911 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 12:22:15,937 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 12:22:15,969 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 12:22:15,997 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 12:22:16,031 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 12:22:16,060 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 12:22:16,086 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 12:22:16,117 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 12:22:16,122 INFO cli: Indexed 12 items into vector store
+2025-09-07 12:22:28,810 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 12:22:28,811 ERROR chromadb.telemetry.product.posthog: Failed to send telemetry event CollectionQueryEvent: capture() takes 1 positional argument but 3 were given
+2025-09-07 12:22:29,127 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-07 12:22:29,619 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-07 12:22:30,596 INFO query_processor: Executing SQL: SELECT COUNT(DISTINCT e.employee_id) 
+FROM `employe` e 
+JOIN `performance` p ON e.id = p.employee_id 
+JOIN `employee_projects` ep ON e.id = ep.employee_id 
+WHERE ep.project_id IN (
+  SELECT project_id 
+  FROM `employee_projects` 
+  GROUP BY project_id 
+  HAVING COUNT(DISTINCT employee_id) > 1
+)
+LIMIT 1;
+2025-09-07 12:22:31,099 INFO query_processor: Executing SQL: SELECT COUNT(DISTINCT e.employee_id) 
+FROM `employe` e 
+JOIN `performance` p ON e.id = p.employee_id 
+JOIN `employee_projects` ep ON e.id = ep.employee_id 
+WHERE ep.project_id IN (
+  SELECT project_id 
+  FROM `employee_projects` 
+  GROUP BY project_id 
+  HAVING COUNT(DISTINCT employee_id) > 1
+)
+LIMIT 1;
+2025-09-07 12:22:31,101 WARNING query_processor: Initial SQL failed, attempting repair: (pymysql.err.OperationalError) (1054, "Unknown column 'e.employee_id' in 'field list'")
+[SQL: SELECT COUNT(DISTINCT e.employee_id) 
+FROM `employe` e 
+JOIN `performance` p ON e.id = p.employee_id 
+JOIN `employee_projects` ep ON e.id = ep.employee_id 
+WHERE ep.project_id IN (
+  SELECT project_id 
+  FROM `employee_projects` 
+  GROUP BY project_id 
+  HAVING COUNT(DISTINCT employee_id) > 1
+)
+LIMIT 1;]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-09-07 12:22:31,424 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-07 12:22:32,394 INFO query_processor: Executing SQL: SELECT COUNT(DISTINCT e.id) 
+FROM `employe` e 
+JOIN `performance` p ON e.id = p.employee_id 
+JOIN `employee_projects` ep ON e.id = ep.employee_id 
+WHERE ep.project_id IN (
+  SELECT project_id 
+  FROM `employee_projects` 
+  GROUP BY project_id 
+  HAVING COUNT(DISTINCT employee_id) > 1
+)
+LIMIT 1;
+2025-09-07 12:23:47,062 INFO chromadb.telemetry.product.posthog: Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-09-07 12:23:47,156 ERROR chromadb.telemetry.product.posthog: Failed to send telemetry event ClientStartEvent: capture() takes 1 positional argument but 3 were given
+2025-09-07 12:23:47,159 ERROR chromadb.telemetry.product.posthog: Failed to send telemetry event ClientCreateCollectionEvent: capture() takes 1 positional argument but 3 were given
+2025-09-07 12:29:54,548 INFO chromadb.telemetry.product.posthog: Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-09-07 12:29:54,959 ERROR chromadb.telemetry.product.posthog: Failed to send telemetry event ClientStartEvent: capture() takes 1 positional argument but 3 were given
+2025-09-07 12:29:54,960 ERROR chromadb.telemetry.product.posthog: Failed to send telemetry event ClientCreateCollectionEvent: capture() takes 1 positional argument but 3 were given
+2025-09-07 12:31:05,189 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 12:31:05,190 ERROR chromadb.telemetry.product.posthog: Failed to send telemetry event CollectionQueryEvent: capture() takes 1 positional argument but 3 were given
+2025-09-07 12:31:07,862 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-07 12:31:08,403 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-07 12:31:09,012 INFO query_processor: Executing SQL: SELECT COUNT(DISTINCT t1.employee_id) FROM `employee_projects` AS t1 JOIN `employe` AS t2 ON t1.employee_id = t2.id JOIN departments AS t3 ON t2.department_id = t3.id LIMIT 10;
+2025-09-07 12:32:53,347 INFO chromadb.telemetry.product.posthog: Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-09-07 12:32:53,454 ERROR chromadb.telemetry.product.posthog: Failed to send telemetry event ClientStartEvent: capture() takes 1 positional argument but 3 were given
+2025-09-07 12:32:53,456 ERROR chromadb.telemetry.product.posthog: Failed to send telemetry event ClientCreateCollectionEvent: capture() takes 1 positional argument but 3 were given
+2025-09-07 12:32:53,537 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 12:32:53,624 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 12:32:53,678 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 12:32:53,747 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 12:32:53,783 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 12:32:53,820 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 12:32:53,859 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 12:32:53,900 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 12:32:53,940 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 12:32:53,980 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 12:32:54,017 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 12:32:54,052 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 12:32:54,056 INFO cli: Indexed 12 items into vector store
+2025-09-07 12:33:02,400 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 12:33:02,400 ERROR chromadb.telemetry.product.posthog: Failed to send telemetry event CollectionQueryEvent: capture() takes 1 positional argument but 3 were given
+2025-09-07 12:33:02,707 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-07 12:33:03,239 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-07 12:33:03,414 INFO query_processor: Executing SQL: SELECT COUNT(DISTINCT employee_id) FROM `performance` LIMIT 50
+2025-09-07 12:41:24,013 INFO chromadb.telemetry.product.posthog: Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-09-07 12:41:24,125 ERROR chromadb.telemetry.product.posthog: Failed to send telemetry event ClientStartEvent: capture() takes 1 positional argument but 3 were given
+2025-09-07 12:41:24,127 ERROR chromadb.telemetry.product.posthog: Failed to send telemetry event ClientCreateCollectionEvent: capture() takes 1 positional argument but 3 were given
+2025-09-07 12:41:33,268 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 12:41:33,269 ERROR chromadb.telemetry.product.posthog: Failed to send telemetry event CollectionQueryEvent: capture() takes 1 positional argument but 3 were given
+2025-09-07 12:41:36,011 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-07 12:41:36,544 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-07 12:41:36,720 INFO query_processor: Executing SQL: SELECT COUNT(DISTINCT employee_id) FROM `performance` LIMIT 50
+2025-09-07 12:42:20,153 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 12:42:20,458 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-07 12:42:20,947 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-07 12:42:21,724 INFO query_processor: Executing SQL: SELECT COUNT(DISTINCT e.id) 
+FROM `employe` e 
+JOIN `employee_projects` ep ON e.id = ep.employee_id 
+WHERE ep.role = 'Lead Developer' OR ep.role = 'Sales Lead' LIMIT 50
+2025-09-07 14:08:08,588 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 14:08:11,711 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-07 14:08:12,407 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-07 14:08:13,190 WARNING query_processor: Initial SQL failed, attempting repair: Multiple statements are not allowed.
+2025-09-07 14:08:13,631 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-07 14:08:14,377 INFO query_processor: Executing SQL: SELECT 
+    e.first_name,
+    e.last_name,
+    p.name AS project_name,
+    ep.role
+FROM 
+    `employe` e
+JOIN 
+    `employee_projects` ep ON e.nid = ep.employee_id
+JOIN 
+    `projects` p ON ep.project_id = p.id LIMIT 50
+2025-09-07 14:08:14,886 INFO query_processor: Executing SQL: SELECT 
+    e.first_name,
+    e.last_name,
+    p.name AS project_name,
+    ep.role
+FROM 
+    `employe` e
+JOIN 
+    `employee_projects` ep ON e.nid = ep.employee_id
+JOIN 
+    `projects` p ON ep.project_id = p.id LIMIT 50
+2025-09-07 14:08:14,887 ERROR query_processor: SQL repair failed: (pymysql.err.OperationalError) (1054, "Unknown column 'e.nid' in 'on clause'")
+[SQL: SELECT 
+    e.first_name,
+    e.last_name,
+    p.name AS project_name,
+    ep.role
+FROM 
+    `employe` e
+JOIN 
+    `employee_projects` ep ON e.nid = ep.employee_id
+JOIN 
+    `projects` p ON ep.project_id = p.id LIMIT 50]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-09-07 14:08:24,032 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 14:08:24,319 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-07 14:08:24,850 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-07 14:08:25,022 INFO query_processor: Executing SQL: SELECT COUNT(DISTINCT employee_id) FROM `performance` LIMIT 50
+2025-09-07 14:09:10,417 INFO chromadb.telemetry.product.posthog: Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-09-07 14:09:10,729 ERROR chromadb.telemetry.product.posthog: Failed to send telemetry event ClientStartEvent: capture() takes 1 positional argument but 3 were given
+2025-09-07 14:09:10,731 ERROR chromadb.telemetry.product.posthog: Failed to send telemetry event ClientCreateCollectionEvent: capture() takes 1 positional argument but 3 were given
+2025-09-07 14:09:10,765 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 14:09:10,841 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 14:09:10,890 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 14:09:10,954 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 14:09:10,984 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 14:09:11,013 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 14:09:11,046 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 14:09:11,078 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 14:09:11,107 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 14:09:11,139 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 14:09:11,166 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 14:09:11,196 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 14:09:11,201 INFO cli: Indexed 12 items into vector store
+2025-09-07 14:09:21,600 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 14:09:21,601 ERROR chromadb.telemetry.product.posthog: Failed to send telemetry event CollectionQueryEvent: capture() takes 1 positional argument but 3 were given
+2025-09-07 14:09:21,893 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-07 14:09:22,344 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-07 14:09:22,813 INFO query_processor: Executing SQL: SELECT COUNT(DISTINCT t1.employee_id) 
+FROM `employee_projects` t1 
+JOIN `performance` t2 ON t1.employee_id = t2.employee_id 
+LIMIT 10;
+2025-09-07 14:10:36,895 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 14:10:37,213 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-07 14:10:37,717 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-07 14:10:38,146 INFO query_processor: Executing SQL: SELECT COUNT(*) 
+FROM `employe` LIMIT 50
+2025-09-07 14:10:52,168 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 14:10:52,428 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-07 14:10:52,961 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-07 14:10:53,154 INFO query_processor: Executing SQL: SELECT COUNT(DISTINCT employee_id) 
+FROM `employee_projects` LIMIT 50
+2025-09-07 14:11:20,522 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 14:11:20,898 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-07 14:11:21,520 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-07 14:11:22,820 INFO query_processor: Executing SQL: SELECT 
+    p.employee_id,
+    COUNT(DISTINCT p.id) AS total_tasks_completed,
+    SUM(p.tasks_completed) AS total_tasks_completed_count,
+    COUNT(DISTINCT p.id) AS total_projects_involved,
+    SUM(p.projects_involved) AS total_projects_involved_count,
+    AVG(p.hours_worked) AS average_hours_worked,
+    AVG(p.client_feedback_score) AS average_client_feedback_score,
+    AVG(p.manager_rating) AS average_manager_rating
+FROM 
+    `performance` p
+GROUP BY 
+    p.employee_id
+LIMIT 10;
+2025-09-07 14:11:23,234 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-07 14:15:08,631 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-07 14:15:09,004 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-07 14:15:09,673 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-07 14:15:11,039 INFO query_processor: Executing SQL: SELECT 
+  e.employee_id,
+  p.name AS project_name,
+  COUNT(DISTINCT ep.nid) AS num_projects,
+  SUM(ep.hours_worked) AS total_hours_worked,
+  AVG(p.budget / 100000.0) AS avg_project_budget
+FROM 
+  `employee_projects` ep
+JOIN 
+  `projects` p ON ep.project_id = p.nid
+JOIN 
+  `performance` pe ON ep.employee_id = pe.employee_id
+GROUP BY 
+  e.employee_id, p.name
+ORDER BY 
+  num_projects DESC
+LIMIT 10;
+2025-09-07 14:15:11,577 INFO query_processor: Executing SQL: SELECT 
+  e.employee_id,
+  p.name AS project_name,
+  COUNT(DISTINCT ep.nid) AS num_projects,
+  SUM(ep.hours_worked) AS total_hours_worked,
+  AVG(p.budget / 100000.0) AS avg_project_budget
+FROM 
+  `employee_projects` ep
+JOIN 
+  `projects` p ON ep.project_id = p.nid
+JOIN 
+  `performance` pe ON ep.employee_id = pe.employee_id
+GROUP BY 
+  e.employee_id, p.name
+ORDER BY 
+  num_projects DESC
+LIMIT 10;
+2025-09-07 14:15:11,579 WARNING query_processor: Initial SQL failed, attempting repair: (pymysql.err.OperationalError) (1054, "Unknown column 'e.employee_id' in 'field list'")
+[SQL: SELECT 
+  e.employee_id,
+  p.name AS project_name,
+  COUNT(DISTINCT ep.nid) AS num_projects,
+  SUM(ep.hours_worked) AS total_hours_worked,
+  AVG(p.budget / 100000.0) AS avg_project_budget
+FROM 
+  `employee_projects` ep
+JOIN 
+  `projects` p ON ep.project_id = p.nid
+JOIN 
+  `performance` pe ON ep.employee_id = pe.employee_id
+GROUP BY 
+  e.employee_id, p.name
+ORDER BY 
+  num_projects DESC
+LIMIT 10;]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-09-07 14:15:11,975 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-07 14:15:13,335 INFO query_processor: Executing SQL: SELECT 
+  e.employee_id,
+  p.name AS project_name,
+  COUNT(DISTINCT ep.nid) AS num_projects,
+  SUM(ep.hours_worked) AS total_hours_worked,
+  AVG(p.budget / 100000.0) AS avg_project_budget
+FROM 
+  `employee_projects` ep
+JOIN 
+  `projects` p ON ep.project_id = p.nid
+JOIN 
+  `performance` pe ON ep.employee_id = pe.employee_id
+GROUP BY 
+  e.employee_id, p.name
+ORDER BY 
+  num_projects DESC
+LIMIT 10;
+2025-09-07 14:15:13,839 INFO query_processor: Executing SQL: SELECT 
+  e.employee_id,
+  p.name AS project_name,
+  COUNT(DISTINCT ep.nid) AS num_projects,
+  SUM(ep.hours_worked) AS total_hours_worked,
+  AVG(p.budget / 100000.0) AS avg_project_budget
+FROM 
+  `employee_projects` ep
+JOIN 
+  `projects` p ON ep.project_id = p.nid
+JOIN 
+  `performance` pe ON ep.employee_id = pe.employee_id
+GROUP BY 
+  e.employee_id, p.name
+ORDER BY 
+  num_projects DESC
+LIMIT 10;
+2025-09-07 14:15:13,840 ERROR query_processor: SQL repair failed: (pymysql.err.OperationalError) (1054, "Unknown column 'e.employee_id' in 'field list'")
+[SQL: SELECT 
+  e.employee_id,
+  p.name AS project_name,
+  COUNT(DISTINCT ep.nid) AS num_projects,
+  SUM(ep.hours_worked) AS total_hours_worked,
+  AVG(p.budget / 100000.0) AS avg_project_budget
+FROM 
+  `employee_projects` ep
+JOIN 
+  `projects` p ON ep.project_id = p.nid
+JOIN 
+  `performance` pe ON ep.employee_id = pe.employee_id
+GROUP BY 
+  e.employee_id, p.name
+ORDER BY 
+  num_projects DESC
+LIMIT 10;]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-09-07 14:15:14,118 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
