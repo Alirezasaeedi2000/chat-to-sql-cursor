@@ -5,28 +5,8 @@ import os
 from typing import Any, Dict, Optional, Callable
 
 from mcp.server import Server
+from mcp.server.models import InitializationOptions
 from mcp.server.stdio import stdio_server
-# Version-tolerant imports without symbol lookups to satisfy Pylance
-try:
-    import mcp.server.models as _mcp_models  # type: ignore[import-not-found]
-except Exception:  # pragma: no cover
-    _mcp_models = None  # type: ignore[assignment]
-try:
-    import mcp.types as _mcp_types  # type: ignore[import-not-found]
-except Exception:  # pragma: no cover
-    _mcp_types = None  # type: ignore[assignment]
-
-# Resolve classes dynamically (may be None if not present)
-InitializationOptions = (
-    getattr(_mcp_models, "InitializationOptions", None) if _mcp_models else None
-) or (
-    getattr(_mcp_types, "InitializationOptions", None) if _mcp_types else None
-)
-NotificationOptions = (
-    getattr(_mcp_models, "NotificationOptions", None) if _mcp_models else None
-) or (
-    getattr(_mcp_types, "NotificationOptions", None) if _mcp_types else None
-)
 
 from query_processor import SafeSqlExecutor, create_engine_from_env
 from vector import VectorStoreManager
@@ -146,7 +126,6 @@ def _load_saved() -> Dict[str, Dict[str, Any]]:
             data = json.load(f)
             if isinstance(data, dict):
                 return data
-            # migrate from old list format if any
             if isinstance(data, list):
                 return {item.get("name", f"q{i}"): item for i, item in enumerate(data)}
     except Exception:
@@ -193,7 +172,6 @@ async def tool_run_saved_query(args: Dict[str, Any]) -> Dict[str, Any]:
     return {"sql": safe_sql, "row_count": len(df), "rows": df.to_dict(orient="records")[:50]}
 
 
-# ---- Registry and compatibility layers ----
 TOOLS: Dict[str, Callable[[Dict[str, Any]], Any]] = {
     "health_check": tool_health_check,
     "get_schema": tool_get_schema,
@@ -243,30 +221,22 @@ if hasattr(server, "method"):
 
 async def main() -> None:
     async with stdio_server() as (read, write):
-        init_opts: Any
-        # Build capabilities robustly across versions
-        caps: Any = None
+        from typing import Any
         try:
-            if hasattr(server, "get_capabilities"):
-                if NotificationOptions is not None:
-                    caps = server.get_capabilities(notification_options=NotificationOptions(), experimental_capabilities={})
-                else:
-                    caps = server.get_capabilities()  # type: ignore[call-arg]
+            # Use NotificationOptions if available; fall back otherwise
+            from mcp.server.models import NotificationOptions  # type: ignore
+            caps: Any = server.get_capabilities(
+                notification_options=NotificationOptions(),  # type: ignore
+                experimental_capabilities={},
+            )
         except Exception:
-            caps = None
-        if caps is None:
             caps = {}
-
-        if InitializationOptions is not None:
-            try:
-                init_opts = InitializationOptions(server_name="mysql-nl2sql", server_version="0.1.0", capabilities=caps)
-            except Exception:
-                init_opts = {"server_name": "mysql-nl2sql", "server_version": "0.1.0", "capabilities": caps}
-        else:
-            init_opts = {"server_name": "mysql-nl2sql", "server_version": "0.1.0", "capabilities": caps}
-
-        await server.run(read, write, init_opts)  # type: ignore[arg-type]
-
-
-if __name__ == "__main__":
-    asyncio.run(main())
+        await server.run(
+            read,
+            write,
+            InitializationOptions(
+                server_name="mysql-nl2sql",
+                server_version="0.1.0",
+                capabilities=caps,  # type: ignore[arg-type]
+            ),
+        )

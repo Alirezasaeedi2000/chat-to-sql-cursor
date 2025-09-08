@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "mysql-nl2sql": {
+      "command": "C:\\Users\\Laptop Markazi\\Desktop\\NL to sql_cursor\\chat-to-sql-cursor-build-production-ready-nlp-to-sql-assistant-75f7\\.venv\\Scripts\\python.exe",
+      "args": ["C:\\Users\\Laptop Markazi\\Desktop\\NL to sql_cursor\\chat-to-sql-cursor-build-production-ready-nlp-to-sql-assistant-75f7\\mcp_sql_server.py"],
+      "env": {
+        "DATABASE_URL": "mysql+pymysql://USER:@127.0.0.1:3306/test_01"
+      }
+    }
+  }
+}
