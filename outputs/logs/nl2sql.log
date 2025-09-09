@@ -622,3 +622,583 @@ GROUP BY
 ORDER BY 
     p1.name, ep1.employee_id
 LIMIT 10;
+2025-09-09 15:20:56,314 INFO chromadb.telemetry.product.posthog: Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-09-09 15:23:43,008 INFO chromadb.telemetry.product.posthog: Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-09-09 15:25:06,955 INFO chromadb.telemetry.product.posthog: Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-09-09 15:25:12,959 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 15:25:13,199 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 15:25:13,502 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 15:25:14,003 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 15:25:14,224 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 15:25:14,380 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 15:25:14,513 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 15:25:14,763 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 15:25:14,978 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 15:25:15,231 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 15:25:15,462 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 15:25:15,629 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 15:25:15,638 INFO cli: Indexed 12 items into vector store
+2025-09-09 15:27:01,609 INFO chromadb.telemetry.product.posthog: Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-09-09 15:27:01,844 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 15:27:01,880 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 15:27:01,937 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 15:27:01,982 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 15:27:02,033 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 15:27:02,068 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 15:27:02,116 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 15:27:02,165 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 15:27:02,222 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 15:27:02,261 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 15:27:02,357 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 15:27:02,396 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 15:27:02,407 INFO cli: Indexed 12 items into vector store
+2025-09-09 15:27:14,866 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 15:27:26,256 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 15:27:27,103 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 15:27:39,031 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ COUNT(DISTINCT e.id) AS num_employees 
+FROM `employe` e 
+JOIN `employee_projects` ep ON e.id = ep.employee_id 
+JOIN `departments` d ON e.department_id = d.id LIMIT 50
+2025-09-09 15:30:16,667 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 15:30:17,300 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 15:30:18,716 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 15:30:21,192 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+  e.first_name, 
+  e.last_name, 
+  e.salary
+FROM 
+  `employe` e
+JOIN 
+  `performance` p ON e.id = p.employee_id
+WHERE 
+  p.tasks_completed > 10
+ORDER BY 
+  p.tasks_completed DESC
+LIMIT 10;
+2025-09-09 15:30:41,765 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 15:30:42,424 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 15:30:44,004 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 15:30:48,861 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    e.first_name,
+    e.last_name,
+    d.name AS department_name,
+    COUNT(p.id) AS num_projects,
+    SUM(e.salary * 1.0 / (12 * 4)) AS avg_salary_per_month
+FROM 
+    employe e
+JOIN 
+    departments d ON e.department_id = d.id
+LEFT JOIN 
+    employee_projects ep ON e.id = ep.employee_id
+LEFT JOIN 
+    projects p ON ep.project_id = p.id
+GROUP BY 
+    e.first_name, e.last_name, d.name
+ORDER BY 
+    num_projects DESC, avg_salary_per_month DESC
+LIMIT 10;
+2025-09-09 15:30:51,931 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 15:33:27,827 INFO chromadb.telemetry.product.posthog: Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-09-09 15:35:11,790 INFO chromadb.telemetry.product.posthog: Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-09-09 15:35:20,708 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 15:35:21,532 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 15:35:23,752 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 15:35:24,235 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ COUNT(*) FROM employe LIMIT 50
+2025-09-09 15:35:24,657 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 15:36:17,929 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 15:36:18,591 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 15:36:26,783 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 15:36:30,553 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ name, salary FROM employe ORDER BY salary DESC LIMIT 10;
+2025-09-09 15:36:31,073 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ name, salary FROM employe ORDER BY salary DESC LIMIT 10;
+2025-09-09 15:36:31,084 WARNING query_processor: Initial SQL failed, attempting repair: (pymysql.err.OperationalError) (1054, "Unknown column 'name' in 'field list'")
+[SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ name, salary FROM employe ORDER BY salary DESC LIMIT 10;]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-09-09 15:36:32,841 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 15:36:33,459 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ `position`, salary FROM `employe` ORDER BY salary DESC LIMIT 10;
+2025-09-09 15:36:43,898 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 15:37:44,748 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 15:37:45,483 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 15:37:47,330 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 15:37:48,984 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ d.name AS department, COUNT(e.id) as employee_count 
+FROM employe e 
+JOIN departments d ON e.department_id = d.id 
+GROUP BY d.name 
+ORDER BY d.name LIMIT 50;
+2025-09-09 15:37:49,620 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 17:17:32,129 INFO chromadb.telemetry.product.posthog: Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-09-09 17:25:29,896 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 17:25:32,743 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 17:25:33,714 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 17:25:33,889 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ COUNT(*) FROM employe LIMIT 50
+2025-09-09 17:25:34,176 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 17:25:55,239 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 17:25:55,666 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 17:25:56,340 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 17:25:56,645 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ first_name, last_name, salary 
+FROM `employe` 
+ORDER BY salary DESC LIMIT 5;
+2025-09-09 17:25:57,738 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 17:26:24,089 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 17:26:24,519 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 17:26:25,292 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 17:26:25,459 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ COUNT(*) as count FROM `employe` LIMIT 50
+2025-09-09 17:26:25,690 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 17:26:51,562 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 17:26:51,995 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 17:26:52,979 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 17:26:53,670 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+  d.name AS department_name,
+  AVG(e.salary) AS average_salary
+FROM 
+  employe e
+JOIN 
+  departments d ON e.department_id = d.id
+GROUP BY 
+  d.name
+ORDER BY 
+  average_salary DESC
+LIMIT 50;
+2025-09-09 17:26:54,279 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 17:28:20,792 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 17:28:21,135 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 17:28:21,876 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 17:28:23,181 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    d.name AS department_name,
+    COUNT(e.id) as total_employees,
+    AVG(p.hours_worked) as avg_hours_worked,
+    MAX(p.hours_worked) as max_hours_worked,
+    MIN(p.hours_worked) as min_hours_worked
+FROM 
+    employe e
+JOIN 
+    departments d ON e.department_id = d.id
+LEFT JOIN 
+    performance p ON e.id = p.employee_id
+GROUP BY 
+    d.name
+ORDER BY 
+    total_employees DESC
+LIMIT 50;
+2025-09-09 17:28:23,746 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 17:32:09,728 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 17:32:10,162 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 17:32:10,939 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 17:32:12,617 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    e.first_name,
+    e.last_name,
+    p.name AS department,
+    AVG(p.client_feedback_score) AS avg_client_feedback_score,
+    AVG(e.salary) AS avg_salary,
+    COUNT(DISTINCT ep.role) AS num_roles,
+    COUNT(DISTINCT e.department_id) AS num_departments
+FROM 
+    employe e
+JOIN 
+    departments d ON e.department_id = d.id
+LEFT JOIN 
+    performance p ON e.id = p.employee_id
+LEFT JOIN 
+    employee_projects ep ON e.id = ep.employee_id
+GROUP BY 
+    e.first_name, e.last_name, p.name
+ORDER BY 
+    avg_client_feedback_score DESC, avg_salary DESC
+LIMIT 50;
+2025-09-09 17:32:13,127 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    e.first_name,
+    e.last_name,
+    p.name AS department,
+    AVG(p.client_feedback_score) AS avg_client_feedback_score,
+    AVG(e.salary) AS avg_salary,
+    COUNT(DISTINCT ep.role) AS num_roles,
+    COUNT(DISTINCT e.department_id) AS num_departments
+FROM 
+    employe e
+JOIN 
+    departments d ON e.department_id = d.id
+LEFT JOIN 
+    performance p ON e.id = p.employee_id
+LEFT JOIN 
+    employee_projects ep ON e.id = ep.employee_id
+GROUP BY 
+    e.first_name, e.last_name, p.name
+ORDER BY 
+    avg_client_feedback_score DESC, avg_salary DESC
+LIMIT 50;
+2025-09-09 17:32:13,129 WARNING query_processor: Initial SQL failed, attempting repair: (pymysql.err.OperationalError) (1054, "Unknown column 'p.name' in 'field list'")
+[SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    e.first_name,
+    e.last_name,
+    p.name AS department,
+    AVG(p.client_feedback_score) AS avg_client_feedback_score,
+    AVG(e.salary) AS avg_salary,
+    COUNT(DISTINCT ep.role) AS num_roles,
+    COUNT(DISTINCT e.department_id) AS num_departments
+FROM 
+    employe e
+JOIN 
+    departments d ON e.department_id = d.id
+LEFT JOIN 
+    performance p ON e.id = p.employee_id
+LEFT JOIN 
+    employee_projects ep ON e.id = ep.employee_id
+GROUP BY 
+    e.first_name, e.last_name, p.name
+ORDER BY 
+    avg_client_feedback_score DESC, avg_salary DESC
+LIMIT 50;]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-09-09 17:32:13,569 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 17:32:15,251 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    e.first_name,
+    e.last_name,
+    d.name AS department,
+    AVG(p.client_feedback_score) AS avg_client_feedback_score,
+    AVG(e.salary) AS avg_salary,
+    COUNT(DISTINCT ep.role) AS num_roles,
+    COUNT(DISTINCT e.department_id) AS num_departments
+FROM 
+    employe e
+JOIN 
+    departments d ON e.department_id = d.id
+LEFT JOIN 
+    performance p ON e.id = p.employee_id
+LEFT JOIN 
+    employee_projects ep ON e.id = ep.employee_id
+GROUP BY 
+    e.first_name, e.last_name, d.name
+ORDER BY 
+    avg_client_feedback_score DESC, avg_salary DESC
+LIMIT 50;
+2025-09-09 17:32:15,966 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 17:36:17,816 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 17:36:18,277 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 17:36:19,132 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 17:36:20,331 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+  e.first_name, 
+  e.last_name, 
+  p.name AS project_name, 
+  p.department_id, 
+  p.status, 
+  e.salary
+FROM 
+  `employe` e
+JOIN 
+  `projects` p ON e.department_id = p.department_id
+WHERE 
+  p.status = 'Ongoing'
+GROUP BY 
+  e.first_name, e.last_name, p.name, p.department_id, p.status, e.salary
+ORDER BY 
+  p.name ASC LIMIT 50
+2025-09-09 17:36:20,958 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 17:37:26,048 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 17:37:26,494 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 17:37:27,426 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 17:37:28,320 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    e.salary,
+    COUNT(DISTINCT p.name) as project_count
+FROM 
+    `employe` e
+JOIN 
+    `employee_projects` ep ON e.id = ep.employee_id
+JOIN 
+    `projects` p ON ep.project_id = p.id
+GROUP BY 
+    e.salary
+ORDER BY 
+    e.salary DESC
+LIMIT 50;
+2025-09-09 17:37:28,386 INFO matplotlib.category: Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-09-09 17:37:28,387 INFO matplotlib.category: Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-09-09 17:37:29,191 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 17:37:50,180 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 17:37:50,640 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 17:37:51,516 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 17:37:52,347 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    e.salary,
+    COUNT(*) as count
+FROM 
+    `employe` e
+JOIN 
+    `employee_projects` ep ON e.id = ep.employee_id
+JOIN 
+    `projects` p ON ep.project_id = p.id
+GROUP BY 
+    e.salary
+ORDER BY 
+    e.salary DESC
+LIMIT 50;
+2025-09-09 17:37:52,415 INFO matplotlib.category: Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-09-09 17:37:52,415 INFO matplotlib.category: Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-09-09 17:37:53,097 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 17:52:52,137 INFO chromadb.telemetry.product.posthog: Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-09-09 17:54:08,993 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 17:54:11,207 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 17:54:11,870 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 17:54:12,890 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ COUNT(*) FROM `employee_projects` AS ep 
+JOIN `employe` AS e ON ep.employee_id = e.id LIMIT 50
+2025-09-09 17:54:27,751 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 17:54:28,165 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 17:54:28,856 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 17:54:30,282 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ d.name AS department_name, COUNT(e.id) AS employee_count 
+FROM `employe` e 
+JOIN departments d ON e.department_id = d.id 
+GROUP BY d.name 
+ORDER BY employee_count DESC 
+LIMIT 50;
+2025-09-09 17:55:15,831 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 17:55:16,274 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 17:55:16,969 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 17:55:17,896 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ position, salary 
+FROM employe 
+ORDER BY salary DESC 
+LIMIT 5;
+2025-09-09 17:55:34,459 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 17:55:34,880 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 17:55:35,594 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 17:55:37,116 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+  d.name AS department_name,
+  AVG(e.salary) AS average_salary
+FROM 
+  departments d
+JOIN 
+  employe e ON d.id = e.department_id
+GROUP BY 
+  d.name
+ORDER BY 
+  average_salary DESC
+LIMIT 50;
+2025-09-09 17:55:37,505 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 17:56:16,892 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 17:56:17,216 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 17:56:17,877 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 17:56:18,663 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ name FROM `departments` LIMIT 50;
+2025-09-09 18:03:26,335 INFO chromadb.telemetry.product.posthog: Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-09-09 18:03:43,859 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 18:03:46,092 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:03:46,821 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:03:47,290 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ COUNT(*) FROM `employe` LIMIT 50
+2025-09-09 18:03:55,957 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 18:03:56,293 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:03:56,930 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:03:57,708 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ COUNT(*) FROM departments LIMIT 50;
+2025-09-09 18:04:06,073 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 18:04:06,421 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:04:07,114 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:04:07,746 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ COUNT(*) FROM `projects` LIMIT 50
+2025-09-09 18:04:26,626 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 18:04:27,010 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:04:27,707 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:04:28,630 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ first_name, last_name, salary 
+FROM `employe` 
+ORDER BY salary DESC 
+LIMIT 10;
+2025-09-09 18:04:40,458 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 18:04:40,800 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:04:41,437 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:04:42,464 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ name FROM `departments` LIMIT 50;
+2025-09-09 18:04:50,427 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 18:04:50,875 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:04:51,552 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:04:52,393 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ first_name, last_name, salary 
+FROM `employe` 
+ORDER BY salary ASC 
+LIMIT 5;
+2025-09-09 18:05:03,253 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 18:05:03,596 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:05:04,335 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:05:05,087 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ p.name, p.status 
+FROM projects p LIMIT 50;
+2025-09-09 18:05:25,996 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 18:05:26,414 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:05:27,115 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:05:28,348 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ d.name, COUNT(e.id) AS employee_count 
+FROM `employe` e JOIN `departments` d ON e.department_id = d.id 
+GROUP BY d.name 
+ORDER BY employee_count DESC 
+LIMIT 50;
+2025-09-09 18:06:01,863 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 18:06:02,324 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:06:03,041 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:06:04,638 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    d.name AS department_name,
+    AVG(e.salary) AS average_salary
+FROM 
+    employe e
+JOIN 
+    departments d ON e.department_id = d.id
+GROUP BY 
+    d.name
+ORDER BY 
+    average_salary DESC
+LIMIT 50;
+2025-09-09 18:07:57,595 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 18:07:57,976 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:07:58,637 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:07:59,562 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ COUNT(*) 
+FROM projects p JOIN employee_projects ep ON p.id = ep.project_id LIMIT 50
+2025-09-09 18:08:25,519 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 18:08:25,968 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:08:26,690 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:08:28,243 INFO query_processor: Using cached result for SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    d.name AS department_name,
+    AVG(e.salary) AS average_salary
+FROM 
+    employe e
+JOIN 
+    departments d ON e.department_id = d.id
+GROUP BY 
+    d.name
+ORDER BY 
+    average_salary DESC
+LIMIT 50;
+2025-09-09 18:08:55,468 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 18:08:55,900 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:08:56,604 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:08:58,109 INFO query_processor: Using cached result for SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+  d.name AS department_name,
+  AVG(e.salary) AS average_salary
+FROM 
+  employe e
+JOIN 
+  departments d ON e.department_id = d.id
+GROUP BY 
+  d.name
+ORDER BY 
+  average_salary DESC
+LIMIT 50;
+2025-09-09 18:08:58,511 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:09:31,871 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 18:09:32,216 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:09:32,902 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:09:34,294 INFO query_processor: Using cached result for SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+  d.name AS department_name,
+  AVG(e.salary) AS average_salary
+FROM 
+  employe e
+JOIN 
+  departments d ON e.department_id = d.id
+GROUP BY 
+  d.name
+ORDER BY 
+  average_salary DESC
+LIMIT 50;
+2025-09-09 18:09:34,601 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:09:46,723 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 18:09:47,149 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:09:47,874 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:09:48,681 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+  e.salary,
+  d.name AS department_name,
+  COUNT(e.id) AS num_employees
+FROM 
+  `employe` e
+JOIN 
+  `departments` d ON e.department_id = d.id
+GROUP BY 
+  e.salary, d.name
+ORDER BY 
+  e.salary DESC
+LIMIT 50;
+2025-09-09 18:09:49,079 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:10:38,464 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 18:10:38,843 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:10:39,456 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:10:40,301 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+  p.name AS department_name, 
+  COUNT(e.id) AS num_employees, 
+  AVG(p.budget / 100000.0) AS avg_budget
+FROM 
+  `projects` p JOIN departments d ON p.department_id = d.id
+GROUP BY 
+  d.name
+ORDER BY 
+  avg_budget DESC
+LIMIT 50;
+2025-09-09 18:10:40,805 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+  p.name AS department_name, 
+  COUNT(e.id) AS num_employees, 
+  AVG(p.budget / 100000.0) AS avg_budget
+FROM 
+  `projects` p JOIN departments d ON p.department_id = d.id
+GROUP BY 
+  d.name
+ORDER BY 
+  avg_budget DESC
+LIMIT 50;
+2025-09-09 18:10:40,807 WARNING query_processor: Initial SQL failed, attempting repair: (pymysql.err.OperationalError) (1054, "Unknown column 'e.id' in 'field list'")
+[SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+  p.name AS department_name, 
+  COUNT(e.id) AS num_employees, 
+  AVG(p.budget / 100000.0) AS avg_budget
+FROM 
+  `projects` p JOIN departments d ON p.department_id = d.id
+GROUP BY 
+  d.name
+ORDER BY 
+  avg_budget DESC
+LIMIT 50;]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-09-09 18:10:41,155 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:10:42,042 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+  p.name AS department_name, 
+  COUNT(ep.employee_id) AS num_employees, 
+  AVG(p.budget / 100000.0) AS avg_budget
+FROM 
+  `projects` p JOIN `employee_projects` ep ON p.id = ep.project_id
+GROUP BY 
+  p.name
+ORDER BY 
+  avg_budget DESC
+LIMIT 50;
+2025-09-09 18:10:42,394 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:14:16,831 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 18:14:17,269 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:14:17,980 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:14:18,722 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    d.name AS department_name,
+    COUNT(e.id) AS num_employees
+FROM 
+    `employe` e
+JOIN 
+    `departments` d ON e.department_id = d.id
+GROUP BY 
+    d.name
+ORDER BY 
+    num_employees DESC
+LIMIT 50;
+2025-09-09 18:14:38,866 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 18:14:39,311 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:14:40,088 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:14:40,954 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ AVG(e.salary) AS average_salary 
+FROM `employe` e JOIN departments d ON e.department_id = d.id LIMIT 50
+2025-09-09 18:15:12,737 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 18:15:13,198 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:15:13,925 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:15:14,691 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    COUNT(DISTINCT e.salary) AS salary_count
+FROM 
+    `employe` e
+ORDER BY 
+    e.salary DESC
+LIMIT 50;
+2025-09-09 18:15:27,060 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-09-09 18:15:27,455 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:15:28,166 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-09 18:15:29,817 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+  e.first_name, 
+  e.last_name, 
+  p.name AS project_name, 
+  p.start_date, 
+  p.end_date, 
+  p.budget, 
+  p.status
+FROM 
+  employe e
+JOIN 
+  employee_projects ep ON e.id = ep.employee_id
+JOIN 
+  projects p ON ep.project_id = p.id
+ORDER BY 
+  p.name ASC LIMIT 50
