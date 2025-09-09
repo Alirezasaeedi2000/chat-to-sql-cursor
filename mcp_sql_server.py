@@ -225,6 +225,12 @@ async def main() -> None:
     # Ensure logging is configured if not already
     if not logging.getLogger().handlers:
         logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
+    # Load .env if present to populate DATABASE_URL
+    try:
+        from dotenv import load_dotenv  # type: ignore
+        load_dotenv()
+    except Exception:
+        pass
     async with stdio_server() as (read, write):
         from typing import Any
         try:
