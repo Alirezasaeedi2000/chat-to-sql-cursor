@@ -7,6 +7,7 @@ from typing import Optional
 
 from query_processor import QueryProcessor, create_engine_from_url
 from vector import VectorStoreManager
+from query_history import QueryHistoryManager
 
 
 def setup_logging() -> None:
@@ -77,6 +78,83 @@ def run_cli(db_url: str, query: Optional[str], mode: Optional[str], export: Opti
     return 0
 
 
+def handle_history_commands(args) -> int:
+    """Handle history-related commands."""
+    setup_logging()
+    logger = logging.getLogger("history")
+    history = QueryHistoryManager()
+    
+    if args.history_clear:
+        history.clear_history()
+        print("Query history cleared.")
+        return 0
+    
+    if args.history_stats:
+        stats = history.get_statistics()
+        print("\n=== Query Statistics ===")
+        print(f"Total queries: {stats['total_queries']}")
+        print(f"Successful: {stats['successful_queries']}")
+        print(f"Failed: {stats['failed_queries']}")
+        print(f"Success rate: {stats['success_rate']:.1%}")
+        print(f"Average execution time: {stats['average_execution_time_ms']:.1f}ms")
+        print(f"Recent queries (7 days): {stats['recent_queries_7_days']}")
+        print(f"Favorites: {stats['favorites_count']}")
+        
+        if stats['mode_distribution']:
+            print("\nMode distribution:")
+            for mode, count in stats['mode_distribution'].items():
+                print(f"  {mode}: {count}")
+        
+        print("\n=== Popular Query Patterns ===")
+        popular = history.get_popular_queries()
+        for i, pattern in enumerate(popular, 1):
+            print(f"{i}. {pattern['example']} (used {pattern['count']} times, {pattern['success_rate']:.1%} success)")
+        
+        return 0
+    
+    if args.history_export:
+        try:
+            filepath = history.export_history(args.history_export)
+            print(f"History exported to: {filepath}")
+        except Exception as e:
+            print(f"Export failed: {e}")
+            return 1
+        return 0
+    
+    # Show recent history
+    search_term = args.history_search if args.history_search else ""
+    entries = history.search_history(query=search_term, limit=20)
+    
+    if not entries:
+        print("No history entries found.")
+        return 0
+    
+    print(f"\n=== Query History {'(Search: ' + search_term + ')' if search_term else ''} ===")
+    for entry in entries:
+        status = "✓" if entry.error is None else "✗"
+        favorite = "★" if entry.is_favorite else " "
+        timestamp = entry.timestamp.split('T')[0]  # Just date
+        
+        print(f"\n{status} {favorite} [{entry.id}] {timestamp}")
+        print(f"Query: {entry.user_query}")
+        if entry.sql_query:
+            print(f"SQL: {entry.sql_query[:100]}{'...' if len(entry.sql_query) > 100 else ''}")
+        print(f"Mode: {entry.mode} | Rows: {entry.row_count or 0} | Time: {entry.execution_time_ms or 0:.1f}ms")
+        if entry.tags:
+            print(f"Tags: {', '.join(entry.tags)}")
+        if entry.error:
+            print(f"Error: {entry.error[:200]}{'...' if len(entry.error) > 200 else ''}")
+    
+    return 0
+
+
+def run_web_server() -> int:
+    """Run the web interface server."""
+    setup_logging()
+    from web_server import main as web_main
+    return web_main()
+
+
 def run_server() -> int:
     setup_logging()
     import subprocess
@@ -95,10 +173,26 @@ def main() -> int:
     parser.add_argument("--export", help="Export format: csv|json", required=False)
     parser.add_argument("--build-index", help="Build or refresh the vector index", action="store_true")
     parser.add_argument("--server", help="Run MCP stdio server", action="store_true")
+    parser.add_argument("--web", help="Run web interface", action="store_true")
+    
+    # History commands
+    parser.add_argument("--history", help="Show query history", action="store_true")
+    parser.add_argument("--history-search", help="Search query history", type=str)
+    parser.add_argument("--history-stats", help="Show query statistics", action="store_true")
+    parser.add_argument("--history-export", help="Export history (json|csv)", type=str)
+    parser.add_argument("--history-clear", help="Clear all history", action="store_true")
+    
     args = parser.parse_args()
 
     if args.server:
         return run_server()
+
+    if args.web:
+        return run_web_server()
+
+    # Handle history commands that don't need database
+    if args.history or args.history_search or args.history_stats or args.history_export or args.history_clear:
+        return handle_history_commands(args)
 
     db_url = args.db_url or os.environ.get("DATABASE_URL")
     if not db_url:

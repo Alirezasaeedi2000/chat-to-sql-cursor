@@ -2,6 +2,9 @@ import json
 import logging
 import os
 import re
+import hashlib
+import pickle
+import time
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple, cast
@@ -17,6 +20,7 @@ from langchain_ollama import ChatOllama
 
 from vector import VectorStoreManager, RetrievedContext
 import mcp_handler
+from query_history import QueryHistoryManager
 
 
 LOGGER = logging.getLogger(__name__)
@@ -27,6 +31,7 @@ def ensure_dirs() -> None:
     os.makedirs("outputs/exports", exist_ok=True)
     os.makedirs("outputs/plots", exist_ok=True)
     os.makedirs("outputs/logs", exist_ok=True)
+    os.makedirs("outputs/cache", exist_ok=True)
 
 
 def create_engine_from_url(db_url: str) -> Engine:
@@ -34,6 +39,12 @@ def create_engine_from_url(db_url: str) -> Engine:
     if db_url.startswith("mysql+"):
         connect_args["connect_timeout"] = 10
         connect_args["charset"] = "utf8mb4"
+    elif db_url.startswith("postgresql+"):
+        connect_args["connect_timeout"] = 10
+    elif db_url.startswith("sqlite+"):
+        # SQLite specific optimizations
+        connect_args["check_same_thread"] = False
+    
     engine = create_engine(
         db_url,
         pool_pre_ping=True,
@@ -41,6 +52,7 @@ def create_engine_from_url(db_url: str) -> Engine:
         pool_size=5,
         max_overflow=10,
         connect_args=connect_args,
+        echo=False,  # Set to True for SQL debugging
     )
     return engine
 
@@ -49,7 +61,23 @@ def create_engine_from_env() -> Engine:
     db_url = os.environ.get("DATABASE_URL")
     if not db_url:
         raise RuntimeError("DATABASE_URL environment variable is not set.")
-    return create_engine_from_url(db_url)
+    
+    # Test the connection with better error messaging
+    try:
+        engine = create_engine_from_url(db_url)
+        # Test connection
+        with engine.connect() as conn:
+            conn.execute(text("SELECT 1"))
+        return engine
+    except Exception as e:
+        if "Access denied" in str(e):
+            raise RuntimeError(f"Database authentication failed. Please check your DATABASE_URL credentials: {e}")
+        elif "Can't connect" in str(e) or "Connection refused" in str(e):
+            raise RuntimeError(f"Cannot connect to database server. Please verify the host and port in DATABASE_URL: {e}")
+        elif "Unknown database" in str(e):
+            raise RuntimeError(f"Database does not exist. Please check the database name in DATABASE_URL: {e}")
+        else:
+            raise RuntimeError(f"Database connection failed: {e}")
 
 
 def _strip_code_fences(text_value: str) -> str:
@@ -119,14 +147,75 @@ class SqlValidationError(Exception):
     pass
 
 
+class QueryCache:
+    """Simple file-based cache for query results with TTL support."""
+    
+    def __init__(self, cache_dir: str = "outputs/cache", ttl_seconds: int = 3600):
+        self.cache_dir = cache_dir
+        self.ttl_seconds = ttl_seconds
+        ensure_dirs()
+    
+    def _get_cache_key(self, sql: str) -> str:
+        """Generate a cache key from SQL query."""
+        normalized = re.sub(r'\s+', ' ', sql.strip().lower())
+        return hashlib.md5(normalized.encode()).hexdigest()
+    
+    def _get_cache_path(self, cache_key: str) -> str:
+        return os.path.join(self.cache_dir, f"{cache_key}.pkl")
+    
+    def get(self, sql: str) -> Optional[Tuple[pd.DataFrame, str]]:
+        """Get cached result if exists and not expired."""
+        try:
+            cache_key = self._get_cache_key(sql)
+            cache_path = self._get_cache_path(cache_key)
+            
+            if not os.path.exists(cache_path):
+                return None
+            
+            # Check if expired
+            if time.time() - os.path.getmtime(cache_path) > self.ttl_seconds:
+                try:
+                    os.remove(cache_path)
+                except:
+                    pass
+                return None
+            
+            with open(cache_path, 'rb') as f:
+                return pickle.load(f)
+        except Exception as e:
+            LOGGER.debug(f"Cache get failed: {e}")
+            return None
+    
+    def set(self, sql: str, result: Tuple[pd.DataFrame, str]) -> None:
+        """Cache the query result."""
+        try:
+            cache_key = self._get_cache_key(sql)
+            cache_path = self._get_cache_path(cache_key)
+            
+            with open(cache_path, 'wb') as f:
+                pickle.dump(result, f)
+        except Exception as e:
+            LOGGER.debug(f"Cache set failed: {e}")
+    
+    def clear(self) -> None:
+        """Clear all cached results."""
+        try:
+            for file in os.listdir(self.cache_dir):
+                if file.endswith('.pkl'):
+                    os.remove(os.path.join(self.cache_dir, file))
+        except Exception as e:
+            LOGGER.debug(f"Cache clear failed: {e}")
+
+
 class SafeSqlExecutor:
     """Guards and executes SELECT-only SQL with LIMIT enforcement and timeouts."""
 
-    def __init__(self, engine: Engine, default_limit: int = 50, max_limit: int = 1000, timeout_secs: int = 30) -> None:
+    def __init__(self, engine: Engine, default_limit: int = 50, max_limit: int = 1000, timeout_secs: int = 30, enable_cache: bool = True) -> None:
         self.engine = engine
         self.default_limit = default_limit
         self.max_limit = max_limit
         self.timeout_secs = timeout_secs
+        self.cache = QueryCache() if enable_cache else None
 
     def validate_select_only(self, sql: str) -> None:
         stripped = sql.strip().rstrip(";")
@@ -144,11 +233,31 @@ class SafeSqlExecutor:
         forbidden = [
             "INSERT", "UPDATE", "DELETE", "CREATE", "DROP", "ALTER", "TRUNCATE", "REPLACE",
             "MERGE", "GRANT", "REVOKE", "CALL", "USE", "SET", "SHOW", "DESCRIBE", "EXPLAIN ",
+            # Exfiltration / file I/O vectors
+            "OUTFILE", "DUMPFILE", "LOAD_FILE", "LOAD DATA", "INFILE", "INTO OUTFILE", "INTO DUMPFILE",
         ]
         if any(f in keywords for f in forbidden):
             raise SqlValidationError("Only SELECT queries are allowed.")
         if not (" SELECT " in f" {keywords} " or keywords.strip().startswith("SELECT") or "WITH" in keywords):
             raise SqlValidationError("Query must be a SELECT.")
+
+    def _inject_exec_timeout_hint(self, sql: str) -> str:
+        """Inject MySQL MAX_EXECUTION_TIME hint after the first SELECT if absent.
+
+        This is a no-op for databases that ignore MySQL hints; safe to include for MySQL dialects.
+        """
+        try:
+            if re.search(r"MAX_EXECUTION_TIME\s*\(", sql, flags=re.IGNORECASE):
+                return sql
+            # Find the first SELECT keyword and inject the hint right after it
+            match = re.search(r"\bSELECT\b", sql, flags=re.IGNORECASE)
+            if not match:
+                return sql
+            ms = max(int(self.timeout_secs * 1000), 1)
+            start, end = match.span()
+            return sql[:end] + f" /*+ MAX_EXECUTION_TIME({ms}) */" + sql[end:]
+        except Exception:
+            return sql
 
     def _clamp_or_inject_limit(self, sql: str) -> str:
         # crude but effective LIMIT detection and clamping
@@ -171,11 +280,27 @@ class SafeSqlExecutor:
     @retry(stop=stop_after_attempt(2), wait=wait_exponential(multiplier=0.5, min=0.5, max=2.0), reraise=True, retry=retry_if_exception_type(SQLAlchemyError))
     def execute_select(self, sql: str) -> Tuple[pd.DataFrame, str]:
         self.validate_select_only(sql)
-        safe_sql = self._clamp_or_inject_limit(sql)
+        hinted = self._inject_exec_timeout_hint(sql)
+        safe_sql = self._clamp_or_inject_limit(hinted)
+        
+        # Check cache first
+        if self.cache:
+            cached_result = self.cache.get(safe_sql)
+            if cached_result is not None:
+                LOGGER.info("Using cached result for SQL: %s", safe_sql)
+                return cached_result
+        
         LOGGER.info("Executing SQL: %s", safe_sql)
         with self.engine.connect() as conn:
             df = pd.read_sql(text(safe_sql), conn)
-        return df, safe_sql
+        
+        result = (df, safe_sql)
+        
+        # Cache the result
+        if self.cache:
+            self.cache.set(safe_sql, result)
+        
+        return result
 
     def explain(self, sql: str) -> pd.DataFrame:
         self.validate_select_only(sql)
@@ -260,6 +385,7 @@ class QueryProcessor:
         self.vector_manager = vector_manager
         self.llm = ChatOllama(model=model_name, temperature=temperature)
         self.safe_exec = SafeSqlExecutor(engine, default_limit=default_limit, max_limit=max_limit, timeout_secs=timeout_secs)
+        self.history = QueryHistoryManager()
 
     def _detect_mode(self, user_query: str, context: RetrievedContext, prefer_mode: Optional[str]) -> str:
         if prefer_mode:
@@ -322,34 +448,92 @@ class QueryProcessor:
                 return str(df[name].iloc[0])
         return str(df.iloc[0, 0])
 
-    def _maybe_visualize(self, df: pd.DataFrame, title: str) -> Optional[str]:
+    def _maybe_visualize(self, df: pd.DataFrame, title: str, user_query: str = "") -> Optional[str]:
         if df is None or df.empty or df.shape[1] < 2:
             return None
         try:
             import matplotlib.pyplot as plt
+            import seaborn as sns
+            
+            # Set up the plotting style
+            plt.style.use('seaborn-v0_8' if 'seaborn-v0_8' in plt.style.available else 'default')
+            sns.set_palette("husl")
+            
             x_col = df.columns[0]
             y_candidates = [c for c in df.columns[1:] if pd.api.types.is_numeric_dtype(df[c])]
             if not y_candidates:
                 return None
             y_col = y_candidates[0]
-            fig, ax = plt.subplots(figsize=(8, 4.5))
-            # choose line for datetime-like x
-            if pd.api.types.is_datetime64_any_dtype(df[x_col]) or "date" in x_col.lower():
-                ax.plot(df[x_col], df[y_col], marker="o")
-            else:
-                ax.bar(df[x_col].astype(str), df[y_col])
+            
+            # Determine chart type based on data and query hints
+            chart_type = self._determine_chart_type(df, x_col, y_col, user_query)
+            
+            fig, ax = plt.subplots(figsize=(10, 6))
+            
+            if chart_type == "line":
+                ax.plot(df[x_col], df[y_col], marker="o", linewidth=2, markersize=6)
+            elif chart_type == "scatter":
+                ax.scatter(df[x_col], df[y_col], alpha=0.6, s=50)
+            elif chart_type == "pie":
+                # For pie charts, use the first column as labels
+                df_top = df.head(10)  # Limit to top 10 for readability
+                ax.pie(df_top[y_col], labels=df_top[x_col], autopct='%1.1f%%', startangle=90)
+                ax.axis('equal')
+            elif chart_type == "histogram":
+                ax.hist(df[y_col], bins=min(20, len(df)//2), alpha=0.7, edgecolor='black')
+            else:  # Default bar chart
+                colors = plt.cm.Set3(range(len(df)))
+                bars = ax.bar(df[x_col].astype(str), df[y_col], color=colors, alpha=0.8)
                 ax.tick_params(axis='x', labelrotation=45)
-            ax.set_title(title)
-            ax.set_xlabel(x_col)
-            ax.set_ylabel(y_col)
+                
+                # Add value labels on bars if not too many
+                if len(df) <= 15:
+                    for bar, value in zip(bars, df[y_col]):
+                        height = bar.get_height()
+                        ax.text(bar.get_x() + bar.get_width()/2., height,
+                               f'{value:.1f}' if isinstance(value, float) else str(value),
+                               ha='center', va='bottom')
+            
+            ax.set_title(title, fontsize=14, fontweight='bold', pad=20)
+            if chart_type != "pie":
+                ax.set_xlabel(x_col, fontsize=12)
+                ax.set_ylabel(y_col, fontsize=12)
+                ax.grid(True, alpha=0.3)
+            
             plt.tight_layout()
             path = os.path.join("outputs", "plots", f"viz_{datetime.utcnow().strftime('%Y%m%d_%H%M%S_%f')}.png")
-            plt.savefig(path)
+            plt.savefig(path, dpi=300, bbox_inches='tight')
             plt.close(fig)
             return path
         except Exception as exc:
             LOGGER.warning("Visualization failed: %s", exc)
             return None
+    
+    def _determine_chart_type(self, df: pd.DataFrame, x_col: str, y_col: str, user_query: str) -> str:
+        """Determine the best chart type based on data characteristics and user query."""
+        query_lower = user_query.lower()
+        
+        # Check for explicit chart type requests
+        if any(word in query_lower for word in ["pie", "donut"]):
+            return "pie"
+        if any(word in query_lower for word in ["scatter", "correlation"]):
+            return "scatter"
+        if any(word in query_lower for word in ["histogram", "distribution"]):
+            return "histogram"
+        if any(word in query_lower for word in ["line", "trend", "over time"]):
+            return "line"
+        
+        # Automatic detection based on data
+        if pd.api.types.is_datetime64_any_dtype(df[x_col]) or "date" in x_col.lower() or "time" in x_col.lower():
+            return "line"
+        
+        # For small datasets with categories, consider pie chart
+        if len(df) <= 10 and not pd.api.types.is_numeric_dtype(df[x_col]):
+            if any(word in query_lower for word in ["share", "percentage", "proportion", "breakdown"]):
+                return "pie"
+        
+        # Default to bar chart
+        return "bar"
 
     def _analysis_narrative(self, user_query: str, df: pd.DataFrame, sql: str, context: RetrievedContext) -> str:
         sys_prompt = mcp_handler.build_analytical_prompt()
@@ -372,15 +556,19 @@ class QueryProcessor:
             return "Unable to generate analytical summary."
 
     def process(self, user_query: str, prefer_mode: Optional[str] = None, export: Optional[str] = None) -> NL2SQLOutput:
+        start_time = time.time()
         context = self.vector_manager.similarity_search(user_query, top_k=8)
         mode = self._detect_mode(user_query, context, prefer_mode)
         sql = self._generate_sql(user_query, context, mode)
         df: Optional[pd.DataFrame] = None
         executed_sql = None
+        error_msg: Optional[str] = None
+        
         if sql:
             try:
                 df, executed_sql = self.safe_exec.execute_select(sql)
             except Exception as exc:
+                error_msg = str(exc)
                 LOGGER.warning("Initial SQL failed, attempting repair: %s", exc)
                 # single-shot repair attempt
                 repair_prompt = mcp_handler.build_sql_repair_prompt()
@@ -398,8 +586,10 @@ class QueryProcessor:
                     if repaired_sql:
                         df, executed_sql = self.safe_exec.execute_select(repaired_sql)
                         sql = repaired_sql
+                        error_msg = None  # Clear error since repair succeeded
                 except Exception as exc2:
                     LOGGER.error("SQL repair failed: %s", exc2)
+                    error_msg = f"Original error: {exc}. Repair failed: {exc2}"
 
         table_md = self._format_table(df) if df is not None else None
         short_answer = self._short_answer_from_df(df) if df is not None else None
@@ -407,7 +597,7 @@ class QueryProcessor:
         analysis: Optional[str] = None
 
         if mode in ("VISUALIZATION", "COMBO") and df is not None:
-            viz_path = self._maybe_visualize(df, title=user_query)
+            viz_path = self._maybe_visualize(df, title=user_query, user_query=user_query)
         if mode in ("ANALYTICAL", "COMBO"):
             analysis = self._analysis_narrative(user_query, df if df is not None else pd.DataFrame(), sql or "", context)
 
@@ -422,6 +612,19 @@ class QueryProcessor:
             except Exception as exc:
                 LOGGER.warning("Export failed: %s", exc)
 
+        # Calculate execution time
+        execution_time_ms = (time.time() - start_time) * 1000
+        
+        # Add to history
+        history_id = self.history.add_entry(
+            user_query=user_query,
+            sql_query=executed_sql or sql,
+            mode=mode,
+            execution_time_ms=execution_time_ms,
+            row_count=len(df) if df is not None else 0,
+            error=error_msg
+        )
+        
         return NL2SQLOutput(
             mode=mode,
             sql=executed_sql or sql,
@@ -431,6 +634,8 @@ class QueryProcessor:
             visualization_path=viz_path,
             metadata={
                 "row_count": int(len(df)) if df is not None else 0,
+                "execution_time_ms": execution_time_ms,
+                "history_id": history_id,
             },
         )
 

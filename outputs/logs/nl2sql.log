@@ -392,3 +392,233 @@ ORDER BY
 LIMIT 10;]
 (Background on this error at: https://sqlalche.me/e/20/e3q8)
 2025-09-07 14:15:14,118 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-08 16:52:03,449 INFO chromadb.telemetry.product.posthog: Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-09-08 16:52:03,744 ERROR chromadb.telemetry.product.posthog: Failed to send telemetry event ClientStartEvent: capture() takes 1 positional argument but 3 were given
+2025-09-08 16:52:03,746 ERROR chromadb.telemetry.product.posthog: Failed to send telemetry event ClientCreateCollectionEvent: capture() takes 1 positional argument but 3 were given
+2025-09-08 16:52:16,577 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-08 16:52:16,578 ERROR chromadb.telemetry.product.posthog: Failed to send telemetry event CollectionQueryEvent: capture() takes 1 positional argument but 3 were given
+2025-09-08 16:52:18,855 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-08 16:52:19,364 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-08 16:52:19,788 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ COUNT(*) 
+FROM `employe` LIMIT 50
+2025-09-08 16:52:49,738 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-08 16:52:49,963 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-08 16:52:50,429 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-08 16:52:51,361 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    d.name AS department_name,
+    e.name AS employee_name,
+    COUNT(ep.role) AS num_projects
+FROM 
+    `departments` d
+JOIN 
+    `employee_projects` ep ON d.id = ep.employee_id
+JOIN 
+    `employees` e ON ep.employee_id = e.id
+GROUP BY 
+    d.name, e.name
+ORDER BY 
+    d.name, e.name
+LIMIT 10;
+2025-09-08 16:52:51,868 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    d.name AS department_name,
+    e.name AS employee_name,
+    COUNT(ep.role) AS num_projects
+FROM 
+    `departments` d
+JOIN 
+    `employee_projects` ep ON d.id = ep.employee_id
+JOIN 
+    `employees` e ON ep.employee_id = e.id
+GROUP BY 
+    d.name, e.name
+ORDER BY 
+    d.name, e.name
+LIMIT 10;
+2025-09-08 16:52:51,869 WARNING query_processor: Initial SQL failed, attempting repair: (pymysql.err.ProgrammingError) (1146, "Table 'test_01.employees' doesn't exist")
+[SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    d.name AS department_name,
+    e.name AS employee_name,
+    COUNT(ep.role) AS num_projects
+FROM 
+    `departments` d
+JOIN 
+    `employee_projects` ep ON d.id = ep.employee_id
+JOIN 
+    `employees` e ON ep.employee_id = e.id
+GROUP BY 
+    d.name, e.name
+ORDER BY 
+    d.name, e.name
+LIMIT 10;]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-09-08 16:52:52,130 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-08 16:52:53,085 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    d.name AS department_name,
+    e.name AS employee_name,
+    COUNT(ep.role) AS num_projects
+FROM 
+    `departments` d
+JOIN 
+    `employee_projects` ep ON d.id = ep.employee_id
+JOIN 
+    `employees` e ON ep.employee_id = e.id
+GROUP BY 
+    d.name, e.name
+ORDER BY 
+    d.name, e.name
+LIMIT 10;
+2025-09-08 16:52:53,589 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    d.name AS department_name,
+    e.name AS employee_name,
+    COUNT(ep.role) AS num_projects
+FROM 
+    `departments` d
+JOIN 
+    `employee_projects` ep ON d.id = ep.employee_id
+JOIN 
+    `employees` e ON ep.employee_id = e.id
+GROUP BY 
+    d.name, e.name
+ORDER BY 
+    d.name, e.name
+LIMIT 10;
+2025-09-08 16:52:53,591 ERROR query_processor: SQL repair failed: (pymysql.err.ProgrammingError) (1146, "Table 'test_01.employees' doesn't exist")
+[SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    d.name AS department_name,
+    e.name AS employee_name,
+    COUNT(ep.role) AS num_projects
+FROM 
+    `departments` d
+JOIN 
+    `employee_projects` ep ON d.id = ep.employee_id
+JOIN 
+    `employees` e ON ep.employee_id = e.id
+GROUP BY 
+    d.name, e.name
+ORDER BY 
+    d.name, e.name
+LIMIT 10;]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-09-08 16:52:53,808 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-08 16:53:48,014 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-08 16:53:48,196 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-08 16:53:48,643 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-08 16:53:49,209 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    e.first_name,
+    e.last_name,
+    s.skill_name
+FROM 
+    employe e
+JOIN 
+    skills s ON e.id = s.employee_id
+WHERE 
+    s.id = 2534
+LIMIT 1;
+2025-09-08 16:56:49,884 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-08 16:56:50,206 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-08 16:56:50,761 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-08 16:56:53,069 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    p1.name AS project_name,
+    e1.name AS employee_name,
+    p1.status,
+    p1.budget,
+    p1.start_date,
+    p1.end_date,
+    p2.name AS department_name
+FROM 
+    `employee_projects` ep1
+JOIN 
+    `projects` p1 ON ep1.project_id = p1.id
+JOIN 
+    `departments` d1 ON p1.department_id = d1.id
+JOIN 
+    `employee_projects` ep2 ON ep1.employee_id = ep2.employee_id
+JOIN 
+    `projects` p2 ON ep2.project_id = p2.id
+JOIN 
+    `departments` d2 ON p2.department_id = d2.id
+WHERE 
+    p1.status != 'Completed'
+GROUP BY 
+    p1.name, e1.name, p1.status, p1.budget, p1.start_date, p1.end_date, d1.name, d2.name
+ORDER BY 
+    p1.name, e1.name
+LIMIT 10;
+2025-09-08 16:56:53,578 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    p1.name AS project_name,
+    e1.name AS employee_name,
+    p1.status,
+    p1.budget,
+    p1.start_date,
+    p1.end_date,
+    p2.name AS department_name
+FROM 
+    `employee_projects` ep1
+JOIN 
+    `projects` p1 ON ep1.project_id = p1.id
+JOIN 
+    `departments` d1 ON p1.department_id = d1.id
+JOIN 
+    `employee_projects` ep2 ON ep1.employee_id = ep2.employee_id
+JOIN 
+    `projects` p2 ON ep2.project_id = p2.id
+JOIN 
+    `departments` d2 ON p2.department_id = d2.id
+WHERE 
+    p1.status != 'Completed'
+GROUP BY 
+    p1.name, e1.name, p1.status, p1.budget, p1.start_date, p1.end_date, d1.name, d2.name
+ORDER BY 
+    p1.name, e1.name
+LIMIT 10;
+2025-09-08 16:56:53,581 WARNING query_processor: Initial SQL failed, attempting repair: (pymysql.err.OperationalError) (1054, "Unknown column 'e1.name' in 'field list'")
+[SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    p1.name AS project_name,
+    e1.name AS employee_name,
+    p1.status,
+    p1.budget,
+    p1.start_date,
+    p1.end_date,
+    p2.name AS department_name
+FROM 
+    `employee_projects` ep1
+JOIN 
+    `projects` p1 ON ep1.project_id = p1.id
+JOIN 
+    `departments` d1 ON p1.department_id = d1.id
+JOIN 
+    `employee_projects` ep2 ON ep1.employee_id = ep2.employee_id
+JOIN 
+    `projects` p2 ON ep2.project_id = p2.id
+JOIN 
+    `departments` d2 ON p2.department_id = d2.id
+WHERE 
+    p1.status != 'Completed'
+GROUP BY 
+    p1.name, e1.name, p1.status, p1.budget, p1.start_date, p1.end_date, d1.name, d2.name
+ORDER BY 
+    p1.name, e1.name
+LIMIT 10;]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-09-08 16:56:54,021 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-08 16:56:55,797 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    p1.name AS project_name,
+    ep1.employee_id AS employee_id,
+    p1.status,
+    p1.budget,
+    p1.start_date,
+    p1.end_date,
+    d1.name AS department_name
+FROM 
+    `employee_projects` ep1
+JOIN 
+    `projects` p1 ON ep1.project_id = p1.id
+JOIN 
+    `departments` d1 ON p1.department_id = d1.id
+WHERE 
+    p1.status != 'Completed'
+GROUP BY 
+    p1.name, ep1.employee_id, p1.status, p1.budget, p1.start_date, p1.end_date, d1.name
+ORDER BY 
+    p1.name, ep1.employee_id
+LIMIT 10;

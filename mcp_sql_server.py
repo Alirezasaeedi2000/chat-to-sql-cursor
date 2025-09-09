@@ -101,8 +101,10 @@ async def tool_export(args: Dict[str, Any]) -> Dict[str, Any]:
     execu = build_executor()
     df, safe_sql = execu.execute_select(query)
     os.makedirs("outputs/exports", exist_ok=True)
-    ts = os.path.getmtime(__file__)  # deterministic but fine
-    base = os.path.join("outputs", "exports", f"export_{int(ts)}")
+    # Use UTC timestamp for unique filenames
+    import datetime as _dt
+    ts = _dt.datetime.utcnow().strftime("%Y%m%d_%H%M%S_%f")
+    base = os.path.join("outputs", "exports", f"export_{ts}")
     path: Optional[str] = None
     if fmt.lower() == "csv":
         path = base + ".csv"
@@ -220,6 +222,17 @@ if hasattr(server, "method"):
 
 
 async def main() -> None:
+    # Ensure logging is configured if not already
+    if not logging.getLogger().handlers:
+        logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
+
+    # Load .env if present to populate DATABASE_URL
+    try:
+        from dotenv import load_dotenv  # type: ignore
+        load_dotenv()
+    except Exception:
+        pass
+
     async with stdio_server() as (read, write):
         from typing import Any
         try:
