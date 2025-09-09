@@ -88,6 +88,12 @@ def run_server() -> int:
 
 
 def main() -> int:
+    # Load .env if present
+    try:
+        from dotenv import load_dotenv  # type: ignore
+        load_dotenv()
+    except Exception:
+        pass
     parser = argparse.ArgumentParser(description="Natural Language to SQL Assistant for MySQL")
     parser.add_argument("--db-url", help="SQLAlchemy DB URL, e.g., mysql+pymysql://user:pass@host:3306/db", required=False)
     parser.add_argument("--query", help="One-shot NL query", required=False)

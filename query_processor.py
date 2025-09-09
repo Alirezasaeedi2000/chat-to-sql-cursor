@@ -144,11 +144,31 @@ class SafeSqlExecutor:
         forbidden = [
             "INSERT", "UPDATE", "DELETE", "CREATE", "DROP", "ALTER", "TRUNCATE", "REPLACE",
             "MERGE", "GRANT", "REVOKE", "CALL", "USE", "SET", "SHOW", "DESCRIBE", "EXPLAIN ",
+            # Exfiltration / file I/O vectors
+            "OUTFILE", "DUMPFILE", "LOAD_FILE", "LOAD DATA", "INFILE", "INTO OUTFILE", "INTO DUMPFILE",
         ]
         if any(f in keywords for f in forbidden):
             raise SqlValidationError("Only SELECT queries are allowed.")
         if not (" SELECT " in f" {keywords} " or keywords.strip().startswith("SELECT") or "WITH" in keywords):
             raise SqlValidationError("Query must be a SELECT.")
+
+    def _inject_exec_timeout_hint(self, sql: str) -> str:
+        """Inject MySQL MAX_EXECUTION_TIME hint after the first SELECT if absent.
+
+        This is a no-op for databases that ignore MySQL hints; safe to include for MySQL dialects.
+        """
+        try:
+            if re.search(r"MAX_EXECUTION_TIME\s*\(", sql, flags=re.IGNORECASE):
+                return sql
+            # Find the first SELECT keyword and inject the hint right after it
+            match = re.search(r"\bSELECT\b", sql, flags=re.IGNORECASE)
+            if not match:
+                return sql
+            ms = max(int(self.timeout_secs * 1000), 1)
+            start, end = match.span()
+            return sql[:end] + f" /*+ MAX_EXECUTION_TIME({ms}) */" + sql[end:]
+        except Exception:
+            return sql
 
     def _clamp_or_inject_limit(self, sql: str) -> str:
         # crude but effective LIMIT detection and clamping
@@ -171,7 +191,8 @@ class SafeSqlExecutor:
     @retry(stop=stop_after_attempt(2), wait=wait_exponential(multiplier=0.5, min=0.5, max=2.0), reraise=True, retry=retry_if_exception_type(SQLAlchemyError))
     def execute_select(self, sql: str) -> Tuple[pd.DataFrame, str]:
         self.validate_select_only(sql)
-        safe_sql = self._clamp_or_inject_limit(sql)
+        hinted = self._inject_exec_timeout_hint(sql)
+        safe_sql = self._clamp_or_inject_limit(hinted)
         LOGGER.info("Executing SQL: %s", safe_sql)
         with self.engine.connect() as conn:
             df = pd.read_sql(text(safe_sql), conn)
