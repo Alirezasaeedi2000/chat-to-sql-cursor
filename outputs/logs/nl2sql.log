@@ -1202,3 +1202,752 @@ JOIN
   projects p ON ep.project_id = p.id
 ORDER BY 
   p.name ASC LIMIT 50
+2025-09-12 18:53:36,428 ERROR web_server: Failed to initialize application: DATABASE_URL environment variable is not set.
+2025-09-12 18:53:36,429 ERROR web_server: Failed to start web server: DATABASE_URL environment variable is not set.
+2025-09-12 18:54:42,185 ERROR web_server: Failed to initialize application: DATABASE_URL environment variable is not set.
+2025-09-12 18:54:42,185 ERROR web_server: Failed to start web server: DATABASE_URL environment variable is not set.
+2025-09-12 18:55:25,753 ERROR web_server: Failed to initialize application: Database authentication failed. Please check your DATABASE_URL credentials: (pymysql.err.OperationalError) (1045, "Access denied for user 'USER'@'localhost' (using password: NO)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-09-12 18:55:25,753 ERROR web_server: Failed to start web server: Database authentication failed. Please check your DATABASE_URL credentials: (pymysql.err.OperationalError) (1045, "Access denied for user 'USER'@'localhost' (using password: NO)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-09-12 18:55:37,524 INFO chromadb.telemetry.product.posthog: Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-09-12 18:55:37,623 INFO web_server: Application initialized successfully
+2025-09-12 18:55:37,623 INFO web_server: Starting web server on 127.0.0.1:8080
+2025-09-12 18:55:37,639 INFO werkzeug: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:8080
+2025-09-12 18:55:37,639 INFO werkzeug: [33mPress CTRL+C to quit[0m
+2025-09-12 18:57:43,681 INFO chromadb.telemetry.product.posthog: Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-09-12 18:57:43,788 INFO web_server: Application initialized successfully
+2025-09-12 18:57:43,789 INFO web_server: Starting web server on 127.0.0.1:8080
+2025-09-12 18:57:43,801 INFO werkzeug: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:8080
+2025-09-12 18:57:43,801 INFO werkzeug: [33mPress CTRL+C to quit[0m
+2025-09-12 18:57:57,899 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 18:57:57] "GET / HTTP/1.1" 200 -
+2025-09-12 18:58:00,957 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 18:58:00] "GET /api/history HTTP/1.1" 200 -
+2025-09-12 18:58:00,962 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 18:58:00] "[33mGET /static/undefined HTTP/1.1[0m" 404 -
+2025-09-12 18:58:01,078 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 18:58:01] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-09-12 18:58:37,350 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-12 18:58:40,795 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-12 18:58:41,523 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ COUNT(*) FROM `employe` LIMIT 50
+2025-09-12 18:58:41,888 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-12 18:58:42,936 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 18:58:42] "POST /api/query HTTP/1.1" 200 -
+2025-09-12 18:58:42,956 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 18:58:42] "GET /api/history HTTP/1.1" 200 -
+2025-09-12 18:58:42,959 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 18:58:42] "[33mGET /static/null HTTP/1.1[0m" 404 -
+2025-09-12 18:59:05,565 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 18:59:05] "[33mGET /static/undefined HTTP/1.1[0m" 404 -
+2025-09-12 18:59:05,618 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-12 18:59:06,127 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-12 18:59:06,800 INFO query_processor: Using cached result for SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ COUNT(*) FROM `employe` LIMIT 50
+2025-09-12 18:59:07,128 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-12 18:59:08,172 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 18:59:08] "POST /api/query HTTP/1.1" 200 -
+2025-09-12 18:59:08,177 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 18:59:08] "GET /api/history HTTP/1.1" 200 -
+2025-09-12 18:59:08,178 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 18:59:08] "[33mGET /static/null HTTP/1.1[0m" 404 -
+2025-09-12 18:59:14,554 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 18:59:14] "[33mGET /static/undefined HTTP/1.1[0m" 404 -
+2025-09-12 18:59:14,602 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-12 18:59:15,100 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-12 18:59:15,716 INFO query_processor: Using cached result for SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ COUNT(*) FROM `employe` LIMIT 50
+2025-09-12 18:59:15,721 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 18:59:15] "POST /api/query HTTP/1.1" 200 -
+2025-09-12 18:59:15,726 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 18:59:15] "GET /api/history HTTP/1.1" 200 -
+2025-09-12 18:59:15,729 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 18:59:15] "[33mGET /static/null HTTP/1.1[0m" 404 -
+2025-09-12 18:59:35,284 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 18:59:35] "[33mGET /static/undefined HTTP/1.1[0m" 404 -
+2025-09-12 18:59:35,340 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-12 18:59:35,823 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-12 18:59:36,629 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+  e.salary,
+  d.name AS department_name,
+  COUNT(e.id) AS num_employees
+FROM 
+  `employe` e
+JOIN 
+  `departments` d ON e.department_id = d.id
+GROUP BY 
+  e.salary, d.name
+ORDER BY 
+  e.salary DESC
+LIMIT 50;
+2025-09-12 18:59:40,792 INFO matplotlib.category: Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-09-12 18:59:40,794 INFO matplotlib.category: Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-09-12 18:59:41,544 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 18:59:41] "POST /api/query HTTP/1.1" 200 -
+2025-09-12 18:59:41,553 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 18:59:41] "GET /api/history HTTP/1.1" 200 -
+2025-09-12 18:59:41,554 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 18:59:41] "[33mGET /static/viz_20250912_152941_023576.png HTTP/1.1[0m" 404 -
+2025-09-12 19:00:10,275 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:00:10] "[33mGET /static/undefined HTTP/1.1[0m" 404 -
+2025-09-12 19:00:10,337 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-12 19:00:10,817 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-12 19:00:12,145 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+  e.salary,
+  d.name AS department_name,
+  COUNT(e.id) AS num_employees_in_range
+FROM 
+  `employe` e
+JOIN 
+  `departments` d ON e.department_id = d.id
+GROUP BY 
+  e.salary, d.name
+ORDER BY 
+  e.salary ASC
+LIMIT 50;
+2025-09-12 19:00:12,610 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-12 19:00:14,117 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:00:14] "POST /api/query HTTP/1.1" 200 -
+2025-09-12 19:00:14,124 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:00:14] "GET /api/history HTTP/1.1" 200 -
+2025-09-12 19:00:14,127 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:00:14] "[33mGET /static/null HTTP/1.1[0m" 404 -
+2025-09-12 19:00:48,409 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:00:48] "[33mGET /static/undefined HTTP/1.1[0m" 404 -
+2025-09-12 19:00:48,450 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-12 19:00:49,041 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-12 19:00:49,848 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+  e.salary,
+  d.name AS department_name,
+  COUNT(e.id) AS num_employees
+FROM 
+  `employe` e
+JOIN 
+  `departments` d ON e.department_id = d.id
+GROUP BY 
+  d.name, e.salary
+ORDER BY 
+  e.salary DESC
+LIMIT 50;
+2025-09-12 19:00:49,896 INFO matplotlib.category: Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-09-12 19:00:49,897 INFO matplotlib.category: Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-09-12 19:00:51,087 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-12 19:00:52,867 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:00:52] "POST /api/query HTTP/1.1" 200 -
+2025-09-12 19:00:52,875 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:00:52] "GET /api/history HTTP/1.1" 200 -
+2025-09-12 19:00:52,875 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:00:52] "[33mGET /static/viz_20250912_153050_051189.png HTTP/1.1[0m" 404 -
+2025-09-12 19:01:30,392 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:01:30] "[33mGET /static/undefined HTTP/1.1[0m" 404 -
+2025-09-12 19:01:30,543 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-12 19:01:31,056 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-12 19:01:31,610 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ COUNT(*) FROM employe LIMIT 50
+2025-09-12 19:01:31,615 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:01:31] "POST /api/query HTTP/1.1" 200 -
+2025-09-12 19:01:31,621 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:01:31] "GET /api/history HTTP/1.1" 200 -
+2025-09-12 19:01:31,622 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:01:31] "[33mGET /static/null HTTP/1.1[0m" 404 -
+2025-09-12 19:02:22,787 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:02:22] "[33mGET /static/undefined HTTP/1.1[0m" 404 -
+2025-09-12 19:02:22,845 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-12 19:02:23,345 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-12 19:02:24,643 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ e.first_name, e.last_name, d.name AS department 
+FROM `employe` e JOIN departments d ON e.department_id = d.id 
+WHERE e.status = 'Active' 
+GROUP BY d.name 
+ORDER BY salary DESC LIMIT 50;
+2025-09-12 19:02:24,656 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:02:24] "POST /api/query HTTP/1.1" 200 -
+2025-09-12 19:02:24,662 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:02:24] "GET /api/history HTTP/1.1" 200 -
+2025-09-12 19:02:24,666 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:02:24] "[33mGET /static/null HTTP/1.1[0m" 404 -
+2025-09-12 19:03:10,214 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:03:10] "[33mGET /static/undefined HTTP/1.1[0m" 404 -
+2025-09-12 19:03:10,262 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-12 19:03:10,706 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-12 19:03:11,661 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    e.first_name,
+    e.last_name,
+    p.salary
+FROM 
+    employe e
+JOIN 
+    performance p ON e.id = p.employee_id
+WHERE 
+    e.department_id IN (
+        SELECT 
+            d.id 
+        FROM 
+            departments d
+        WHERE 
+            d.name = 'HR'
+    )
+ORDER BY 
+    p.salary DESC
+LIMIT 50;
+2025-09-12 19:03:12,170 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    e.first_name,
+    e.last_name,
+    p.salary
+FROM 
+    employe e
+JOIN 
+    performance p ON e.id = p.employee_id
+WHERE 
+    e.department_id IN (
+        SELECT 
+            d.id 
+        FROM 
+            departments d
+        WHERE 
+            d.name = 'HR'
+    )
+ORDER BY 
+    p.salary DESC
+LIMIT 50;
+2025-09-12 19:03:12,174 WARNING query_processor: Initial SQL failed, attempting repair: (pymysql.err.OperationalError) (1054, "Unknown column 'p.salary' in 'field list'")
+[SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    e.first_name,
+    e.last_name,
+    p.salary
+FROM 
+    employe e
+JOIN 
+    performance p ON e.id = p.employee_id
+WHERE 
+    e.department_id IN (
+        SELECT 
+            d.id 
+        FROM 
+            departments d
+        WHERE 
+            d.name = 'HR'
+    )
+ORDER BY 
+    p.salary DESC
+LIMIT 50;]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-09-12 19:03:12,609 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-12 19:03:13,571 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    e.first_name,
+    e.last_name,
+    p.salary
+FROM 
+    `employe` e
+JOIN 
+    performance p ON e.id = p.employee_id
+WHERE 
+    e.department_id IN (
+        SELECT 
+            d.id 
+        FROM 
+            departments d
+        WHERE 
+            d.name = 'HR'
+    )
+ORDER BY 
+    p.salary DESC
+LIMIT 50;
+2025-09-12 19:03:14,082 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    e.first_name,
+    e.last_name,
+    p.salary
+FROM 
+    `employe` e
+JOIN 
+    performance p ON e.id = p.employee_id
+WHERE 
+    e.department_id IN (
+        SELECT 
+            d.id 
+        FROM 
+            departments d
+        WHERE 
+            d.name = 'HR'
+    )
+ORDER BY 
+    p.salary DESC
+LIMIT 50;
+2025-09-12 19:03:14,084 ERROR query_processor: SQL repair failed: (pymysql.err.OperationalError) (1054, "Unknown column 'p.salary' in 'field list'")
+[SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    e.first_name,
+    e.last_name,
+    p.salary
+FROM 
+    `employe` e
+JOIN 
+    performance p ON e.id = p.employee_id
+WHERE 
+    e.department_id IN (
+        SELECT 
+            d.id 
+        FROM 
+            departments d
+        WHERE 
+            d.name = 'HR'
+    )
+ORDER BY 
+    p.salary DESC
+LIMIT 50;]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-09-12 19:03:14,088 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:03:14] "POST /api/query HTTP/1.1" 200 -
+2025-09-12 19:03:14,094 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:03:14] "GET /api/history HTTP/1.1" 200 -
+2025-09-12 19:03:14,096 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:03:14] "[33mGET /static/null HTTP/1.1[0m" 404 -
+2025-09-12 19:03:47,812 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:03:47] "[33mGET /static/undefined HTTP/1.1[0m" 404 -
+2025-09-12 19:03:47,851 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-12 19:03:48,373 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-12 19:03:49,504 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    e.first_name,
+    e.last_name,
+    e.salary
+FROM 
+    employe e
+JOIN 
+    departments d ON e.department_id = d.id
+WHERE 
+    e.salary DESC
+LIMIT 5;
+2025-09-12 19:03:50,014 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    e.first_name,
+    e.last_name,
+    e.salary
+FROM 
+    employe e
+JOIN 
+    departments d ON e.department_id = d.id
+WHERE 
+    e.salary DESC
+LIMIT 5;
+2025-09-12 19:03:50,016 WARNING query_processor: Initial SQL failed, attempting repair: (pymysql.err.ProgrammingError) (1064, "You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'DESC\nLIMIT 5' at line 10")
+[SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    e.first_name,
+    e.last_name,
+    e.salary
+FROM 
+    employe e
+JOIN 
+    departments d ON e.department_id = d.id
+WHERE 
+    e.salary DESC
+LIMIT 5;]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-09-12 19:03:50,430 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-12 19:03:51,006 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    e.first_name,
+    e.last_name,
+    e.salary
+FROM 
+    `employe` e
+JOIN 
+    departments d ON e.department_id = d.id
+WHERE 
+    e.salary DESC
+LIMIT 5;
+2025-09-12 19:03:51,512 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    e.first_name,
+    e.last_name,
+    e.salary
+FROM 
+    `employe` e
+JOIN 
+    departments d ON e.department_id = d.id
+WHERE 
+    e.salary DESC
+LIMIT 5;
+2025-09-12 19:03:51,516 ERROR query_processor: SQL repair failed: (pymysql.err.ProgrammingError) (1064, "You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'DESC\nLIMIT 5' at line 10")
+[SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    e.first_name,
+    e.last_name,
+    e.salary
+FROM 
+    `employe` e
+JOIN 
+    departments d ON e.department_id = d.id
+WHERE 
+    e.salary DESC
+LIMIT 5;]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-09-12 19:03:51,519 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:03:51] "POST /api/query HTTP/1.1" 200 -
+2025-09-12 19:03:51,529 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:03:51] "GET /api/history HTTP/1.1" 200 -
+2025-09-12 19:03:51,530 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:03:51] "[33mGET /static/null HTTP/1.1[0m" 404 -
+2025-09-12 19:03:58,804 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:03:58] "[33mGET /static/undefined HTTP/1.1[0m" 404 -
+2025-09-12 19:03:58,838 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-12 19:03:59,307 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-12 19:04:00,436 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    e.first_name,
+    e.last_name,
+    e.salary
+FROM 
+    employe e
+JOIN 
+    departments d ON e.department_id = d.id
+WHERE 
+    e.salary DESC
+LIMIT 5;
+2025-09-12 19:04:00,941 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    e.first_name,
+    e.last_name,
+    e.salary
+FROM 
+    employe e
+JOIN 
+    departments d ON e.department_id = d.id
+WHERE 
+    e.salary DESC
+LIMIT 5;
+2025-09-12 19:04:00,944 WARNING query_processor: Initial SQL failed, attempting repair: (pymysql.err.ProgrammingError) (1064, "You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'DESC\nLIMIT 5' at line 10")
+[SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    e.first_name,
+    e.last_name,
+    e.salary
+FROM 
+    employe e
+JOIN 
+    departments d ON e.department_id = d.id
+WHERE 
+    e.salary DESC
+LIMIT 5;]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-09-12 19:04:01,365 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-12 19:04:01,941 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    e.first_name,
+    e.last_name,
+    e.salary
+FROM 
+    `employe` e
+JOIN 
+    departments d ON e.department_id = d.id
+WHERE 
+    e.salary DESC
+LIMIT 5;
+2025-09-12 19:04:02,447 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    e.first_name,
+    e.last_name,
+    e.salary
+FROM 
+    `employe` e
+JOIN 
+    departments d ON e.department_id = d.id
+WHERE 
+    e.salary DESC
+LIMIT 5;
+2025-09-12 19:04:02,450 ERROR query_processor: SQL repair failed: (pymysql.err.ProgrammingError) (1064, "You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'DESC\nLIMIT 5' at line 10")
+[SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    e.first_name,
+    e.last_name,
+    e.salary
+FROM 
+    `employe` e
+JOIN 
+    departments d ON e.department_id = d.id
+WHERE 
+    e.salary DESC
+LIMIT 5;]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-09-12 19:04:02,454 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:04:02] "POST /api/query HTTP/1.1" 200 -
+2025-09-12 19:04:02,463 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:04:02] "GET /api/history HTTP/1.1" 200 -
+2025-09-12 19:04:02,467 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:04:02] "[33mGET /static/null HTTP/1.1[0m" 404 -
+2025-09-12 19:04:07,475 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:04:07] "[33mGET /static/undefined HTTP/1.1[0m" 404 -
+2025-09-12 19:04:07,547 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-12 19:04:08,033 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-12 19:04:09,158 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    e.first_name,
+    e.last_name,
+    e.salary
+FROM 
+    employe e
+JOIN 
+    departments d ON e.department_id = d.id
+WHERE 
+    e.salary DESC
+LIMIT 5;
+2025-09-12 19:04:09,663 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    e.first_name,
+    e.last_name,
+    e.salary
+FROM 
+    employe e
+JOIN 
+    departments d ON e.department_id = d.id
+WHERE 
+    e.salary DESC
+LIMIT 5;
+2025-09-12 19:04:09,665 WARNING query_processor: Initial SQL failed, attempting repair: (pymysql.err.ProgrammingError) (1064, "You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'DESC\nLIMIT 5' at line 10")
+[SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    e.first_name,
+    e.last_name,
+    e.salary
+FROM 
+    employe e
+JOIN 
+    departments d ON e.department_id = d.id
+WHERE 
+    e.salary DESC
+LIMIT 5;]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-09-12 19:04:10,089 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-12 19:04:10,663 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    e.first_name,
+    e.last_name,
+    e.salary
+FROM 
+    `employe` e
+JOIN 
+    departments d ON e.department_id = d.id
+WHERE 
+    e.salary DESC
+LIMIT 5;
+2025-09-12 19:04:11,169 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    e.first_name,
+    e.last_name,
+    e.salary
+FROM 
+    `employe` e
+JOIN 
+    departments d ON e.department_id = d.id
+WHERE 
+    e.salary DESC
+LIMIT 5;
+2025-09-12 19:04:11,172 ERROR query_processor: SQL repair failed: (pymysql.err.ProgrammingError) (1064, "You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'DESC\nLIMIT 5' at line 10")
+[SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    e.first_name,
+    e.last_name,
+    e.salary
+FROM 
+    `employe` e
+JOIN 
+    departments d ON e.department_id = d.id
+WHERE 
+    e.salary DESC
+LIMIT 5;]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-09-12 19:04:11,175 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:04:11] "POST /api/query HTTP/1.1" 200 -
+2025-09-12 19:04:11,183 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:04:11] "GET /api/history HTTP/1.1" 200 -
+2025-09-12 19:04:11,186 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:04:11] "[33mGET /static/null HTTP/1.1[0m" 404 -
+2025-09-12 19:04:20,664 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:04:20] "[33mGET /static/undefined HTTP/1.1[0m" 404 -
+2025-09-12 19:04:20,710 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-12 19:04:21,212 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-12 19:04:21,931 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-12 19:04:22,927 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    e.first_name,
+    e.last_name,
+    e.salary,
+    ROW_NUMBER() OVER (ORDER BY e.salary DESC) AS row_num
+FROM 
+    employe e
+WHERE 
+    e.department_id = 1
+LIMIT 5;
+2025-09-12 19:04:22,939 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:04:22] "POST /api/query HTTP/1.1" 200 -
+2025-09-12 19:04:22,944 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:04:22] "GET /api/history HTTP/1.1" 200 -
+2025-09-12 19:04:22,946 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:04:22] "[33mGET /static/null HTTP/1.1[0m" 404 -
+2025-09-12 19:05:32,001 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:05:32] "[33mGET /static/undefined HTTP/1.1[0m" 404 -
+2025-09-12 19:05:32,052 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-12 19:05:32,427 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-12 19:05:33,692 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+  p.name AS department_name, 
+  COUNT(e.id) AS num_employees, 
+  AVG(p.budget / 12.0) AS avg_budget_per_employee
+FROM 
+  `projects` p JOIN departments d ON p.department_id = d.id
+JOIN 
+  `employee_projects` ep ON p.id = ep.project_id
+JOIN 
+  `employe` e ON ep.employee_id = e.id
+GROUP BY 
+  d.name, p.budget
+ORDER BY 
+  avg_budget_per_employee DESC
+LIMIT 50;
+2025-09-12 19:05:34,382 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:05:34] "POST /api/query HTTP/1.1" 200 -
+2025-09-12 19:05:34,388 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:05:34] "GET /api/history HTTP/1.1" 200 -
+2025-09-12 19:05:34,389 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:05:34] "[33mGET /static/viz_20250912_153533_825892.png HTTP/1.1[0m" 404 -
+2025-09-12 19:05:45,056 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:05:45] "[33mGET /static/undefined HTTP/1.1[0m" 404 -
+2025-09-12 19:05:45,119 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-12 19:05:45,294 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-12 19:05:46,590 INFO query_processor: Using cached result for SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+  p.name AS department_name, 
+  COUNT(e.id) AS num_employees, 
+  AVG(p.budget / 12.0) AS avg_budget_per_employee
+FROM 
+  `projects` p JOIN departments d ON p.department_id = d.id
+JOIN 
+  `employee_projects` ep ON p.id = ep.project_id
+JOIN 
+  `employe` e ON ep.employee_id = e.id
+GROUP BY 
+  d.name, p.budget
+ORDER BY 
+  avg_budget_per_employee DESC
+LIMIT 50;
+2025-09-12 19:05:47,205 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:05:47] "POST /api/query HTTP/1.1" 200 -
+2025-09-12 19:05:47,210 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:05:47] "GET /api/history HTTP/1.1" 200 -
+2025-09-12 19:05:47,213 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:05:47] "[33mGET /static/viz_20250912_153546_683000.png HTTP/1.1[0m" 404 -
+2025-09-12 19:05:55,914 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:05:55] "[33mGET /static/undefined HTTP/1.1[0m" 404 -
+2025-09-12 19:05:55,989 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-12 19:05:56,378 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-12 19:05:57,217 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+  p.name AS department_name, 
+  COUNT(e.id) AS num_employees, 
+  AVG(p.budget / 1000000) AS avg_budget
+FROM 
+  `projects` p JOIN departments d ON p.department_id = d.id
+GROUP BY 
+  d.name
+ORDER BY 
+  avg_budget DESC
+LIMIT 50;
+2025-09-12 19:05:57,721 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+  p.name AS department_name, 
+  COUNT(e.id) AS num_employees, 
+  AVG(p.budget / 1000000) AS avg_budget
+FROM 
+  `projects` p JOIN departments d ON p.department_id = d.id
+GROUP BY 
+  d.name
+ORDER BY 
+  avg_budget DESC
+LIMIT 50;
+2025-09-12 19:05:57,723 WARNING query_processor: Initial SQL failed, attempting repair: (pymysql.err.OperationalError) (1054, "Unknown column 'e.id' in 'field list'")
+[SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+  p.name AS department_name, 
+  COUNT(e.id) AS num_employees, 
+  AVG(p.budget / 1000000) AS avg_budget
+FROM 
+  `projects` p JOIN departments d ON p.department_id = d.id
+GROUP BY 
+  d.name
+ORDER BY 
+  avg_budget DESC
+LIMIT 50;]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-09-12 19:05:58,114 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-12 19:05:58,991 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+  p.name AS department_name, 
+  COUNT(ep.employee_id) AS num_employees, 
+  AVG(p.budget / 1000000) AS avg_budget
+FROM 
+  `projects` p JOIN `employee_projects` ep ON p.id = ep.project_id
+GROUP BY 
+  d.name
+ORDER BY 
+  avg_budget DESC
+LIMIT 50;
+2025-09-12 19:05:59,499 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+  p.name AS department_name, 
+  COUNT(ep.employee_id) AS num_employees, 
+  AVG(p.budget / 1000000) AS avg_budget
+FROM 
+  `projects` p JOIN `employee_projects` ep ON p.id = ep.project_id
+GROUP BY 
+  d.name
+ORDER BY 
+  avg_budget DESC
+LIMIT 50;
+2025-09-12 19:05:59,502 ERROR query_processor: SQL repair failed: (pymysql.err.OperationalError) (1054, "Unknown column 'd.name' in 'group statement'")
+[SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+  p.name AS department_name, 
+  COUNT(ep.employee_id) AS num_employees, 
+  AVG(p.budget / 1000000) AS avg_budget
+FROM 
+  `projects` p JOIN `employee_projects` ep ON p.id = ep.project_id
+GROUP BY 
+  d.name
+ORDER BY 
+  avg_budget DESC
+LIMIT 50;]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-09-12 19:05:59,808 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-12 19:06:02,853 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:06:02] "POST /api/query HTTP/1.1" 200 -
+2025-09-12 19:06:02,858 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:06:02] "GET /api/history HTTP/1.1" 200 -
+2025-09-12 19:06:02,861 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:06:02] "[33mGET /static/null HTTP/1.1[0m" 404 -
+2025-09-12 19:09:02,667 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:09:02] "[33mGET /static/undefined HTTP/1.1[0m" 404 -
+2025-09-12 19:09:02,712 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-12 19:09:03,141 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-12 19:09:04,384 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+  p.name AS department_name, 
+  COUNT(e.id) AS num_employees, 
+  AVG(p.budget / 100000.0) AS avg_budget
+FROM 
+  `projects` p JOIN departments d ON p.department_id = d.id
+JOIN 
+  `employee_projects` ep ON p.id = ep.project_id
+JOIN 
+  `employe` e ON ep.employee_id = e.id
+GROUP BY 
+  d.name, p.budget
+ORDER BY 
+  avg_budget DESC
+LIMIT 50;
+2025-09-12 19:09:04,399 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:09:04] "POST /api/query HTTP/1.1" 200 -
+2025-09-12 19:09:04,403 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:09:04] "GET /api/history HTTP/1.1" 200 -
+2025-09-12 19:09:04,407 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:09:04] "[33mGET /static/null HTTP/1.1[0m" 404 -
+2025-09-12 19:09:17,507 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:09:17] "[33mGET /static/undefined HTTP/1.1[0m" 404 -
+2025-09-12 19:09:17,547 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-12 19:09:17,953 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-12 19:09:19,221 INFO query_processor: Using cached result for SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+  p.name AS department_name, 
+  COUNT(e.id) AS num_employees, 
+  AVG(p.budget / 12.0) AS avg_budget_per_employee
+FROM 
+  `projects` p JOIN departments d ON p.department_id = d.id
+JOIN 
+  `employee_projects` ep ON p.id = ep.project_id
+JOIN 
+  `employe` e ON ep.employee_id = e.id
+GROUP BY 
+  d.name, p.budget
+ORDER BY 
+  avg_budget_per_employee DESC
+LIMIT 50;
+2025-09-12 19:09:19,229 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:09:19] "POST /api/query HTTP/1.1" 200 -
+2025-09-12 19:09:19,239 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:09:19] "GET /api/history HTTP/1.1" 200 -
+2025-09-12 19:09:19,242 INFO werkzeug: 127.0.0.1 - - [12/Sep/2025 19:09:19] "[33mGET /static/null HTTP/1.1[0m" 404 -
+2025-09-12 19:11:27,959 INFO chromadb.telemetry.product.posthog: Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-09-12 19:11:57,258 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-12 19:11:57,728 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-12 19:11:58,465 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-12 19:11:59,265 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    p.name AS department_name,
+    SUM(p.budget) / COUNT(DISTINCT e.nid) AS average_budget_per_department
+FROM 
+    projects p JOIN departments d ON p.department_id = d.id
+GROUP BY 
+    d.name
+ORDER BY 
+    average_budget_per_department DESC
+LIMIT 50;
+2025-09-12 19:11:59,772 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    p.name AS department_name,
+    SUM(p.budget) / COUNT(DISTINCT e.nid) AS average_budget_per_department
+FROM 
+    projects p JOIN departments d ON p.department_id = d.id
+GROUP BY 
+    d.name
+ORDER BY 
+    average_budget_per_department DESC
+LIMIT 50;
+2025-09-12 19:11:59,773 WARNING query_processor: Initial SQL failed, attempting repair: (pymysql.err.OperationalError) (1054, "Unknown column 'e.nid' in 'field list'")
+[SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    p.name AS department_name,
+    SUM(p.budget) / COUNT(DISTINCT e.nid) AS average_budget_per_department
+FROM 
+    projects p JOIN departments d ON p.department_id = d.id
+GROUP BY 
+    d.name
+ORDER BY 
+    average_budget_per_department DESC
+LIMIT 50;]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-09-12 19:12:00,126 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-12 19:12:01,047 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    p.name AS department_name,
+    SUM(p.budget) / COUNT(DISTINCT ep.employee_id) AS average_budget_per_department
+FROM 
+    projects p JOIN departments d ON p.department_id = d.id
+JOIN 
+    employee_projects ep ON p.id = ep.project_id
+GROUP BY 
+    d.name
+ORDER BY 
+    average_budget_per_department DESC
+LIMIT 50;
+2025-09-12 19:12:51,894 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-12 19:12:52,271 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-12 19:12:52,882 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-12 19:12:53,979 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ COUNT(*) FROM `employee_projects` AS ep JOIN `projects` p ON ep.project_id = p.id LIMIT 50;
+2025-09-12 19:13:41,454 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-12 19:13:41,782 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-12 19:13:42,452 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-12 19:13:43,499 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ COUNT(*) FROM `employee_projects` AS e JOIN `projects` p ON e.project_id = p.id LIMIT 50;
+2025-09-12 19:14:23,732 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-12 19:14:24,119 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-12 19:14:24,743 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-12 19:14:26,840 INFO query_processor: Using cached result for SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ COUNT(*) FROM `employee_projects` AS ep JOIN `projects` p ON ep.project_id = p.id LIMIT 50;
+2025-09-12 19:19:24,063 INFO chromadb.telemetry.product.posthog: Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-09-12 19:19:25,069 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-12 19:19:25,618 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-12 19:19:26,235 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ COUNT(*) FROM `projects`
+LIMIT 50;
+2025-09-12 19:19:49,086 INFO chromadb.telemetry.product.posthog: Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-09-12 19:19:49,247 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-12 19:19:49,446 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-12 19:19:50,080 INFO query_processor: Using cached result for SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ COUNT(*) FROM `projects`
+LIMIT 50;
+2025-09-12 19:20:08,583 INFO chromadb.telemetry.product.posthog: Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-09-12 19:20:08,752 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/embeddings "HTTP/1.1 200 OK"
+2025-09-12 19:20:09,315 INFO httpx: HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-09-12 19:20:10,735 INFO query_processor: Executing SQL: SELECT /*+ MAX_EXECUTION_TIME(30000) */ 
+    p.name AS label,
+    SUM(p.budget) / COUNT(DISTINCT p.id) * 100 AS value
+FROM `projects` p
+GROUP BY p.name
+ORDER BY value DESC
+LIMIT 50;
