@@ -335,25 +335,10 @@ class TestWebAPI(unittest.TestCase):
         from web_server import app
         app.config['TESTING'] = True
         self.client = app.test_client()
-        
-        # Mock the global instances
-        with patch('web_server.qp') as mock_qp, patch('web_server.history') as mock_history:
-            mock_result = Mock()
-            mock_result.mode = "TABLE"
-            mock_result.sql = "SELECT * FROM test"
-            mock_result.table_markdown = "|id|name|\n|1|test|"
-            mock_result.short_answer = None
-            mock_result.analysis = None
-            mock_result.visualization_path = None
-            mock_result.metadata = {"row_count": 1}
-            
-            mock_qp.process.return_value = mock_result
-            mock_history.search_history.return_value = []
-            
-            self.mock_qp = mock_qp
-            self.mock_history = mock_history
     
-    def test_health_endpoint(self):
+    @patch('web_server.qp')
+    @patch('web_server.history')
+    def test_health_endpoint(self, mock_history, mock_qp):
         """Test health check endpoint."""
         response = self.client.get('/health')
         self.assertEqual(response.status_code, 200)
@@ -361,21 +346,25 @@ class TestWebAPI(unittest.TestCase):
         self.assertIn('status', data)
         self.assertIn('timestamp', data)
     
-    def test_query_endpoint_missing_data(self):
+    @patch('web_server.qp')
+    @patch('web_server.history')  
+    def test_query_endpoint_missing_data(self, mock_history, mock_qp):
         """Test query endpoint with missing data."""
         response = self.client.post('/api/query', json={})
         self.assertEqual(response.status_code, 400)
         data = response.get_json()
         self.assertIn('error', data)
     
-    def test_history_endpoint(self):
+    @patch('web_server.qp')
+    @patch('web_server.history')
+    def test_history_endpoint(self, mock_history, mock_qp):
         """Test history retrieval endpoint."""
+        mock_history.search_history.return_value = []
         response = self.client.get('/api/history')
         self.assertEqual(response.status_code, 200)
         data = response.get_json()
         self.assertIsInstance(data, list)
-
-
+    
 class TestIntegration(unittest.TestCase):
     """Integration tests for the complete system."""
     
@@ -385,7 +374,12 @@ class TestIntegration(unittest.TestCase):
         # Mock engine and connection
         mock_engine = Mock()
         mock_conn = Mock()
-        mock_engine.connect.return_value.__enter__.return_value = mock_conn
+        
+        # Properly mock the context manager
+        mock_context = Mock()
+        mock_context.__enter__ = Mock(return_value=mock_conn)
+        mock_context.__exit__ = Mock(return_value=None)
+        mock_engine.connect.return_value = mock_context
         mock_create_engine.return_value = mock_engine
         
         # Mock pandas read_sql to return test data

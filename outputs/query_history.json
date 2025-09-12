@@ -466,5 +466,29 @@
     "error": null,
     "is_favorite": false,
     "tags": []
+  },
+  {
+    "id": "q_20250912_151100_448546",
+    "timestamp": "2025-09-12T15:11:00.448546",
+    "user_query": "Show me all users",
+    "sql_query": "SELECT /*+ MAX_EXECUTION_TIME(30000) */ id, name FROM users LIMIT 50",
+    "mode": "TABLE",
+    "execution_time_ms": 1690.528154373169,
+    "row_count": 2,
+    "error": null,
+    "is_favorite": false,
+    "tags": []
+  },
+  {
+    "id": "q_20250912_151126_221074",
+    "timestamp": "2025-09-12T15:11:26.221074",
+    "user_query": "Show me all users",
+    "sql_query": "SELECT /*+ MAX_EXECUTION_TIME(30000) */ id, name FROM users LIMIT 50",
+    "mode": "TABLE",
+    "execution_time_ms": 204.70070838928223,
+    "row_count": 2,
+    "error": null,
+    "is_favorite": false,
+    "tags": []
   }
 ]

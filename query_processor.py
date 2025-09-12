@@ -236,6 +236,10 @@ class SafeSqlExecutor:
             # Exfiltration / file I/O vectors
             "OUTFILE", "DUMPFILE", "LOAD_FILE", "LOAD DATA", "INFILE", "INTO OUTFILE", "INTO DUMPFILE",
         ]
+        # Also check for these patterns in the original SQL text
+        sql_upper = sql.upper()
+        if any(f in sql_upper for f in ["INTO OUTFILE", "INTO DUMPFILE", "LOAD_FILE", "LOAD DATA"]):
+            raise SqlValidationError("File operations are not allowed.")
         if any(f in keywords for f in forbidden):
             raise SqlValidationError("Only SELECT queries are allowed.")
         if not (" SELECT " in f" {keywords} " or keywords.strip().startswith("SELECT") or "WITH" in keywords):

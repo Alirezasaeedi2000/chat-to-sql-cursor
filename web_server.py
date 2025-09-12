@@ -292,12 +292,12 @@ HTML_TEMPLATE = """
                     if (!text) return '';
                     // Simple markdown-to-HTML conversion for tables
                     return text
-                        .replace(/\\n/g, '\\n')
-                        .replace(/\|/g, '|')
+                        .replace(/\\\\n/g, '\\n')
+                        .replace(/\\|/g, '|')
                         .replace(/^(.+)$/gm, '<div>$1</div>')
-                        .replace(/<div>(\|[^|]+\|.*)<\/div>/g, '<table class="min-w-full divide-y divide-gray-200"><tbody>$1</tbody></table>')
-                        .replace(/\|([^|]*)\|/g, '<td class="px-3 py-2 border">$1</td>')
-                        .replace(/<td class="px-3 py-2 border">([^<]+)<\/td>/g, (match, content) => {
+                        .replace(/<div>(\\|[^|]+\\|.*)<\\/div>/g, '<table class="min-w-full divide-y divide-gray-200"><tbody>$1</tbody></table>')
+                        .replace(/\\|([^|]*)\\|/g, '<td class="px-3 py-2 border">$1</td>')
+                        .replace(/<td class="px-3 py-2 border">([^<]+)<\\/td>/g, (match, content) => {
                             return content.trim().startsWith('-') ? 
                                 '<td class="px-3 py-2 border bg-gray-50"></td>' : 
                                 '<td class="px-3 py-2 border">' + content + '</td>';
