@@ -378,7 +378,7 @@ class QueryProcessor:
         self,
         engine: Engine,
         vector_manager: VectorStoreManager,
-        model_name: str = "llama3.2",
+        model_name: str = "llama3.1:8b-instruct-q4_K_M",
         temperature: float = 0.0,
         default_limit: int = 50,
         max_limit: int = 1000,
