@@ -1,4 +1,5 @@
 import argparse
+import re
 import json
 import logging
 import os
@@ -63,7 +64,17 @@ def run_cli(db_url: str, query: Optional[str], mode: Optional[str], export: Opti
             break
         if not user_q:
             continue
-        res = qp.process(user_q, prefer_mode=mode, export=export)
+        # Per-query inline mode override: "mode:COMBO your query"
+        prefer_mode_iter = mode
+        m = re.match(r"^\s*mode\s*:\s*([a-z_ ]+)\s*(.*)$", user_q, flags=re.IGNORECASE)
+        if m:
+            requested = m.group(1).strip().upper().replace(" ", "_")
+            if requested in {"TABLE", "SHORT_ANSWER", "ANALYTICAL", "VISUALIZATION", "COMBO"}:
+                prefer_mode_iter = requested
+                remainder = m.group(2).strip()
+                if remainder:
+                    user_q = remainder
+        res = qp.process(user_q, prefer_mode=prefer_mode_iter, export=export)
         print("Mode:", res.mode)
         if res.sql:
             print("SQL:\n", res.sql)

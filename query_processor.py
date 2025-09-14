@@ -830,7 +830,7 @@ class QueryProcessor:
             "sample_rows": df.head(5).to_dict(orient="records") if df is not None else [],
             "context": context.texts[:4],
         }
-        prompt = sys_prompt + "\n\n" + json.dumps(summary, ensure_ascii=False)
+        prompt = sys_prompt + "\n\n" + json.dumps(summary, ensure_ascii=False, default=str)
         try:
             resp = self.llm.invoke(prompt)
             raw = resp.content if hasattr(resp, "content") else resp
@@ -842,8 +842,29 @@ class QueryProcessor:
 
     def process(self, user_query: str, prefer_mode: Optional[str] = None, export: Optional[str] = None) -> NL2SQLOutput:
         start_time = time.time()
+        # Soft override if the user includes phrases like "use combo mode" inline
+        override_mode: Optional[str] = None
+        try:
+            lower_q = user_query.lower()
+            if "use combo mode" in lower_q or "use combo mod" in lower_q:
+                override_mode = "COMBO"
+                user_query = re.sub(r"use\s+combo\s+mod(e)?", "", user_query, flags=re.IGNORECASE).strip()
+            elif "use analytical mode" in lower_q:
+                override_mode = "ANALYTICAL"
+                user_query = re.sub(r"use\s+analytical\s+mode", "", user_query, flags=re.IGNORECASE).strip()
+            elif "use table mode" in lower_q:
+                override_mode = "TABLE"
+                user_query = re.sub(r"use\s+table\s+mode", "", user_query, flags=re.IGNORECASE).strip()
+            elif "use short answer" in lower_q:
+                override_mode = "SHORT_ANSWER"
+                user_query = re.sub(r"use\s+short\s+answer", "", user_query, flags=re.IGNORECASE).strip()
+            elif "use visualization mode" in lower_q or "use chart" in lower_q:
+                override_mode = "VISUALIZATION"
+                user_query = re.sub(r"use\s+visualization\s+mode|use\s+chart", "", user_query, flags=re.IGNORECASE).strip()
+        except Exception:
+            pass
         context = self.vector_manager.similarity_search(user_query, top_k=8)
-        mode = self._detect_mode(user_query, context, prefer_mode)
+        mode = self._detect_mode(user_query, context, override_mode or prefer_mode)
         # Step 1: Plan JSON
         plan = self._plan_intent(user_query)
         # Step 3: Candidate generation (k-best)
