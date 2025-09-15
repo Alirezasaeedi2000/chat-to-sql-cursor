@@ -138,7 +138,7 @@ def _stringify_llm_content(value: Any) -> str:
                 parts.append(item)
             elif isinstance(item, dict):
                 if "text" in item and isinstance(item["text"], str):
-                    parts.append(item["text"])
+                    parts.append(item["text"]) 
                 elif "json" in item:
                     try:
                         parts.append(json.dumps(item["json"]))
@@ -389,7 +389,7 @@ class SafeSqlExecutor:
             cols = inspector.get_columns(t)
             result["tables"].append(
                 {
-                    "name": t,
+                "name": t,
                     "columns": [
                         {"name": c.get("name"), "type": str(c.get("type"))}
                         for c in cols
@@ -468,6 +468,11 @@ class QueryProcessor:
         self.engine = engine
         self.vector_manager = vector_manager
         self.llm = ChatOllama(model=model_name, temperature=temperature)
+        # Use a faster model for simple tasks like mode detection
+        self.fast_llm = ChatOllama(
+            model="llama3.2:1b" if "3.2" in model_name else model_name,
+            temperature=0.0,
+        )
         self.safe_exec = SafeSqlExecutor(
             engine,
             default_limit=default_limit,
@@ -586,51 +591,382 @@ class QueryProcessor:
             LOGGER.debug("Failed to build schema graph: %s", exc)
 
     def _retrieve_schema_subgraph(
-        self, user_query: str, max_hops: int = 2
+        self, user_query: str, max_hops: int = 3
     ) -> Dict[str, Any]:
-        """Heuristic subgraph retrieval: map keywords to tables/columns, expand by FK hops."""
+        """Advanced Graph RAG: Enhanced subgraph retrieval with semantic scoring and intelligent path finding."""
         try:
             q = user_query.lower()
-            # seed nodes by simple name matches
-            seeds: List[Tuple[str, ...]] = []
+            
+            # Enhanced seed node discovery with semantic scoring
+            seeds: List[Tuple[Tuple[str, ...], float]] = []  # (node, relevance_score)
+            
             for node in self.schema_graph.nodes:
                 kind = node[0]
+                score = 0.0
+                
                 if kind == "table":
-                    name = node[1]
-                    if name.lower() in q:
-                        seeds.append(node)
+                    name = node[1].lower()
+                    # Exact match
+                    if name in q:
+                        score += 1.0
+                    # Partial match (plural/singular)
+                    elif name[:-1] in q or (name + "s") in q:
+                        score += 0.8
+                    # Semantic similarity for common patterns
+                    elif any(pattern in name for pattern in ["employee", "project", "department"] if pattern in q):
+                        score += 0.6
+                    
                 elif kind == "column":
-                    _, t, c = node
-                    if c.lower() in q or t.lower() in q:
-                        seeds.append(node)
-            if not seeds:
-                # fallback: use top 2 table names
-                seeds = [n for n in self.schema_graph.nodes if n[0] == "table"][:2]
-            # BFS expansion
-            included = set(seeds)
-            frontier = list(seeds)
-            for _ in range(max_hops):
+                    _, table_name, col_name = node
+                    col_lower = col_name.lower()
+                    # Column name matches
+                    if col_lower in q:
+                        score += 0.9
+                    # Common column patterns
+                    elif any(pattern in col_lower for pattern in ["name", "id", "date", "status"] if pattern in q):
+                        score += 0.5
+                    # Table context boost
+                    if table_name.lower() in q:
+                        score += 0.3
+                
+                if score > 0.3:  # Threshold for relevance
+                    seeds.append((node, score))
+            
+            # Sort by relevance and take top seeds
+            seeds.sort(key=lambda x: x[1], reverse=True)
+            seed_nodes = [node for node, score in seeds[:8]]
+            
+            if not seed_nodes:
+                # Fallback: use top table names
+                seed_nodes = [n for n in self.schema_graph.nodes if n[0] == "table"][:3]
+            
+            # Multi-hop BFS expansion with decay
+            included = set(seed_nodes)
+            frontier = list(seed_nodes)
+            hop_scores = {node: 1.0 for node in seed_nodes}
+            
+            for hop in range(max_hops):
                 next_frontier: List[Tuple[str, ...]] = []
+                decay_factor = 0.7 ** hop  # Exponential decay
+                
                 for n in frontier:
+                    current_score = hop_scores.get(n, 0.5)
+                    
                     for m in self.schema_graph.neighbors(n):
                         if m not in included:
-                            included.add(m)
-                            next_frontier.append(m)
+                            # Score based on edge type and semantic relevance
+                            edge_data = self.schema_graph.get_edge_data(n, m, {})
+                            edge_score = self._score_graph_edge(edge_data, q)
+                            
+                            propagated_score = current_score * decay_factor * edge_score
+                            
+                            if propagated_score > 0.1:  # Minimum threshold
+                                included.add(m)
+                                next_frontier.append(m)
+                                hop_scores[m] = propagated_score
+                
                 frontier = next_frontier
-            # Collect tables, columns, and fk edges
-            tables = sorted({n[1] for n in included if n[0] == "table"})
+            
+            # Collect enhanced results with scores
+            tables = []
+            table_scores = {}
+            for n in included:
+                if n[0] == "table":
+                    table_name = n[1]
+                    tables.append(table_name)
+                    table_scores[table_name] = hop_scores.get(n, 0.5)
+            
+            # Sort tables by relevance
+            tables = sorted(tables, key=lambda t: table_scores.get(t, 0), reverse=True)[:10]
+            
+            # Enhanced column collection with relevance
             columns: Dict[str, List[str]] = {}
             for n in included:
                 if n[0] == "column":
-                    _, t, c = n
-                    columns.setdefault(t, []).append(c)
-            fk_edges: List[Tuple[str, str, Tuple[str, str]]] = []
+                    _, table_name, col_name = n
+                    if table_name in tables:
+                        columns.setdefault(table_name, []).append(col_name)
+            
+            # Enhanced FK edges with semantic scores
+            fk_edges: List[Dict[str, Any]] = []
             for u, v, data in self.schema_graph.edges(data=True):
-                if u in included and v in included and data.get("kind") == "fk":
-                    fk_edges.append((u[1], v[1], tuple(data.get("via") or ("", ""))))
-            return {"tables": tables, "columns": columns, "fk_edges": fk_edges}
+                if (u in included and v in included and 
+                    data.get("kind") == "fk" and 
+                    u[0] == "table" and v[0] == "table"):
+                    
+                    from_table, to_table = u[1], v[1]
+                    if from_table in tables and to_table in tables:
+                        via = data.get("via", ("", ""))
+                        edge_score = self._score_graph_edge(data, q)
+                        
+                        fk_edges.append({
+                            "from": from_table,
+                            "to": to_table,
+                            "columns": via,
+                            "score": edge_score,
+                            "join_hint": f"JOIN `{to_table}` ON `{from_table}`.`{via[0]}` = `{to_table}`.`{via[1]}`"
+                        })
+            
+            # Sort FK edges by relevance
+            fk_edges.sort(key=lambda x: x["score"], reverse=True)
+            
+            # Generate intelligent join paths
+            join_paths = self._generate_join_paths(tables[:6], fk_edges, q)
+            
+            return {
+                "tables": tables,
+                "columns": columns,
+                "fk_edges": fk_edges,
+                "table_scores": table_scores,
+                "join_paths": join_paths,
+                "semantic_context": self._extract_semantic_context(q, tables)
+            }
+            
+        except Exception as exc:
+            LOGGER.debug("Enhanced subgraph retrieval failed: %s", exc)
+            return {"tables": [], "columns": {}, "fk_edges": [], "table_scores": {}, "join_paths": []}
+
+    def _score_graph_edge(self, edge_data: Dict[str, Any], query: str) -> float:
+        """Score the relevance of a graph edge to the query."""
+        score = 0.5  # Base score
+        
+        edge_kind = edge_data.get("kind", "")
+        if edge_kind == "fk":
+            score += 0.3  # Foreign keys are important for joins
+        
+        # Boost if edge involves tables mentioned in query
+        via = edge_data.get("via", ("", ""))
+        if any(col.lower() in query.lower() for col in via if col):
+            score += 0.2
+            
+        return min(score, 1.0)
+
+    def _generate_join_paths(self, tables: List[str], fk_edges: List[Dict], query: str) -> List[Dict[str, Any]]:
+        """Generate intelligent join paths for complex queries."""
+        if len(tables) < 2:
+            return []
+        
+        join_paths = []
+        
+        # Generate direct join paths for high-scoring table pairs
+        for i, table1 in enumerate(tables[:4]):
+            for table2 in tables[i+1:4]:
+                # Find direct connection
+                direct_edge = None
+                for edge in fk_edges:
+                    if ((edge["from"] == table1 and edge["to"] == table2) or
+                        (edge["from"] == table2 and edge["to"] == table1)):
+                        direct_edge = edge
+                        break
+                
+                if direct_edge:
+                    join_paths.append({
+                        "tables": [table1, table2],
+                        "path_type": "direct",
+                        "sql": direct_edge["join_hint"],
+                        "score": direct_edge["score"],
+                        "complexity": 1
+                    })
+        
+        # Generate multi-hop paths for complex queries
+        if len(tables) >= 3 and any(word in query.lower() for word in ["with", "and", "related", "across"]):
+            # Simple 3-table path
+            if len(tables) >= 3:
+                path_tables = tables[:3]
+                path_sql = self._build_multi_table_join(path_tables, fk_edges)
+                if path_sql:
+                    join_paths.append({
+                        "tables": path_tables,
+                        "path_type": "multi_hop",
+                        "sql": path_sql,
+                        "score": 0.7,
+                        "complexity": len(path_tables) - 1
+                    })
+        
+        # Sort by score and complexity
+        join_paths.sort(key=lambda x: (x["score"], -x["complexity"]), reverse=True)
+        return join_paths[:5]
+
+    def _build_multi_table_join(self, tables: List[str], fk_edges: List[Dict]) -> str:
+        """Build multi-table JOIN SQL from FK relationships."""
+        if len(tables) < 2:
+            return ""
+        
+        joins = []
+        base_table = tables[0]
+        
+        for target_table in tables[1:]:
+            # Find connection to base or already joined tables
+            join_found = False
+            for edge in fk_edges:
+                if ((edge["from"] == base_table and edge["to"] == target_table) or
+                    (edge["from"] == target_table and edge["to"] == base_table)):
+                    joins.append(edge["join_hint"])
+                    join_found = True
+                    break
+            
+            if not join_found:
+                # Fallback to simple ID-based join
+                joins.append(f"JOIN `{target_table}` ON `{base_table}`.id = `{target_table}`.{base_table}_id")
+        
+        return " ".join(joins)
+
+    def _extract_semantic_context(self, query: str, tables: List[str]) -> Dict[str, Any]:
+        """Extract semantic context from query for enhanced SQL generation."""
+        query_lower = query.lower()
+        
+        context = {
+            "intent": "select",
+            "aggregation": None,
+            "grouping": None,
+            "filtering": None,
+            "ordering": None,
+            "temporal": None
+        }
+        
+        # Detect aggregation patterns
+        if any(word in query_lower for word in ["count", "sum", "avg", "average", "total", "max", "min"]):
+            context["aggregation"] = "aggregate"
+        
+        # Detect grouping patterns
+        if any(phrase in query_lower for phrase in ["by", "per", "each", "group"]):
+            context["grouping"] = "group_by"
+        
+        # Detect temporal patterns
+        if any(word in query_lower for word in ["year", "month", "date", "time", "recent", "last", "since"]):
+            context["temporal"] = "time_based"
+        
+        # Detect comparison patterns
+        if any(word in query_lower for word in ["compare", "vs", "versus", "between", "against"]):
+            context["intent"] = "comparison"
+        
+        return context
+
+    def _pre_validate_schema_usage(self, sql: str, context: RetrievedContext) -> List[str]:
+        """Pre-validate SQL against schema context to catch common errors early."""
+        issues = []
+        sql_lower = sql.lower()
+        
+        # Extract schema information from context
+        schema_tables = set()
+        schema_columns = {}
+        fk_relationships = {}
+        
+        for text in context.texts:
+            if "Table `" in text:
+                # Extract table name
+                import re
+                table_match = re.search(r"Table `(\w+)`", text)
+                if table_match:
+                    table_name = table_match.group(1)
+                    schema_tables.add(table_name)
+                    
+                    # Extract columns
+                    col_matches = re.findall(r"(\w+)\([^)]+\)", text)
+                    schema_columns[table_name] = col_matches
+                    
+                    # Extract FK relationships
+                    fk_matches = re.findall(r"(\w+) -> (\w+)\((\w+)\)", text)
+                    for from_col, to_table, to_col in fk_matches:
+                        fk_relationships[f"{table_name}.{from_col}"] = f"{to_table}.{to_col}"
+        
+        # Check for common schema violations
+        
+        # 1. Wrong table names (employee vs employe)
+        if "`employee`" in sql and "employe" in schema_tables:
+            issues.append("Using wrong table name: `employee` should be `employe`")
+        
+        # 2. Wrong column references for employe table
+        if "`employe`" in sql and "employee_id" in sql:
+            if "employe" in schema_columns and "id" in schema_columns["employe"]:
+                issues.append("Wrong column reference: employe table uses `id` not `employee_id`")
+        
+        # 3. Incorrect JOIN patterns
+        if "employe" in sql_lower and "employee_projects" in sql_lower:
+            if "e.employee_id" in sql or "employe.employee_id" in sql:
+                issues.append("Incorrect JOIN: use `employe.id = employee_projects.employee_id`")
+        
+        # 4. Missing table references in schema
+        for table in schema_tables:
+            if f"`{table}`" not in sql and table in sql_lower:
+                # Table mentioned but not properly quoted
+                issues.append(f"Table `{table}` should be properly quoted with backticks")
+        
+        return issues
+
+    def _compute_alignment_bonus(self, user_query: str, plan: Dict[str, Any], sql: str) -> int:
+        """Compute a small alignment bonus for candidates whose SQL matches intent-critical cues.
+
+        Bonuses are intentionally small and additive to existing validation scores.
+        """
+        try:
+            s = sql.lower()
+            q = user_query.lower()
+            bonus = 0
+            # Distribution / group by when question says by/per/each
+            if any(k in q for k in [" by ", " per ", " each ", "group by"]) and " group by " in s:
+                bonus += 1
+            # Exactly-N projects
+            m = re.search(r"\b(\d{1,3})\s+active\s+project", q) or re.search(r"\b(\d{1,3})\s+project", q)
+            if m:
+                n = int(m.group(1))
+                if f"having count(distinct ep.project_id) = {n}" in s:
+                    bonus += 2
+                if any(w in q for w in ["active", "ongoing", "planned"]) and " p.status " in s:
+                    bonus += 1
+            # Time series comparison should include group by year
+            if any(k in q for k in ["over the last", "by year", "per year", "trend"]):
+                if " group by " in s and (" year" in s or "year(" in s):
+                    bonus += 1
+            # Avoid hard-coded ID filters for departments
+            if re.search(r"\bdepartment_id\s*=\s*\d+", s):
+                bonus -= 1
+            return bonus
         except Exception:
-            return {"tables": [], "columns": {}, "fk_edges": []}
+            return 0
+
+    def _maybe_build_compare_two_departments_over_years(self, user_query: str) -> Optional[str]:
+        """Build time comparison for two departments over last N years or generic years.
+
+        Extracts two department names (e.g., Engineering vs Sales) and produces a year, count_A, count_B table.
+        """
+        q = user_query.lower()
+        if not ("compare" in q and "over" in q and "year" in q and "department" in q):
+            # also accept explicit names without the word department
+            if not ("compare" in q and "over" in q and "year" in q and any(n in q for n in ["engineering", "sales", "hr", "marketing", "finance"])):
+                return None
+        # Find two department tokens by name heuristics
+        known = ["engineering", "sales", "hr", "marketing", "finance"]
+        depts = [w for w in known if w in q]
+        if len(depts) < 2:
+            return None
+        dept_a, dept_b = depts[0], depts[1]
+        # Year window
+        years_match = re.search(r"last\s+(\d{1,2})\s+years", q)
+        year_filter = ""
+        if years_match:
+            try:
+                n = int(years_match.group(1))
+                if 1 <= n <= 20:
+                    # Use MySQL YEAR(CURDATE()) for relative window
+                    year_filter = f"WHERE p.year >= YEAR(CURDATE()) - {n - 1}\n"
+            except Exception:
+                pass
+        if "performance" not in self.allowed_tables or "employe" not in self.allowed_tables or "departments" not in self.allowed_tables:
+            return None
+        limit_val = self.safe_exec.default_limit if hasattr(self.safe_exec, "default_limit") else 50
+        sql = (
+            "SELECT p.year,\n"
+            f"  SUM(CASE WHEN d.name = '{dept_a.capitalize()}' THEN 1 ELSE 0 END) AS {dept_a}_count,\n"
+            f"  SUM(CASE WHEN d.name = '{dept_b.capitalize()}' THEN 1 ELSE 0 END) AS {dept_b}_count\n"
+            "FROM `performance` p JOIN `employe` e ON p.employee_id=e.id\n"
+            "JOIN `departments` d ON e.department_id=d.id\n"
+            f"{year_filter}"
+            "GROUP BY p.year\n"
+            "ORDER BY p.year\n"
+            f"LIMIT {limit_val}"
+        )
+        return sql
 
     def _detect_mode(
         self, user_query: str, context: RetrievedContext, prefer_mode: Optional[str]
@@ -650,7 +986,7 @@ class QueryProcessor:
             + json.dumps(input_block, ensure_ascii=False)
         )
         try:
-            resp = self.llm.invoke(prompt)
+            resp = self.fast_llm.invoke(prompt)
             raw = resp.content if hasattr(resp, "content") else resp
             txt: str = _stringify_llm_content(raw)
             data = _parse_json_block(txt)
@@ -660,8 +996,14 @@ class QueryProcessor:
             LOGGER.warning("Mode detection failed: %s", exc)
         # heuristics fallback
         lower = user_query.lower()
-        if any(w in lower for w in ["plot", "chart", "graph", "trend"]):
+        # Explicit visuals first (enhanced with "pie")
+        vis_keywords = ["plot", "chart", "graph", "trend", "visualize", "visualisation", "visualization", "pie"]
+        if any(w in lower for w in vis_keywords):
             return "VISUALIZATION"
+        # Distribution style queries (grouped outputs): prefer TABLE unless explicitly visualized
+        if any(k in lower for k in [" by ", " per ", " each ", "group by", "count by", "distribution"]):
+            return "TABLE"
+        # Scalar questions
         if any(
             w in lower
             for w in [
@@ -676,6 +1018,7 @@ class QueryProcessor:
             ]
         ):
             return "SHORT_ANSWER"
+        # Analytical comparisons/explanations
         if any(
             w in lower
             for w in ["why", "insight", "explain", "compare", "versus", "vs "]
@@ -770,6 +1113,9 @@ class QueryProcessor:
                 if not a_table or not b_table:
                     # Likely join with a derived table; skip FK validation for this ON clause
                     continue
+                # Allow self-joins (e.g., manager relationships) without requiring FK edge
+                if a_table == b_table:
+                    continue
                 # Check fk edges in either direction
                 a_edges = {(c, rt, rc) for c, rt, rc in self.fk_graph.get(a_table, [])}
                 b_edges = {(c, rt, rc) for c, rt, rc in self.fk_graph.get(b_table, [])}
@@ -863,6 +1209,155 @@ class QueryProcessor:
         )
         return sql
 
+    def _maybe_build_distribution_count(self, user_query: str) -> Optional[str]:
+        """Deterministic builder for distribution counts (e.g., employee count by department).
+
+        Triggers on phrases like 'count ... by department', 'employees per department', 'each department'.
+        """
+        q = user_query.lower()
+        if not ("department" in q and any(k in q for k in [" by ", " per ", " each ", "group by"])):
+            return None
+        if not any(k in q for k in ["employee", "employees", "staff", "people"]):
+            return None
+        # Require schema pieces
+        if not ("employe" in self.allowed_tables and "departments" in self.allowed_tables):
+            return None
+        needed_cols = {"department_id"}
+        if not needed_cols <= set(self.table_to_columns.get("employe", [])):
+            return None
+        limit_val = (
+            self.safe_exec.default_limit if hasattr(self.safe_exec, "default_limit") else 50
+        )
+        sql = (
+            "SELECT d.name, COUNT(*)\n"
+            "FROM `employe` e\n"
+            "JOIN `departments` d ON e.department_id = d.id\n"
+            "GROUP BY d.name\n"
+            "ORDER BY COUNT(*) DESC\n"
+            f"LIMIT {limit_val}"
+        )
+        return sql
+
+    def _maybe_build_same_department_as_manager(self, user_query: str) -> Optional[str]:
+        """Deterministic builder for 'employees whose manager is in the same department'.
+
+        Requires `employe` to have `manager_id` and `department_id`. Uses a self-join.
+        If columns are missing, returns None for LLM or other heuristics to handle.
+        """
+        q = user_query.lower()
+        if not (
+            ("same department" in q and "manager" in q)
+            or ("manager" in q and "department" in q and any(k in q for k in ["same", "equal"]))
+        ):
+            return None
+        if "employe" not in self.allowed_tables:
+            return None
+        emp_cols = set(self.table_to_columns.get("employe", []))
+        if not ({"department_id", "manager_id", "id"} <= emp_cols):
+            # Cannot deterministically build without these columns
+            return None
+        limit_val = (
+            self.safe_exec.default_limit if hasattr(self.safe_exec, "default_limit") else 50
+        )
+        if any(k in q for k in ["how many", "count", "number"]):
+            sql = (
+                "SELECT COUNT(*)\n"
+                "FROM `employe` e\n"
+                "JOIN `employe` m ON e.manager_id = m.id\n"
+                "WHERE e.department_id = m.department_id\n"
+                f"LIMIT {limit_val}"
+            )
+        else:
+            sql = (
+                "SELECT e.first_name, e.last_name\n"
+                "FROM `employe` e\n"
+                "JOIN `employe` m ON e.manager_id = m.id\n"
+                "WHERE e.department_id = m.department_id\n"
+                f"LIMIT {limit_val}"
+            )
+        return sql
+
+    def _maybe_build_employees_with_n_projects(self, user_query: str) -> Optional[str]:
+        """Deterministic builder for queries like 'employees working in N (active) projects [by department | pie]'.
+
+        Supports exact N. If 'active'/'ongoing'/'planned' present, filters projects by status.
+        If 'by department'/'per department'/'each department' present, groups by department.
+        If 'pie' present, returns label/value columns suitable for pie chart.
+        """
+        q = user_query.lower()
+        # Must mention employee(s) and projects
+        if not ("employee" in q and "project" in q):
+            return None
+        # Extract N
+        m = re.search(r"\b(\d{1,3})\s+active\s+project", q)
+        active_hint = False
+        if m:
+            n = int(m.group(1))
+            active_hint = True
+        else:
+            m = re.search(r"\b(\d{1,3})\s+project", q)
+            if not m:
+                return None
+            n = int(m.group(1))
+        if n <= 0 or n > 1000:
+            return None
+        # Schema requirements
+        required_tables = {"employee_projects", "employe"}
+        if not required_tables <= self.allowed_tables:
+            return None
+        # Build subquery for employees with exactly N projects (optionally active)
+        status_filter = ""
+        if active_hint or any(s in q for s in ["active", "ongoing", "planned"]):
+            # Require projects table
+            if "projects" not in self.allowed_tables:
+                return None
+            status_filter = (
+                " JOIN `projects` p ON ep.project_id = p.id\n"
+                "  WHERE p.status IN ('Ongoing','Planned')\n"
+            )
+        sub = (
+            "SELECT ep.employee_id\n"
+            "FROM `employee_projects` ep\n"
+            f"{status_filter}"
+            "GROUP BY ep.employee_id\n"
+            f"HAVING COUNT(DISTINCT ep.project_id) = {n}"
+        )
+        by_dept = any(k in q for k in [" by ", " per ", " each "]) and "department" in q
+        limit_val = self.safe_exec.default_limit if hasattr(self.safe_exec, "default_limit") else 50
+        if by_dept:
+            # Need departments table
+            if "departments" not in self.allowed_tables:
+                return None
+            is_pie = "pie" in q
+            label_col = "label" if is_pie else "name"
+            value_col = "value" if is_pie else "COUNT(*)"
+            sql = (
+                f"SELECT d.name AS {label_col}, COUNT(*) AS {value_col}\n"
+                "FROM (\n" + sub + "\n) e2\n"
+                "JOIN `employe` e ON e2.employee_id = e.id\n"
+                "JOIN `departments` d ON e.department_id = d.id\n"
+                "GROUP BY d.name\n"
+                "ORDER BY COUNT(*) DESC\n"
+                f"LIMIT {limit_val}"
+            )
+            return sql
+        # Scalar count
+        if any(w in q for w in ["how many", "count", "number"]):
+            sql = (
+                "SELECT COUNT(*)\n"
+                "FROM (\n" + sub + "\n) t\n"
+                f"LIMIT {limit_val}"
+            )
+            return sql
+        # Otherwise, list employees
+        sql = (
+            "SELECT e.first_name, e.last_name\n"
+            "FROM (\n" + sub + "\n) e2\n"
+            "JOIN `employe` e ON e2.employee_id = e.id\n"
+            f"LIMIT {limit_val}"
+        )
+        return sql
+
     # ---------------- Multi-step pipeline helpers -----------------
     def _plan_intent(self, user_query: str) -> Dict[str, Any]:
         text = user_query.lower()
@@ -936,6 +1431,22 @@ class QueryProcessor:
         heuristic = self._maybe_build_per_group_topk(user_query)
         if heuristic:
             candidates.append(heuristic)
+        # 0.1) Deterministic distribution count builder
+        dist_sql = self._maybe_build_distribution_count(user_query)
+        if dist_sql:
+            candidates.append(dist_sql)
+        # 0.2) Deterministic same-department-as-manager builder
+        same_dept_sql = self._maybe_build_same_department_as_manager(user_query)
+        if same_dept_sql:
+            candidates.append(same_dept_sql)
+        # 0.3) Deterministic employees with N projects builder
+        nproj_sql = self._maybe_build_employees_with_n_projects(user_query)
+        if nproj_sql:
+            candidates.append(nproj_sql)
+        # 0.4) Two-department comparison over years
+        cmp_sql = self._maybe_build_compare_two_departments_over_years(user_query)
+        if cmp_sql:
+            candidates.append(cmp_sql)
         # 1..k) LLM candidates
         for i in range(k):
             payload_hint = f"Candidate:{i + 1}"
@@ -1051,19 +1562,66 @@ class QueryProcessor:
             return "(no rows)"
         return df.to_markdown(index=False)
 
-    def _short_answer_from_df(self, df: pd.DataFrame) -> str:
+    def _short_answer_from_df(self, df: pd.DataFrame) -> Optional[str]:
         if df is None or df.empty:
-            return "No result"
-        # prioritize a column named value or count
-        for name in df.columns:
-            if name.lower() in {"value", "count", "total", "sum", "avg", "average"}:
-                return str(df[name].iloc[0])
-        return str(df.iloc[0, 0])
+            return None
+        # Only emit short answer for a true scalar shape (1 row x 1 column)
+        if df.shape == (1, 1):
+            value = df.iat[0, 0]
+            return str(value)
+        # If there is a single row with a canonical scalar column name, allow
+        if df.shape[0] == 1 and any(
+            name.lower() in {"value", "count", "total", "sum", "avg", "average"}
+            for name in df.columns
+        ):
+            # prefer the canonical column
+            for name in df.columns:
+                if name.lower() in {"value", "count", "total", "sum", "avg", "average"}:
+                    return str(df[name].iloc[0])
+        return None
+
+    def _fallback_short_answer(self, df: pd.DataFrame) -> Optional[str]:
+        """Conservative fallback for single-row, multi-column results.
+
+        Use when we want a concise highlight even if it's not a pure scalar shape
+        (e.g., COMBO aggregated profile). Picks a meaningful column if present.
+        """
+        try:
+            if df is None or df.empty or len(df) != 1:
+                return None
+            preferred = ["count", "total", "sum", "avg", "average", "id"]
+            lower_cols = [c.lower() for c in df.columns]
+            for p in preferred:
+                if p in lower_cols:
+                    idx = lower_cols.index(p)
+                    return str(df.iloc[0, idx])
+            # fallback to the first cell
+            return str(df.iloc[0, 0])
+        except Exception:
+            return None
+
+    def _post_exec_shape_adjust(self, plan: Dict[str, Any], df: Optional[pd.DataFrame], mode: str) -> str:
+        """Adjust mode after execution if the actual result shape doesn't fit the intent.
+
+        - scalar intent must return 1x1; otherwise downgrade to TABLE
+        - distribution intent should return at least 2 columns and multiple rows; otherwise TABLE
+        """
+        try:
+            intent = plan.get("intent", "list")
+            if intent == "scalar" or mode == "SHORT_ANSWER":
+                if not (df is not None and df.shape == (1, 1)):
+                    return "TABLE"
+            if intent == "distribution":
+                if not (df is not None and df.shape[1] >= 2 and len(df) >= 2):
+                    return "TABLE"
+        except Exception:
+            return mode
+        return mode
 
     def _maybe_visualize(
         self, df: pd.DataFrame, title: str, user_query: str = ""
     ) -> Optional[str]:
-        if df is None or df.empty or df.shape[1] < 2:
+        if df is None or df.empty or len(df) == 0 or df.shape[1] < 2:
             return None
         try:
             import matplotlib.pyplot as plt
@@ -1155,7 +1713,7 @@ class QueryProcessor:
                     ax.set_xticklabels(categories, rotation=45)
                     ax.legend()
                 else:
-                    colors = plt.cm.Set3(range(len(df)))
+                    colors = plt.cm.Set3(range(len(df))) if df is not None and not df.empty else []
                     bars = ax.bar(
                         df[x_col].astype(str),
                         df[y_candidates[0]],
@@ -1164,7 +1722,7 @@ class QueryProcessor:
                     )
                     ax.tick_params(axis="x", labelrotation=45)
                     # Add value labels on bars if not too many
-                    if len(df) <= 15:
+                    if df is not None and not df.empty and len(df) <= 15:
                         for bar, value in zip(bars, df[y_candidates[0]]):
                             height = bar.get_height()
                             ax.text(
@@ -1221,7 +1779,7 @@ class QueryProcessor:
             return "line"
 
         # For small datasets with categories, consider pie chart
-        if len(df) <= 10 and not pd.api.types.is_numeric_dtype(df[x_col]):
+        if df is not None and not df.empty and len(df) <= 10 and not pd.api.types.is_numeric_dtype(df[x_col]):
             if any(
                 word in query_lower
                 for word in ["share", "percentage", "proportion", "breakdown"]
@@ -1369,15 +1927,36 @@ class QueryProcessor:
         mode = self._detect_mode(user_query, context, override_mode or prefer_mode)
         # Step 1: Plan JSON
         plan = self._plan_intent(user_query)
+        # Add user_query to plan for clarification logic
+        plan["user_query"] = user_query
+        
+        # Check for underspecification before proceeding
+        if self._is_underspecified(plan):
+            return self._ask_clarification(plan)
+        
         # Step 3: Candidate generation (k-best)
         candidates = self._generate_candidates(user_query, context, mode, k=3)
         validations: List[Dict[str, Any]] = []
         chosen_sql: Optional[str] = None
         # Step 4: Validate each candidate
         for c in candidates:
+            # Pre-validate schema usage before full validation
+            schema_issues = self._pre_validate_schema_usage(c, context)
+            if schema_issues:
+                validations.append({
+                    "sql": c,
+                    "valid": False,
+                    "errors": schema_issues,
+                    "score": 0,
+                    "schema_pre_validation": "failed"
+                })
+                continue
+                
             validations.append(self._validate_candidate(plan, c))
-        # Step 5: Light reranking + execution-guided selection
-        # Rank by score desc, then try execution for top-N
+        # Step 5: Alignment-based reranking + execution-guided selection
+        # Add small alignment bonus based on intent cues
+        for v in validations:
+            v["score"] = v.get("score", 0) + self._compute_alignment_bonus(user_query, plan, v.get("sql", ""))
         ranked = sorted(validations, key=lambda v: v.get("score", 0), reverse=True)
         for v in ranked[:3]:
             if not v.get("valid"):
@@ -1443,11 +2022,24 @@ class QueryProcessor:
                 LOGGER.warning("Initial SQL failed, attempting repair: %s", exc)
                 # single-shot repair attempt
                 repair_prompt = mcp_handler.build_sql_repair_prompt()
+                
+                # Enhanced repair context with specific schema fixes
+                schema_hints = []
+                error_str = str(exc).lower()
+                if "doesn't exist" in error_str:
+                    schema_hints.append("⚠️ Table/column doesn't exist - check schema context for exact names")
+                if "employee_id" in error_str and any("employe" in text for text in context.texts):
+                    schema_hints.append("🔧 Use `employe.id` not `employe.employee_id` - check FK relationships")
+                if "unknown column" in error_str:
+                    schema_hints.append("🔧 Column name mismatch - use exact names from schema context")
+                
                 payload = {
                     "question": user_query,
                     "failed_sql": sql,
                     "error": str(exc),
                     "context": context.texts[:6],
+                    "repair_hints": schema_hints,
+                    "critical_reminder": "Use EXACT table and column names from schema context. For employe table, primary key is `id` not `employee_id`"
                 }
                 try:
                     resp = self.llm.invoke(
@@ -1464,8 +2056,30 @@ class QueryProcessor:
                     LOGGER.error("SQL repair failed: %s", exc2)
                     error_msg = f"Original error: {exc}. Repair failed: {exc2}"
 
+        # Clarification gate: if no valid candidates and plan is underspecified, ask a question instead
+        if (
+            (not validations or sum(1 for v in validations if v.get("valid")) == 0)
+            and (not plan.get("metrics") and plan.get("intent") not in {"list", "top/most"})
+        ):
+            analysis = (
+                "Clarification needed: Which department or time period should we consider, and what metric (count, avg, sum)?"
+            )
+            return NL2SQLOutput(
+                mode="ANALYTICAL",
+                sql=None,
+                table_markdown=None,
+                short_answer=None,
+                analysis=analysis,
+                visualization_path=None,
+                metadata={"row_count": 0, "execution_time_ms": (time.time() - start_time) * 1000, "confidence": 0.0},
+            )
+
+        # Post-execution shape adjustment and short-answer gating
+        mode = self._post_exec_shape_adjust(plan, df, mode)
         table_md = self._format_table(df) if df is not None else None
         short_answer = self._short_answer_from_df(df) if df is not None else None
+        if short_answer is None and df is not None and not df.empty and len(df) == 1 and mode in ("COMBO", "ANALYTICAL"):
+            short_answer = self._fallback_short_answer(df)
         viz_path: Optional[str] = None
         forecast_path: Optional[str] = None
         analysis: Optional[str] = None
@@ -1504,7 +2118,7 @@ class QueryProcessor:
             sql_query=executed_sql or sql,
             mode=mode,
             execution_time_ms=execution_time_ms,
-            row_count=len(df) if df is not None else 0,
+            row_count=len(df) if df is not None and not df.empty else 0,
             error=error_msg,
         )
 
@@ -1535,10 +2149,59 @@ class QueryProcessor:
             analysis=analysis,
             visualization_path=viz_path,
             metadata={
-                "row_count": int(len(df)) if df is not None else 0,
+                "row_count": int(len(df)) if df is not None and not df.empty else 0,
                 "execution_time_ms": execution_time_ms,
                 "history_id": history_id,
                 "confidence": confidence,
                 "forecast_path": forecast_path,
             },
+        )
+
+    def _is_underspecified(self, plan: Dict[str, Any]) -> bool:
+        """Check if the plan is underspecified and requires clarification."""
+        # Check for vague staffing requests
+        user_query = plan.get("user_query", "").lower()
+        entities = plan.get("entities", [])
+        
+        # Staffing questions without specifics
+        if "employee" in entities and any(word in user_query for word in ["need", "require", "more", "additional"]):
+            if not any(kw in user_query for kw in ["department", "dept", "role", "skill", "project", "team"]):
+                return True
+        
+        # Vague comparison requests
+        if "compare" in user_query and "department" in user_query:
+            if not any(kw in user_query for kw in ["vs", "versus", "and", "with", "engineering", "sales", "hr", "marketing", "finance"]):
+                return True
+        
+        # Vague performance questions
+        if any(word in user_query for word in ["performance", "doing", "how are we"]):
+            if not any(kw in user_query for kw in ["department", "project", "employee", "year", "month", "metric"]):
+                return True
+        
+        return False
+
+    def _ask_clarification(self, plan: Dict[str, Any]) -> NL2SQLOutput:
+        """Generate a clarification response based on the plan."""
+        user_query = plan.get("user_query", "").lower()
+        
+        # Handle staffing questions specifically
+        if "employee" in plan.get("entities", []) and any(word in user_query for word in ["need", "require", "more", "additional"]):
+            clarification = "For staffing needs, please specify: which department, role, or skill set are you looking to expand?"
+        # Handle comparison questions
+        elif "compare" in user_query and "department" in user_query:
+            clarification = "Please specify which departments you'd like to compare (e.g., 'Engineering vs Sales') and what metric (headcount, salary, performance)."
+        # Handle vague performance questions
+        elif any(word in user_query for word in ["performance", "doing", "how are we"]):
+            clarification = "Please specify what aspect of performance you'd like to analyze (department, project, time period, or specific metrics)."
+        else:
+            clarification = "Please clarify your question with more specific details about entities, metrics, or time periods."
+        
+        return NL2SQLOutput(
+            mode="CLARIFICATION",
+            sql="",
+            table_markdown="",
+            short_answer="",
+            analysis=clarification,
+            visualization_path="",
+            metadata={"clarification_required": True},
         )

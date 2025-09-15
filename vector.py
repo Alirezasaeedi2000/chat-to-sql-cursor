@@ -90,20 +90,64 @@ class VectorStoreManager:
         cols = inspector.get_columns(table_name)
         pk = inspector.get_pk_constraint(table_name)
         pk_cols = pk.get("constrained_columns") or []
-        col_desc = ", ".join([f"{c['name']}({str(c.get('type'))})" for c in cols])
+        
+        # Enhanced column descriptions with nullability and defaults
+        col_desc = []
+        for c in cols:
+            col_info = f"{c['name']}({str(c.get('type'))})"
+            if not c.get('nullable', True):
+                col_info += " NOT NULL"
+            if c.get('default') is not None:
+                col_info += f" DEFAULT {c['default']}"
+            col_desc.append(col_info)
+        
         snippet = (
-            f"Table `{table_name}` columns: {col_desc}. "
+            f"Table `{table_name}` columns: {', '.join(col_desc)}. "
             f"Primary key: {', '.join(pk_cols) if pk_cols else 'None'}."
         )
+        
+        # Foreign keys with relationship semantics
         fks = inspector.get_foreign_keys(table_name)
         if fks:
-            fk_desc = "; ".join(
-                [
-                    f"{','.join(fk.get('constrained_columns', []))} -> {fk.get('referred_table')}({','.join(fk.get('referred_columns', []))})"
-                    for fk in fks
-                ]
-            )
-            snippet += f" Foreign keys: {fk_desc}."
+            fk_desc = []
+            for fk in fks:
+                constrained = ','.join(fk.get('constrained_columns', []))
+                referred_table = fk.get('referred_table')
+                referred_cols = ','.join(fk.get('referred_columns', []))
+                # Add semantic meaning
+                relationship = f"{constrained} -> {referred_table}({referred_cols})"
+                if 'id' in constrained.lower():
+                    relationship += f" [many-to-one: {table_name} belongs to {referred_table}]"
+                fk_desc.append(relationship)
+            snippet += f" Foreign keys: {'; '.join(fk_desc)}."
+        
+        # Indexes for performance hints
+        try:
+            indexes = inspector.get_indexes(table_name)
+            if indexes:
+                idx_desc = []
+                for idx in indexes:
+                    idx_name = idx.get('name', 'unnamed')
+                    idx_cols = ','.join(idx.get('column_names', []))
+                    unique = " UNIQUE" if idx.get('unique') else ""
+                    idx_desc.append(f"{idx_name}({idx_cols}){unique}")
+                snippet += f" Indexes: {'; '.join(idx_desc)}."
+        except Exception:
+            # Some databases don't support index inspection
+            pass
+        
+        # Unique constraints
+        try:
+            unique_constraints = inspector.get_unique_constraints(table_name)
+            if unique_constraints:
+                uc_desc = []
+                for uc in unique_constraints:
+                    uc_cols = ','.join(uc.get('column_names', []))
+                    uc_desc.append(f"UNIQUE({uc_cols})")
+                snippet += f" Unique constraints: {'; '.join(uc_desc)}."
+        except Exception:
+            pass
+            
         return snippet
 
     def _sample_rows_snippet(
@@ -118,9 +162,40 @@ class VectorStoreManager:
                 )
             if df.empty:
                 return f"No sample rows available for `{table_name}`.", df
+            
+            # Enhanced analysis with data patterns
             head = df.head(min(sample_rows, 5))
             sample_text = head.to_csv(index=False)
-            return f"Sample rows for `{table_name}` (CSV):\n{sample_text}", df
+            
+            # Analyze data patterns and distributions
+            patterns = []
+            for col in df.columns:
+                col_data = df[col].dropna()
+                if len(col_data) == 0:
+                    continue
+                    
+                # Data type analysis
+                if pd.api.types.is_numeric_dtype(col_data):
+                    patterns.append(f"{col}: numeric range [{col_data.min():.2f} to {col_data.max():.2f}]")
+                elif pd.api.types.is_datetime64_any_dtype(col_data):
+                    patterns.append(f"{col}: dates from {col_data.min()} to {col_data.max()}")
+                elif pd.api.types.is_string_dtype(col_data) or pd.api.types.is_object_dtype(col_data):
+                    unique_count = col_data.nunique()
+                    total_count = len(col_data)
+                    if unique_count == total_count:
+                        patterns.append(f"{col}: unique values (likely identifier)")
+                    elif unique_count <= 10:
+                        sample_values = list(col_data.unique()[:5])
+                        patterns.append(f"{col}: categorical [{unique_count} values: {sample_values}...]")
+                    else:
+                        patterns.append(f"{col}: text data [{unique_count}/{total_count} unique]")
+            
+            pattern_text = "\nData patterns: " + "; ".join(patterns) if patterns else ""
+            
+            return (
+                f"Sample rows for `{table_name}` (CSV):\n{sample_text}{pattern_text}",
+                df
+            )
         except Exception as exc:
             LOGGER.warning("Failed to sample rows for %s: %s", table_name, exc)
             return f"Failed to sample rows for `{table_name}` due to error.", None
