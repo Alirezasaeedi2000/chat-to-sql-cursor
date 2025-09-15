@@ -89,5 +89,3 @@ def build_analytical_prompt() -> str:
         "- Don't mention February unless time data is present\n"
         "- Don't mention overtime unless hours data is shown\n"
     )
-
-

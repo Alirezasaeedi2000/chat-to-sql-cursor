@@ -40,7 +40,9 @@ class QueryExpander:
                 with open(self.synonyms_path, "r", encoding="utf-8") as f:
                     self.synonyms = json.load(f)
             except Exception as exc:
-                LOGGER.warning("Failed to load synonyms file %s: %s", self.synonyms_path, exc)
+                LOGGER.warning(
+                    "Failed to load synonyms file %s: %s", self.synonyms_path, exc
+                )
                 self.synonyms = {}
 
     def expand(self, query_text: str) -> str:
@@ -104,10 +106,16 @@ class VectorStoreManager:
             snippet += f" Foreign keys: {fk_desc}."
         return snippet
 
-    def _sample_rows_snippet(self, engine: Engine, table_name: str, sample_rows: int) -> Tuple[str, Optional[pd.DataFrame]]:
+    def _sample_rows_snippet(
+        self, engine: Engine, table_name: str, sample_rows: int
+    ) -> Tuple[str, Optional[pd.DataFrame]]:
         try:
             with engine.connect() as conn:
-                df = pd.read_sql(text(f"SELECT * FROM `{table_name}` LIMIT :lim"), conn, params={"lim": sample_rows})
+                df = pd.read_sql(
+                    text(f"SELECT * FROM `{table_name}` LIMIT :lim"),
+                    conn,
+                    params={"lim": sample_rows},
+                )
             if df.empty:
                 return f"No sample rows available for `{table_name}`.", df
             head = df.head(min(sample_rows, 5))
@@ -117,13 +125,17 @@ class VectorStoreManager:
             LOGGER.warning("Failed to sample rows for %s: %s", table_name, exc)
             return f"Failed to sample rows for `{table_name}` due to error.", None
 
-    def upsert_schema_and_samples(self, engine: Engine, sample_rows_per_table: int = 5, include_views: bool = True) -> int:
+    def upsert_schema_and_samples(
+        self, engine: Engine, sample_rows_per_table: int = 5, include_views: bool = True
+    ) -> int:
         """Indexes schema metadata and sample rows into the vector store. Returns number of items added."""
         inspector = inspect(engine)
         tables = inspector.get_table_names()
         if include_views:
             try:
-                tables.extend([v for v in inspector.get_view_names() if v not in tables])
+                tables.extend(
+                    [v for v in inspector.get_view_names() if v not in tables]
+                )
             except Exception:
                 pass
 
@@ -143,7 +155,9 @@ class VectorStoreManager:
                 )
                 added += 1
 
-                sample_text, _ = self._sample_rows_snippet(engine, table_name, sample_rows_per_table)
+                sample_text, _ = self._sample_rows_snippet(
+                    engine, table_name, sample_rows_per_table
+                )
                 self._vector_store.add_texts(
                     texts=[sample_text],
                     metadatas=[{"type": "sample", "table": table_name}],
@@ -158,7 +172,9 @@ class VectorStoreManager:
             pass
         return added
 
-    def add_past_query(self, sql: str, result_summary: Optional[str] = None, note: Optional[str] = None) -> None:
+    def add_past_query(
+        self, sql: str, result_summary: Optional[str] = None, note: Optional[str] = None
+    ) -> None:
         text_block = f"SQL: {sql}"
         if result_summary:
             text_block += f"\nResult: {result_summary}"
@@ -183,4 +199,3 @@ class VectorStoreManager:
         texts = [d.page_content for d in docs]
         metas = [d.metadata or {} for d in docs]
         return RetrievedContext(texts=texts, metadatas=metas)
-

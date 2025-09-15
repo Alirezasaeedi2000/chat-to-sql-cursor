@@ -1,4 +1,3 @@
-import asyncio
 import json
 import logging
 import os
@@ -64,7 +63,12 @@ async def tool_find_columns(args: Dict[str, Any]) -> Dict[str, Any]:
 async def tool_distinct_values(args: Dict[str, Any]) -> Dict[str, Any]:
     table = args.get("table")
     column = args.get("column")
-    if not isinstance(table, str) or not isinstance(column, str) or not table or not column:
+    if (
+        not isinstance(table, str)
+        or not isinstance(column, str)
+        or not table
+        or not column
+    ):
         return {"error": "Arguments 'table' and 'column' must be non-empty strings"}
     limit = int(args.get("limit", 50))
     execu = build_executor()
@@ -103,7 +107,8 @@ async def tool_export(args: Dict[str, Any]) -> Dict[str, Any]:
     os.makedirs("outputs/exports", exist_ok=True)
     # Use UTC timestamp for unique filenames
     import datetime as _dt
-    ts = _dt.datetime.utcnow().strftime("%Y%m%d_%H%M%S_%f")
+
+    ts = _dt.datetime.now(_dt.UTC).strftime("%Y%m%d_%H%M%S_%f")
     base = os.path.join("outputs", "exports", f"export_{ts}")
     path: Optional[str] = None
     if fmt.lower() == "csv":
@@ -171,7 +176,11 @@ async def tool_run_saved_query(args: Dict[str, Any]) -> Dict[str, Any]:
         return {"error": f"No saved query named {name}"}
     execu = build_executor()
     df, safe_sql = execu.execute_select(item["query"])
-    return {"sql": safe_sql, "row_count": len(df), "rows": df.to_dict(orient="records")[:50]}
+    return {
+        "sql": safe_sql,
+        "row_count": len(df),
+        "rows": df.to_dict(orient="records")[:50],
+    }
 
 
 TOOLS: Dict[str, Callable[[Dict[str, Any]], Any]] = {
@@ -192,31 +201,128 @@ TOOLS: Dict[str, Callable[[Dict[str, Any]], Any]] = {
 def _list_tools_payload() -> Dict[str, Any]:
     return {
         "tools": [
-            {"name": "health_check", "description": "Health probe", "inputSchema": {"type": "object", "properties": {}, "required": []}},
-            {"name": "get_schema", "description": "Return schema summary", "inputSchema": {"type": "object", "properties": {}, "required": []}},
-            {"name": "describe_table", "description": "Describe a table's columns", "inputSchema": {"type": "object", "properties": {"table": {"type": "string"}}, "required": ["table"]}},
-            {"name": "find_tables", "description": "Find tables matching a pattern", "inputSchema": {"type": "object", "properties": {"pattern": {"type": "string"}}, "required": ["pattern"]}},
-            {"name": "find_columns", "description": "Find columns matching a pattern", "inputSchema": {"type": "object", "properties": {"pattern": {"type": "string"}}, "required": ["pattern"]}},
-            {"name": "distinct_values", "description": "List distinct values of a column", "inputSchema": {"type": "object", "properties": {"table": {"type": "string"}, "column": {"type": "string"}, "limit": {"type": "integer"}}, "required": ["table", "column"]}},
-            {"name": "run_sql", "description": "Run a safe SELECT query", "inputSchema": {"type": "object", "properties": {"query": {"type": "string"}}, "required": ["query"]}},
-            {"name": "explain_sql", "description": "Explain a safe SELECT query", "inputSchema": {"type": "object", "properties": {"query": {"type": "string"}}, "required": ["query"]}},
-            {"name": "export", "description": "Export query results to file", "inputSchema": {"type": "object", "properties": {"query": {"type": "string"}, "fmt": {"type": "string", "enum": ["csv", "json"]}}, "required": ["query"]}},
-            {"name": "save_query", "description": "Save a named SELECT query", "inputSchema": {"type": "object", "properties": {"name": {"type": "string"}, "query": {"type": "string"}, "description": {"type": "string"}}, "required": ["name", "query"]}},
-            {"name": "run_saved_query", "description": "Execute a saved query by name", "inputSchema": {"type": "object", "properties": {"name": {"type": "string"}}, "required": ["name"]}},
+            {
+                "name": "health_check",
+                "description": "Health probe",
+                "inputSchema": {"type": "object", "properties": {}, "required": []},
+            },
+            {
+                "name": "get_schema",
+                "description": "Return schema summary",
+                "inputSchema": {"type": "object", "properties": {}, "required": []},
+            },
+            {
+                "name": "describe_table",
+                "description": "Describe a table's columns",
+                "inputSchema": {
+                    "type": "object",
+                    "properties": {"table": {"type": "string"}},
+                    "required": ["table"],
+                },
+            },
+            {
+                "name": "find_tables",
+                "description": "Find tables matching a pattern",
+                "inputSchema": {
+                    "type": "object",
+                    "properties": {"pattern": {"type": "string"}},
+                    "required": ["pattern"],
+                },
+            },
+            {
+                "name": "find_columns",
+                "description": "Find columns matching a pattern",
+                "inputSchema": {
+                    "type": "object",
+                    "properties": {"pattern": {"type": "string"}},
+                    "required": ["pattern"],
+                },
+            },
+            {
+                "name": "distinct_values",
+                "description": "List distinct values of a column",
+                "inputSchema": {
+                    "type": "object",
+                    "properties": {
+                        "table": {"type": "string"},
+                        "column": {"type": "string"},
+                        "limit": {"type": "integer"},
+                    },
+                    "required": ["table", "column"],
+                },
+            },
+            {
+                "name": "run_sql",
+                "description": "Run a safe SELECT query",
+                "inputSchema": {
+                    "type": "object",
+                    "properties": {"query": {"type": "string"}},
+                    "required": ["query"],
+                },
+            },
+            {
+                "name": "explain_sql",
+                "description": "Explain a safe SELECT query",
+                "inputSchema": {
+                    "type": "object",
+                    "properties": {"query": {"type": "string"}},
+                    "required": ["query"],
+                },
+            },
+            {
+                "name": "export",
+                "description": "Export query results to file",
+                "inputSchema": {
+                    "type": "object",
+                    "properties": {
+                        "query": {"type": "string"},
+                        "fmt": {"type": "string", "enum": ["csv", "json"]},
+                    },
+                    "required": ["query"],
+                },
+            },
+            {
+                "name": "save_query",
+                "description": "Save a named SELECT query",
+                "inputSchema": {
+                    "type": "object",
+                    "properties": {
+                        "name": {"type": "string"},
+                        "query": {"type": "string"},
+                        "description": {"type": "string"},
+                    },
+                    "required": ["name", "query"],
+                },
+            },
+            {
+                "name": "run_saved_query",
+                "description": "Execute a saved query by name",
+                "inputSchema": {
+                    "type": "object",
+                    "properties": {"name": {"type": "string"}},
+                    "required": ["name"],
+                },
+            },
         ]
     }
 
 
 if hasattr(server, "method"):
+
     @server.method("tools/list")  # type: ignore[attr-defined]
     async def _tools_list() -> Dict[str, Any]:
         return _list_tools_payload()
 
     @server.method("tools/call")  # type: ignore[attr-defined]
-    async def _tools_call(name: str, arguments: Optional[Dict[str, Any]] = None, **_: Any) -> Dict[str, Any]:
+    async def _tools_call(
+        name: str, arguments: Optional[Dict[str, Any]] = None, **_: Any
+    ) -> Dict[str, Any]:
         func = TOOLS.get(name)
         if func is None:
-            return {"content": [{"type": "text", "text": f"Unknown tool: {name}"}], "is_error": True}
+            return {
+                "content": [{"type": "text", "text": f"Unknown tool: {name}"}],
+                "is_error": True,
+            }
         result = await func(arguments or {})
         return {"content": [{"type": "json", "json": result}], "is_error": False}
 
@@ -224,20 +330,25 @@ if hasattr(server, "method"):
 async def main() -> None:
     # Ensure logging is configured if not already
     if not logging.getLogger().handlers:
-        logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
+        logging.basicConfig(
+            level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s"
+        )
 
     # Load .env if present to populate DATABASE_URL
     try:
         from dotenv import load_dotenv  # type: ignore
+
         load_dotenv()
     except Exception:
         pass
 
     async with stdio_server() as (read, write):
         from typing import Any
+
         try:
             # Use NotificationOptions if available; fall back otherwise
             from mcp.server.models import NotificationOptions  # type: ignore
+
             caps: Any = server.get_capabilities(
                 notification_options=NotificationOptions(),  # type: ignore
                 experimental_capabilities={},

@@ -4,14 +4,13 @@ Web interface for the Natural Language to SQL Assistant.
 Provides a simple, modern web UI for interacting with the system.
 """
 
-import json
 import logging
 import os
 import traceback
-from datetime import datetime
-from typing import Any, Dict, Optional
+from datetime import datetime, UTC, timedelta
+from typing import Optional
 
-from flask import Flask, render_template_string, request, jsonify, send_file, Response
+from flask import Flask, render_template_string, request, jsonify, send_file
 from werkzeug.exceptions import BadRequest
 
 from query_processor import QueryProcessor, create_engine_from_env
@@ -22,7 +21,7 @@ from query_history import QueryHistoryManager
 LOGGER = logging.getLogger(__name__)
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.urandom(24)
+app.config["SECRET_KEY"] = os.urandom(24)
 
 # Global instances
 qp: Optional[QueryProcessor] = None
@@ -311,136 +310,144 @@ HTML_TEMPLATE = """
 """
 
 
-@app.route('/')
+@app.route("/")
 def index():
     """Serve the main application page."""
     return render_template_string(HTML_TEMPLATE)
 
 
-@app.route('/api/query', methods=['POST'])
+@app.route("/api/query", methods=["POST"])
 def api_query():
     """Handle query execution API endpoint."""
     if not qp:
-        return jsonify({'error': 'Application not initialized'}), 500
-    
+        return jsonify({"error": "Application not initialized"}), 500
+
     try:
         data = request.get_json()
-        if not data or 'query' not in data:
-            raise BadRequest('Missing query parameter')
-        
-        user_query = data['query'].strip()
+        if not data or "query" not in data:
+            raise BadRequest("Missing query parameter")
+
+        user_query = data["query"].strip()
         if not user_query:
-            raise BadRequest('Query cannot be empty')
-        
-        mode = data.get('mode')
-        export_format = data.get('export')
-        
+            raise BadRequest("Query cannot be empty")
+
+        mode = data.get("mode")
+        export_format = data.get("export")
+
         # Process the query
         result = qp.process(user_query, prefer_mode=mode, export=export_format)
-        
+
         # Convert to JSON-serializable format
         response_data = {
-            'mode': result.mode,
-            'sql': result.sql,
-            'table_markdown': result.table_markdown,
-            'short_answer': result.short_answer,
-            'analysis': result.analysis,
-            'visualization_path': os.path.basename(result.visualization_path) if result.visualization_path else None,
-            'metadata': result.metadata
+            "mode": result.mode,
+            "sql": result.sql,
+            "table_markdown": result.table_markdown,
+            "short_answer": result.short_answer,
+            "analysis": result.analysis,
+            "visualization_path": os.path.basename(result.visualization_path)
+            if result.visualization_path
+            else None,
+            "metadata": result.metadata,
         }
-        
+
         return jsonify(response_data)
-    
+
     except BadRequest as e:
-        return jsonify({'error': str(e)}), 400
+        return jsonify({"error": str(e)}), 400
     except Exception as e:
         LOGGER.error(f"Query processing failed: {e}\n{traceback.format_exc()}")
-        return jsonify({'error': f'Query processing failed: {str(e)}'}), 500
+        return jsonify({"error": f"Query processing failed: {str(e)}"}), 500
 
 
-@app.route('/api/history', methods=['GET'])
+@app.route("/api/history", methods=["GET"])
 def api_history_get():
     """Get query history."""
     if not history:
-        return jsonify({'error': 'History not initialized'}), 500
-    
+        return jsonify({"error": "History not initialized"}), 500
+
     try:
         entries = history.search_history(limit=50)
-        return jsonify([{
-            'id': entry.id,
-            'timestamp': entry.timestamp,
-            'user_query': entry.user_query,
-            'sql_query': entry.sql_query,
-            'mode': entry.mode,
-            'execution_time_ms': entry.execution_time_ms,
-            'row_count': entry.row_count,
-            'error': entry.error,
-            'is_favorite': entry.is_favorite,
-            'tags': entry.tags
-        } for entry in entries])
+        return jsonify(
+            [
+                {
+                    "id": entry.id,
+                    "timestamp": entry.timestamp,
+                    "user_query": entry.user_query,
+                    "sql_query": entry.sql_query,
+                    "mode": entry.mode,
+                    "execution_time_ms": entry.execution_time_ms,
+                    "row_count": entry.row_count,
+                    "error": entry.error,
+                    "is_favorite": entry.is_favorite,
+                    "tags": entry.tags,
+                }
+                for entry in entries
+            ]
+        )
     except Exception as e:
         LOGGER.error(f"Failed to get history: {e}")
-        return jsonify({'error': str(e)}), 500
+        return jsonify({"error": str(e)}), 500
 
 
-@app.route('/api/history', methods=['DELETE'])
+@app.route("/api/history", methods=["DELETE"])
 def api_history_clear():
     """Clear query history."""
     if not history:
-        return jsonify({'error': 'History not initialized'}), 500
-    
+        return jsonify({"error": "History not initialized"}), 500
+
     try:
         history.clear_history()
-        return jsonify({'status': 'success'})
+        return jsonify({"status": "success"})
     except Exception as e:
         LOGGER.error(f"Failed to clear history: {e}")
-        return jsonify({'error': str(e)}), 500
+        return jsonify({"error": str(e)}), 500
 
 
-@app.route('/static/<path:filename>')
+@app.route("/static/<path:filename>")
 def serve_static(filename):
     """Serve static files (visualizations)."""
-    if filename.startswith('viz_') and filename.endswith('.png'):
-        full_path = os.path.join('outputs', 'plots', filename)
+    if filename.startswith("viz_") and filename.endswith(".png"):
+        full_path = os.path.join("outputs", "plots", filename)
         if os.path.exists(full_path):
-            return send_file(full_path, mimetype='image/png')
-    
-    return jsonify({'error': 'File not found'}), 404
+            return send_file(full_path, mimetype="image/png")
+
+    return jsonify({"error": "File not found"}), 404
 
 
-@app.route('/health')
+@app.route("/health")
 def health_check():
     """Health check endpoint."""
-    return jsonify({
-        'status': 'healthy',
-        'timestamp': datetime.utcnow().isoformat(),
-        'initialized': qp is not None and history is not None
-    })
+    return jsonify(
+        {
+            "status": "healthy",
+            "timestamp": datetime.now(UTC).isoformat(),
+            "initialized": qp is not None and history is not None,
+        }
+    )
 
 
 def main():
     """Main entry point for the web server."""
     logging.basicConfig(
-        level=logging.INFO,
-        format='%(asctime)s %(levelname)s %(name)s: %(message)s'
+        level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s"
     )
-    
+
     try:
         init_app()
-        
-        port = int(os.environ.get('PORT', 8080))
-        host = os.environ.get('HOST', '127.0.0.1')
-        debug = os.environ.get('DEBUG', '').lower() in ('true', '1', 'yes')
-        
+
+        port = int(os.environ.get("PORT", 8080))
+        host = os.environ.get("HOST", "127.0.0.1")
+        debug = os.environ.get("DEBUG", "").lower() in ("true", "1", "yes")
+
         LOGGER.info(f"Starting web server on {host}:{port}")
         app.run(host=host, port=port, debug=debug)
-        
+
     except Exception as e:
         LOGGER.error(f"Failed to start web server: {e}")
         return 1
-    
+
     return 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     exit(main())
