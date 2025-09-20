@@ -1,0 +1,124 @@
+{
+  "enhanced_prompts": null,
+  "smart_builders": [
+    {
+      "method_name": "_maybe_build_waste_by_type",
+      "patterns": [
+        "waste by type",
+        "waste distribution",
+        "total waste"
+      ],
+      "sql": "SELECT `type`, SUM(`value`) as total_waste FROM `pack_waste` GROUP BY `type` ORDER BY total_waste DESC LIMIT 50"
+    },
+    {
+      "method_name": "_maybe_build_production_by_type",
+      "patterns": [
+        "production by type",
+        "production volume",
+        "total production"
+      ],
+      "sql": "SELECT `bakeType`, SUM(`totalUsage`) as total_production FROM `production_info` GROUP BY `bakeType` ORDER BY total_production DESC LIMIT 50"
+    },
+    {
+      "method_name": "_maybe_build_workers_by_section",
+      "patterns": [
+        "workers by section",
+        "employees by section",
+        "staff by section"
+      ],
+      "sql": "SELECT `section`, COUNT(*) as worker_count FROM `workers` GROUP BY `section` ORDER BY worker_count DESC LIMIT 50"
+    },
+    {
+      "method_name": "_maybe_build_hygiene_violations",
+      "patterns": [
+        "hygiene violations",
+        "hygiene issues",
+        "hygiene problems"
+      ],
+      "sql": "SELECT `personName`, COUNT(*) as violations FROM `person_hyg` WHERE `beard` = 'fail' OR `nail` = 'fail' OR `handLeg` = 'fail' GROUP BY `personName` ORDER BY violations DESC LIMIT 50"
+    },
+    {
+      "method_name": "_maybe_build_price_trends",
+      "patterns": [
+        "price trends",
+        "ingredient prices",
+        "cost trends"
+      ],
+      "sql": "SELECT `date`, AVG(`ricotta`) as avg_ricotta, AVG(`cream`) as avg_cream, AVG(`oil`) as avg_oil FROM `prices` GROUP BY `date` ORDER BY `date` DESC LIMIT 50"
+    }
+  ],
+  "confidence_rules": {
+    "base_confidence": 0.5,
+    "schema_match_bonus": 0.3,
+    "pattern_match_bonus": 0.2,
+    "deterministic_builder_bonus": 0.4,
+    "execution_success_bonus": 0.2,
+    "data_returned_bonus": 0.1,
+    "schema_mismatch_penalty": -0.4,
+    "execution_failure_penalty": -0.6,
+    "no_data_penalty": -0.3
+  },
+  "mode_detection_rules": {
+    "SHORT_ANSWER": [
+      "how many",
+      "count",
+      "total number",
+      "what is the total",
+      "sum of",
+      "average of",
+      "avg of",
+      "maximum",
+      "minimum",
+      "what is the",
+      "give me the",
+      "tell me the"
+    ],
+    "TABLE": [
+      "show me",
+      "list",
+      "display",
+      "get me",
+      "find",
+      "all ",
+      "every",
+      "which",
+      "recent",
+      "latest",
+      "by section",
+      "by type",
+      "by category"
+    ],
+    "ANALYTICAL": [
+      "analyze",
+      "analysis",
+      "compare",
+      "comparison",
+      "trends",
+      "patterns",
+      "insights",
+      "correlation",
+      "efficiency",
+      "performance",
+      "over time"
+    ],
+    "VISUALIZATION": [
+      "pie chart",
+      "bar chart",
+      "histogram",
+      "plot",
+      "chart",
+      "graph",
+      "visualize",
+      "visualization"
+    ]
+  },
+  "intelligence_patch": "\ndef _enhanced_detect_mode(self, user_query: str, context) -> str:\n    \"\"\"Enhanced mode detection with better accuracy\"\"\"\n    query_lower = user_query.lower()\n    \n    # Rule-based detection with priority order\n    \n    # 1. VISUALIZATION (highest priority for explicit requests)\n    viz_patterns = ['pie chart', 'bar chart', 'histogram', 'plot', 'chart', 'graph', 'visualize']\n    if any(pattern in query_lower for pattern in viz_patterns):\n        return \"VISUALIZATION\"\n    \n    # 2. SHORT_ANSWER (single value queries)\n    short_patterns = [\n        'how many', 'count', 'total number', 'what is the total',\n        'sum of', 'average of', 'avg of', 'maximum', 'minimum',\n        'what is the', 'give me the', 'tell me the'\n    ]\n    if any(pattern in query_lower for pattern in short_patterns):\n        return \"SHORT_ANSWER\"\n    \n    # 3. ANALYTICAL (trends and analysis)\n    analytical_patterns = [\n        'analyze', 'analysis', 'compare', 'comparison',\n        'trends', 'patterns', 'insights', 'correlation',\n        'efficiency', 'performance', 'over time'\n    ]\n    if any(pattern in query_lower for pattern in analytical_patterns):\n        return \"ANALYTICAL\"\n    \n    # 4. TABLE (default for listings and multi-row data)\n    table_patterns = [\n        'show me', 'list', 'display', 'get me', 'find',\n        'all ', 'every', 'which', 'recent', 'latest',\n        'by section', 'by type', 'by category'\n    ]\n    if any(pattern in query_lower for pattern in table_patterns):\n        return \"TABLE\"\n    \n    # Default fallback\n    return \"TABLE\"\n\ndef _enhanced_confidence_calculation(self, sql: str, execution_success: bool, data_returned: bool, is_deterministic: bool) -> float:\n    \"\"\"Enhanced confidence calculation with multiple factors\"\"\"\n    confidence = 0.5  # Base confidence\n    \n    # Schema match bonus\n    correct_tables = ['pack_waste', 'production_info', 'workers', 'person_hyg', 'prices', 'packaging_info']\n    if any(table in sql.lower() for table in correct_tables):\n        confidence += 0.3\n    \n    # Pattern match bonus\n    if any(pattern in sql.lower() for pattern in ['group by', 'sum(', 'count(', 'avg(']):\n        confidence += 0.2\n    \n    # Deterministic builder bonus\n    if is_deterministic:\n        confidence += 0.4\n    \n    # Execution success bonus\n    if execution_success:\n        confidence += 0.2\n    else:\n        confidence -= 0.6\n    \n    # Data returned bonus\n    if data_returned:\n        confidence += 0.1\n    else:\n        confidence -= 0.3\n    \n    return max(0.0, min(1.0, confidence))\n\ndef _smart_table_selection(self, user_query: str) -> str:\n    \"\"\"Smart table selection based on query intent\"\"\"\n    query_lower = user_query.lower()\n    \n    # Domain-specific table mapping\n    if any(word in query_lower for word in ['waste', 'packaging waste']):\n        return 'pack_waste'\n    elif any(word in query_lower for word in ['production', 'bake', 'volume']):\n        return 'production_info'\n    elif any(word in query_lower for word in ['worker', 'employee', 'staff', 'section']):\n        return 'workers'\n    elif any(word in query_lower for word in ['hygiene', 'violation', 'compliance']):\n        return 'person_hyg'\n    elif any(word in query_lower for word in ['price', 'cost', 'ingredient']):\n        return 'prices'\n    elif any(word in query_lower for word in ['packaging', 'package']):\n        return 'packaging_info'\n    \n    return 'production_info'  # Default to main table\n",
+  "implementation_steps": [
+    "1. Update system prompts with schema awareness",
+    "2. Implement smart deterministic builders",
+    "3. Apply enhanced confidence calculation",
+    "4. Improve mode detection logic",
+    "5. Add smart table selection",
+    "6. Test with comprehensive test suite"
+  ]
+}

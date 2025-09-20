@@ -1,0 +1,3777 @@
+{
+  "schema_analysis": {
+    "pack_waste": {
+      "columns": {
+        "date": {
+          "type": "VARCHAR(8)",
+          "nullable": false,
+          "is_id": false,
+          "is_date": true,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "index": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "type": {
+          "type": "VARCHAR(10)",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": true,
+          "is_name": false
+        },
+        "value": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": true,
+          "is_category": false,
+          "is_name": false
+        },
+        "Wother1": {
+          "type": "VARCHAR(150)",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "Wother2": {
+          "type": "VARCHAR(150)",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "Wother3": {
+          "type": "VARCHAR(150)",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        }
+      },
+      "foreign_keys": [],
+      "sample_data": [
+        {
+          "date": "14031110",
+          "index": 2.0,
+          "type": "10",
+          "value": null,
+          "Wother1": null,
+          "Wother2": null,
+          "Wother3": null
+        },
+        {
+          "date": "14031110",
+          "index": 1.0,
+          "type": "10",
+          "value": 50.0,
+          "Wother1": null,
+          "Wother2": null,
+          "Wother3": null
+        },
+        {
+          "date": "14031110",
+          "index": 5.0,
+          "type": "50",
+          "value": null,
+          "Wother1": null,
+          "Wother2": null,
+          "Wother3": null
+        },
+        {
+          "date": "14031110",
+          "index": 1.0,
+          "type": "60",
+          "value": null,
+          "Wother1": null,
+          "Wother2": null,
+          "Wother3": null
+        },
+        {
+          "date": "14030922",
+          "index": 1.0,
+          "type": "10",
+          "value": null,
+          "Wother1": null,
+          "Wother2": null,
+          "Wother3": null
+        }
+      ],
+      "row_count": 391
+    },
+    "packaging_info": {
+      "columns": {
+        "Packkey": {
+          "type": "VARCHAR(20)",
+          "nullable": false,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "index": {
+          "type": "INTEGER",
+          "nullable": false,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "date": {
+          "type": "VARCHAR(20)",
+          "nullable": true,
+          "is_id": false,
+          "is_date": true,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "tranNumber": {
+          "type": "INTEGER",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "bakeDate": {
+          "type": "VARCHAR(8)",
+          "nullable": true,
+          "is_id": false,
+          "is_date": true,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "bakeType": {
+          "type": "VARCHAR(255) COLLATE \"utf8mb4_0900_ai_ci\"",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": true,
+          "is_name": false
+        },
+        "TotalWeight": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": true,
+          "is_category": false,
+          "is_name": false
+        },
+        "tranWeight": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": true,
+          "is_category": false,
+          "is_name": false
+        },
+        "templeCount": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "templeWeight": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": true,
+          "is_category": false,
+          "is_name": false
+        },
+        "sample": {
+          "type": "ENUM",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "bakeID": {
+          "type": "VARCHAR(11) COLLATE \"utf8mb4_0900_ai_ci\"",
+          "nullable": true,
+          "is_id": true,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "refer": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "referTemple": {
+          "type": "INTEGER",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        }
+      },
+      "foreign_keys": [],
+      "sample_data": [
+        {
+          "Packkey": "14030922-1",
+          "index": 1,
+          "date": "14030922",
+          "tranNumber": 9,
+          "bakeDate": "\u06f1\u06f4\u06f0\u06f3\u06f0\u06f9\u06f2\u06f2",
+          "bakeType": "4000",
+          "TotalWeight": 450.0,
+          "tranWeight": 66.0,
+          "templeCount": 20.0,
+          "templeWeight": null,
+          "sample": null,
+          "bakeID": null,
+          "refer": null,
+          "referTemple": 0
+        },
+        {
+          "Packkey": "14030926-10",
+          "index": 10,
+          "date": "14030926",
+          "tranNumber": null,
+          "bakeDate": null,
+          "bakeType": "0",
+          "TotalWeight": null,
+          "tranWeight": 66.0,
+          "templeCount": null,
+          "templeWeight": null,
+          "sample": null,
+          "bakeID": null,
+          "refer": null,
+          "referTemple": 0
+        },
+        {
+          "Packkey": "14030926-11",
+          "index": 11,
+          "date": "14030926",
+          "tranNumber": 3,
+          "bakeDate": null,
+          "bakeType": null,
+          "TotalWeight": null,
+          "tranWeight": 66.0,
+          "templeCount": null,
+          "templeWeight": null,
+          "sample": null,
+          "bakeID": null,
+          "refer": null,
+          "referTemple": 0
+        },
+        {
+          "Packkey": "14031001-1",
+          "index": 1,
+          "date": "14031001",
+          "tranNumber": null,
+          "bakeDate": "\u06f1\u06f4\u06f0\u06f3\u06f1\u06f0\u06f1\u06f0",
+          "bakeType": "2000",
+          "TotalWeight": 2.0,
+          "tranWeight": 66.0,
+          "templeCount": null,
+          "templeWeight": null,
+          "sample": null,
+          "bakeID": null,
+          "refer": null,
+          "referTemple": 0
+        },
+        {
+          "Packkey": "14031117-1",
+          "index": 1,
+          "date": "14031117",
+          "tranNumber": 2,
+          "bakeDate": null,
+          "bakeType": "2000",
+          "TotalWeight": 640.0,
+          "tranWeight": 66.0,
+          "templeCount": 35.0,
+          "templeWeight": null,
+          "sample": null,
+          "bakeID": null,
+          "refer": 25.0,
+          "referTemple": 0
+        }
+      ],
+      "row_count": 1302
+    },
+    "packs": {
+      "columns": {
+        "date": {
+          "type": "VARCHAR(20)",
+          "nullable": false,
+          "is_id": false,
+          "is_date": true,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "type": {
+          "type": "VARCHAR(10)",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": true,
+          "is_name": false
+        },
+        "carton": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "cartonCap": {
+          "type": "INTEGER",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "packet": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "other1": {
+          "type": "VARCHAR(150)",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "other2": {
+          "type": "VARCHAR(150)",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "other3": {
+          "type": "VARCHAR(150)",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        }
+      },
+      "foreign_keys": [],
+      "sample_data": [
+        {
+          "date": "14031110",
+          "type": "100",
+          "carton": 10.0,
+          "cartonCap": null,
+          "packet": null,
+          "other1": null,
+          "other2": null,
+          "other3": null
+        },
+        {
+          "date": "14031110",
+          "type": "200",
+          "carton": 11.0,
+          "cartonCap": null,
+          "packet": null,
+          "other1": null,
+          "other2": null,
+          "other3": null
+        },
+        {
+          "date": "14031110",
+          "type": "300",
+          "carton": 12.0,
+          "cartonCap": null,
+          "packet": null,
+          "other1": null,
+          "other2": null,
+          "other3": null
+        },
+        {
+          "date": "14040116",
+          "type": "200",
+          "carton": 101.0,
+          "cartonCap": null,
+          "packet": null,
+          "other1": null,
+          "other2": null,
+          "other3": null
+        },
+        {
+          "date": "14040116",
+          "type": "500",
+          "carton": 94.0,
+          "cartonCap": null,
+          "packet": 4.0,
+          "other1": null,
+          "other2": null,
+          "other3": null
+        }
+      ],
+      "row_count": 288
+    },
+    "person_hyg": {
+      "columns": {
+        "per_hy_id": {
+          "type": "VARCHAR(14) COLLATE \"utf8mb4_0900_ai_ci\"",
+          "nullable": false,
+          "is_id": true,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "ind": {
+          "type": "INTEGER",
+          "nullable": false,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "date": {
+          "type": "VARCHAR(11)",
+          "nullable": false,
+          "is_id": false,
+          "is_date": true,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "personName": {
+          "type": "VARCHAR(150) COLLATE \"utf8mb4_0900_ai_ci\"",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": true
+        },
+        "beard": {
+          "type": "ENUM",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "nail": {
+          "type": "ENUM",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "handLeg": {
+          "type": "ENUM",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "robe": {
+          "type": "ENUM",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "apron": {
+          "type": "ENUM",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "gloves": {
+          "type": "ENUM",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "shoe": {
+          "type": "ENUM",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "headgear": {
+          "type": "ENUM",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "food": {
+          "type": "ENUM",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "lacquer": {
+          "type": "ENUM",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "smoke": {
+          "type": "ENUM",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "jewels": {
+          "type": "ENUM",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "description": {
+          "type": "VARCHAR(255) COLLATE \"utf8mb4_0900_ai_ci\"",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": true
+        }
+      },
+      "foreign_keys": [],
+      "sample_data": [
+        {
+          "per_hy_id": "14031103-01",
+          "ind": 1,
+          "date": "14031103",
+          "personName": "\u0645\u062d\u0645\u062f\u0631\u0636\u0627 \u062e\u0631\u0633\u0646\u062f",
+          "beard": "True",
+          "nail": "True",
+          "handLeg": "True",
+          "robe": "True",
+          "apron": "True",
+          "gloves": "True",
+          "shoe": "True",
+          "headgear": "True",
+          "food": "True",
+          "lacquer": "True",
+          "smoke": "True",
+          "jewels": null,
+          "description": "\u0686\u0647 \u067e\u0633\u0631\u06cc !!!!"
+        },
+        {
+          "per_hy_id": "14031115-01",
+          "ind": 1,
+          "date": "14031115",
+          "personName": "\u06a9\u06cc\u0644\u06cc\u0627\u0646 \u0627\u0645 \u0628\u0627\u067e\u0647",
+          "beard": "True",
+          "nail": "True",
+          "handLeg": "True",
+          "robe": "False",
+          "apron": "True",
+          "gloves": "True",
+          "shoe": "True",
+          "headgear": "None",
+          "food": "True",
+          "lacquer": "True",
+          "smoke": "True",
+          "jewels": "True",
+          "description": "\u0627\u0632\u0634 \u062e\u0648\u0634\u0645 \u0646\u0645\u06cc\u0627\u062f \u0648\u0644\u06cc \u062f\u0645\u0634 \u06af\u0631\u0645"
+        },
+        {
+          "per_hy_id": "14031129-01",
+          "ind": 1,
+          "date": "14031129",
+          "personName": "\u0645\u062d\u0633\u0646 \u0628\u0646\u06cc \u0632\u0647\u0631\u0627",
+          "beard": "False",
+          "nail": "True",
+          "handLeg": "False",
+          "robe": "True",
+          "apron": "True",
+          "gloves": "False",
+          "shoe": "True",
+          "headgear": "None",
+          "food": "True",
+          "lacquer": "True",
+          "smoke": "True",
+          "jewels": "True",
+          "description": null
+        },
+        {
+          "per_hy_id": "14040119-01",
+          "ind": 1,
+          "date": "14040119",
+          "personName": null,
+          "beard": null,
+          "nail": "None",
+          "handLeg": null,
+          "robe": null,
+          "apron": null,
+          "gloves": null,
+          "shoe": null,
+          "headgear": null,
+          "food": null,
+          "lacquer": null,
+          "smoke": null,
+          "jewels": null,
+          "description": null
+        },
+        {
+          "per_hy_id": "14040123-01",
+          "ind": 1,
+          "date": "14040123",
+          "personName": "\u0622\u0642\u0627\u06cc \u0628\u0646\u06cc \u0632\u0647\u0631\u0627 ",
+          "beard": "False",
+          "nail": "True",
+          "handLeg": "False",
+          "robe": "True",
+          "apron": "None",
+          "gloves": "None",
+          "shoe": "False",
+          "headgear": "True",
+          "food": "True",
+          "lacquer": "None",
+          "smoke": "True",
+          "jewels": "True",
+          "description": null
+        }
+      ],
+      "row_count": 2268
+    },
+    "prices": {
+      "columns": {
+        "date": {
+          "type": "VARCHAR(11)",
+          "nullable": false,
+          "is_id": false,
+          "is_date": true,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "NC": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "ricotta": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "buttermilkPowder": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "uf": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "cream": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "oil": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "wheatStarch": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "citrate": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "phosphate": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "stablizer": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "salt": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "butterEssential": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "powderEssential": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "water": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "vegetableButter": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "dryMilk": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "mpc": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "namaisin": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "sorbet": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "lastEdit": {
+          "type": "VARCHAR(15)",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "lastEdittor": {
+          "type": "VARCHAR(150)",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "id": {
+          "type": "INTEGER",
+          "nullable": false,
+          "is_id": true,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "w1000": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "w2000": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "w3000": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "w4000": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "w5000": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "w6000": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "w7000": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "w8000": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        }
+      },
+      "foreign_keys": [],
+      "sample_data": [
+        {
+          "date": "14040119",
+          "NC": 1310000.0,
+          "ricotta": 300000.0,
+          "buttermilkPowder": 1200000.0,
+          "uf": 400000.0,
+          "cream": 2400000.0,
+          "oil": 850000.0,
+          "wheatStarch": 330000.0,
+          "citrate": 880000.0,
+          "phosphate": 1680000.0,
+          "stablizer": 1770000.0,
+          "salt": 50000.0,
+          "butterEssential": 6000000.0,
+          "powderEssential": 4000000.0,
+          "water": 100.0,
+          "vegetableButter": 660000.0,
+          "dryMilk": 1300000.0,
+          "mpc": 3000000.0,
+          "namaisin": 55000000.0,
+          "sorbet": 2280000.0,
+          "lastEdit": "1404/01/19",
+          "lastEdittor": "azizi",
+          "id": 1,
+          "w1000": 720000.0,
+          "w2000": 920000.0,
+          "w3000": 790000.0,
+          "w4000": 870000.0,
+          "w5000": 750000.0,
+          "w6000": 950000.0,
+          "w7000": 1100000.0,
+          "w8000": 1400000.0
+        },
+        {
+          "date": "14040208",
+          "NC": 1310000.0,
+          "ricotta": 300000.0,
+          "buttermilkPowder": 1200000.0,
+          "uf": 400000.0,
+          "cream": 2400000.0,
+          "oil": 850000.0,
+          "wheatStarch": 330000.0,
+          "citrate": 880000.0,
+          "phosphate": 1680000.0,
+          "stablizer": 1770000.0,
+          "salt": 50000.0,
+          "butterEssential": 6000000.0,
+          "powderEssential": 4000000.0,
+          "water": 100.0,
+          "vegetableButter": 660000.0,
+          "dryMilk": 1300000.0,
+          "mpc": 3000000.0,
+          "namaisin": 55000000.0,
+          "sorbet": 2280000.0,
+          "lastEdit": "1404/02/08",
+          "lastEdittor": "shaeri",
+          "id": 2,
+          "w1000": 850000.0,
+          "w2000": 960000.0,
+          "w3000": 820000.0,
+          "w4000": 930000.0,
+          "w5000": 930000.0,
+          "w6000": 1010000.0,
+          "w7000": 1140000.0,
+          "w8000": 1440000.0
+        },
+        {
+          "date": "14040307",
+          "NC": 1500000.0,
+          "ricotta": 350000.0,
+          "buttermilkPowder": 1500000.0,
+          "uf": 400000.0,
+          "cream": 2900000.0,
+          "oil": 650000.0,
+          "wheatStarch": 480000.0,
+          "citrate": 880000.0,
+          "phosphate": 1680000.0,
+          "stablizer": 2200000.0,
+          "salt": 50000.0,
+          "butterEssential": 6000000.0,
+          "powderEssential": 4000000.0,
+          "water": 100.0,
+          "vegetableButter": 660000.0,
+          "dryMilk": 1500000.0,
+          "mpc": 3000000.0,
+          "namaisin": 55000000.0,
+          "sorbet": 2280000.0,
+          "lastEdit": "1404/03/07",
+          "lastEdittor": "azizi",
+          "id": 3,
+          "w1000": 990000.0,
+          "w2000": 1050000.0,
+          "w3000": 880000.0,
+          "w4000": 1000000.0,
+          "w5000": 1000000.0,
+          "w6000": 1100000.0,
+          "w7000": 1300000.0,
+          "w8000": 1440000.0
+        },
+        {
+          "date": "14040311",
+          "NC": 1500000.0,
+          "ricotta": 350000.0,
+          "buttermilkPowder": 1500000.0,
+          "uf": 400000.0,
+          "cream": 2900000.0,
+          "oil": 650000.0,
+          "wheatStarch": 480000.0,
+          "citrate": 880000.0,
+          "phosphate": 1680000.0,
+          "stablizer": 2200000.0,
+          "salt": 50000.0,
+          "butterEssential": 6000000.0,
+          "powderEssential": 4000000.0,
+          "water": 100.0,
+          "vegetableButter": 660000.0,
+          "dryMilk": 1500000.0,
+          "mpc": 3000000.0,
+          "namaisin": 55000000.0,
+          "sorbet": 2280000.0,
+          "lastEdit": "1404/03/11",
+          "lastEdittor": "azizi",
+          "id": 4,
+          "w1000": 990000.0,
+          "w2000": 1050000.0,
+          "w3000": 880000.0,
+          "w4000": 1000000.0,
+          "w5000": 1000000.0,
+          "w6000": 1100000.0,
+          "w7000": 1300000.0,
+          "w8000": 1440000.0
+        }
+      ],
+      "row_count": 4
+    },
+    "production_info": {
+      "columns": {
+        "bakeID": {
+          "type": "VARCHAR(11)",
+          "nullable": false,
+          "is_id": true,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "date": {
+          "type": "VARCHAR(8)",
+          "nullable": true,
+          "is_id": false,
+          "is_date": true,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "bake": {
+          "type": "INTEGER",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "bakeType": {
+          "type": "VARCHAR(255) COLLATE \"utf8mb4_0900_ai_ci\"",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": true,
+          "is_name": false
+        },
+        "ricotta": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "whitecheese": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "oil": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "citrate": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "phosphate": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "wheatStarch": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "cream": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "stablizer": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "salt": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "butterEssential": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "powderEssential": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "namaisin": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "sorbet": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "buttermilkPowder": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "betacarotene": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "vegetableButter": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "dryMilk": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "other2": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "returns": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "returnType": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": true,
+          "is_name": false
+        },
+        "waste": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "wasteType": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": true,
+          "is_name": false
+        },
+        "water": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "totalUsage": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": true,
+          "is_category": false,
+          "is_name": false
+        },
+        "temp": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "humidity": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": true,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "machineNumber": {
+          "type": "INTEGER",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "tranNumber": {
+          "type": "INTEGER",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "tranWeight": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": true,
+          "is_category": false,
+          "is_name": false
+        },
+        "tran2Number": {
+          "type": "INTEGER",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "tran2Weight": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": true,
+          "is_category": false,
+          "is_name": false
+        },
+        "templeCount": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "tranProdWeight": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": true,
+          "is_category": false,
+          "is_name": false
+        },
+        "prodWeight": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": true,
+          "is_category": false,
+          "is_name": false
+        },
+        "tranDesc": {
+          "type": "VARCHAR(255)",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "elasticity": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "permeability": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "QCoil": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "cst": {
+          "type": "VARCHAR(255)",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "meltability": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "drymatter": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "meltTime": {
+          "type": "VARCHAR(150)",
+          "nullable": true,
+          "is_id": false,
+          "is_date": true,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "QCDesc": {
+          "type": "VARCHAR(255)",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "bakeStartTime": {
+          "type": "VARCHAR(6) COLLATE \"utf8mb4_0900_ai_ci\"",
+          "nullable": true,
+          "is_id": false,
+          "is_date": true,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "bakeEndTime": {
+          "type": "VARCHAR(6) COLLATE \"utf8mb4_0900_ai_ci\"",
+          "nullable": true,
+          "is_id": false,
+          "is_date": true,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "nc1Type": {
+          "type": "VARCHAR(10) COLLATE \"utf8mb4_0900_ai_ci\"",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": true,
+          "is_name": false
+        },
+        "nc1Amount": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": true,
+          "is_category": false,
+          "is_name": false
+        },
+        "nc2Type": {
+          "type": "VARCHAR(10) COLLATE \"utf8mb4_0900_ai_ci\"",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": true,
+          "is_name": false
+        },
+        "nc2Amount": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": true,
+          "is_category": false,
+          "is_name": false
+        },
+        "nc3Type": {
+          "type": "VARCHAR(10) COLLATE \"utf8mb4_0900_ai_ci\"",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": true,
+          "is_name": false
+        },
+        "nc3Amount": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": true,
+          "is_category": false,
+          "is_name": false
+        },
+        "nc4Type": {
+          "type": "VARCHAR(10) COLLATE \"utf8mb4_0900_ai_ci\"",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": true,
+          "is_name": false
+        },
+        "nc4Amount": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": true,
+          "is_category": false,
+          "is_name": false
+        },
+        "nc5Type": {
+          "type": "VARCHAR(10) COLLATE \"utf8mb4_0900_ai_ci\"",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": true,
+          "is_name": false
+        },
+        "nc5Amount": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": true,
+          "is_category": false,
+          "is_name": false
+        },
+        "nc6Type": {
+          "type": "VARCHAR(10) COLLATE \"utf8mb4_0900_ai_ci\"",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": true,
+          "is_name": false
+        },
+        "nc6Amount": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": true,
+          "is_category": false,
+          "is_name": false
+        },
+        "NCSum": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "totalMaterUsage": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": true,
+          "is_category": false,
+          "is_name": false
+        }
+      },
+      "foreign_keys": [],
+      "sample_data": [
+        {
+          "bakeID": "1-02",
+          "date": "1",
+          "bake": 2,
+          "bakeType": "0",
+          "ricotta": null,
+          "whitecheese": null,
+          "oil": null,
+          "citrate": null,
+          "phosphate": null,
+          "wheatStarch": null,
+          "cream": null,
+          "stablizer": null,
+          "salt": null,
+          "butterEssential": null,
+          "powderEssential": null,
+          "namaisin": null,
+          "sorbet": null,
+          "buttermilkPowder": null,
+          "betacarotene": null,
+          "vegetableButter": null,
+          "dryMilk": 0.0,
+          "other2": null,
+          "returns": null,
+          "returnType": 0.0,
+          "waste": null,
+          "wasteType": 0.0,
+          "water": null,
+          "totalUsage": null,
+          "temp": null,
+          "humidity": null,
+          "machineNumber": null,
+          "tranNumber": null,
+          "tranWeight": 66.0,
+          "tran2Number": null,
+          "tran2Weight": 66.0,
+          "templeCount": null,
+          "tranProdWeight": null,
+          "prodWeight": null,
+          "tranDesc": null,
+          "elasticity": null,
+          "permeability": null,
+          "QCoil": null,
+          "cst": null,
+          "meltability": null,
+          "drymatter": null,
+          "meltTime": null,
+          "QCDesc": null,
+          "bakeStartTime": null,
+          "bakeEndTime": null,
+          "nc1Type": "0",
+          "nc1Amount": null,
+          "nc2Type": "0",
+          "nc2Amount": null,
+          "nc3Type": "0",
+          "nc3Amount": null,
+          "nc4Type": "0",
+          "nc4Amount": null,
+          "nc5Type": "0",
+          "nc5Amount": null,
+          "nc6Type": "0",
+          "nc6Amount": null,
+          "NCSum": 0.0,
+          "totalMaterUsage": 0.0
+        },
+        {
+          "bakeID": "14030524-01",
+          "date": "14030524",
+          "bake": 1,
+          "bakeType": "0",
+          "ricotta": null,
+          "whitecheese": null,
+          "oil": null,
+          "citrate": null,
+          "phosphate": null,
+          "wheatStarch": null,
+          "cream": null,
+          "stablizer": null,
+          "salt": null,
+          "butterEssential": null,
+          "powderEssential": null,
+          "namaisin": null,
+          "sorbet": null,
+          "buttermilkPowder": null,
+          "betacarotene": null,
+          "vegetableButter": null,
+          "dryMilk": 0.0,
+          "other2": null,
+          "returns": null,
+          "returnType": 0.0,
+          "waste": null,
+          "wasteType": 0.0,
+          "water": null,
+          "totalUsage": null,
+          "temp": null,
+          "humidity": null,
+          "machineNumber": null,
+          "tranNumber": null,
+          "tranWeight": 66.0,
+          "tran2Number": null,
+          "tran2Weight": 66.0,
+          "templeCount": null,
+          "tranProdWeight": null,
+          "prodWeight": null,
+          "tranDesc": null,
+          "elasticity": 3.0,
+          "permeability": 5.0,
+          "QCoil": 5.0,
+          "cst": null,
+          "meltability": null,
+          "drymatter": null,
+          "meltTime": null,
+          "QCDesc": null,
+          "bakeStartTime": null,
+          "bakeEndTime": null,
+          "nc1Type": "0",
+          "nc1Amount": null,
+          "nc2Type": "0",
+          "nc2Amount": null,
+          "nc3Type": "0",
+          "nc3Amount": null,
+          "nc4Type": "0",
+          "nc4Amount": null,
+          "nc5Type": "0",
+          "nc5Amount": null,
+          "nc6Type": "0",
+          "nc6Amount": null,
+          "NCSum": 0.0,
+          "totalMaterUsage": 0.0
+        },
+        {
+          "bakeID": "14030601-01",
+          "date": "14030601",
+          "bake": 1,
+          "bakeType": "0",
+          "ricotta": 50.0,
+          "whitecheese": null,
+          "oil": 92.0,
+          "citrate": 3.0,
+          "phosphate": null,
+          "wheatStarch": 20.0,
+          "cream": null,
+          "stablizer": 2.0,
+          "salt": 3.0,
+          "butterEssential": null,
+          "powderEssential": null,
+          "namaisin": null,
+          "sorbet": null,
+          "buttermilkPowder": 6.0,
+          "betacarotene": null,
+          "vegetableButter": null,
+          "dryMilk": 0.0,
+          "other2": null,
+          "returns": null,
+          "returnType": 30.0,
+          "waste": 35.0,
+          "wasteType": 8.0,
+          "water": null,
+          "totalUsage": null,
+          "temp": null,
+          "humidity": null,
+          "machineNumber": 1,
+          "tranNumber": null,
+          "tranWeight": 66.0,
+          "tran2Number": null,
+          "tran2Weight": 66.0,
+          "templeCount": null,
+          "tranProdWeight": null,
+          "prodWeight": null,
+          "tranDesc": null,
+          "elasticity": null,
+          "permeability": null,
+          "QCoil": null,
+          "cst": null,
+          "meltability": null,
+          "drymatter": null,
+          "meltTime": null,
+          "QCDesc": null,
+          "bakeStartTime": null,
+          "bakeEndTime": null,
+          "nc1Type": "0",
+          "nc1Amount": null,
+          "nc2Type": "0",
+          "nc2Amount": null,
+          "nc3Type": "0",
+          "nc3Amount": null,
+          "nc4Type": "0",
+          "nc4Amount": null,
+          "nc5Type": "0",
+          "nc5Amount": null,
+          "nc6Type": "0",
+          "nc6Amount": null,
+          "NCSum": 0.0,
+          "totalMaterUsage": 211.0
+        },
+        {
+          "bakeID": "14030601-02",
+          "date": "14030601",
+          "bake": 2,
+          "bakeType": "0",
+          "ricotta": 50.0,
+          "whitecheese": null,
+          "oil": 92.0,
+          "citrate": 3.0,
+          "phosphate": null,
+          "wheatStarch": 20.0,
+          "cream": null,
+          "stablizer": 2.0,
+          "salt": 3.0,
+          "butterEssential": null,
+          "powderEssential": null,
+          "namaisin": null,
+          "sorbet": null,
+          "buttermilkPowder": 5.0,
+          "betacarotene": null,
+          "vegetableButter": null,
+          "dryMilk": 0.0,
+          "other2": null,
+          "returns": null,
+          "returnType": 35.0,
+          "waste": 32.0,
+          "wasteType": 5.0,
+          "water": null,
+          "totalUsage": null,
+          "temp": null,
+          "humidity": null,
+          "machineNumber": 1,
+          "tranNumber": null,
+          "tranWeight": 66.0,
+          "tran2Number": null,
+          "tran2Weight": 66.0,
+          "templeCount": null,
+          "tranProdWeight": null,
+          "prodWeight": null,
+          "tranDesc": null,
+          "elasticity": null,
+          "permeability": null,
+          "QCoil": null,
+          "cst": null,
+          "meltability": null,
+          "drymatter": null,
+          "meltTime": null,
+          "QCDesc": null,
+          "bakeStartTime": null,
+          "bakeEndTime": null,
+          "nc1Type": "0",
+          "nc1Amount": null,
+          "nc2Type": "0",
+          "nc2Amount": null,
+          "nc3Type": "0",
+          "nc3Amount": null,
+          "nc4Type": "0",
+          "nc4Amount": null,
+          "nc5Type": "0",
+          "nc5Amount": null,
+          "nc6Type": "0",
+          "nc6Amount": null,
+          "NCSum": 0.0,
+          "totalMaterUsage": 207.0
+        },
+        {
+          "bakeID": "14030601-03",
+          "date": "14030601",
+          "bake": 3,
+          "bakeType": "0",
+          "ricotta": 53.0,
+          "whitecheese": null,
+          "oil": 92.0,
+          "citrate": 3.0,
+          "phosphate": null,
+          "wheatStarch": 20.0,
+          "cream": null,
+          "stablizer": 2.0,
+          "salt": 3.0,
+          "butterEssential": null,
+          "powderEssential": null,
+          "namaisin": null,
+          "sorbet": null,
+          "buttermilkPowder": 6.0,
+          "betacarotene": null,
+          "vegetableButter": null,
+          "dryMilk": 0.0,
+          "other2": null,
+          "returns": null,
+          "returnType": 38.0,
+          "waste": 38.0,
+          "wasteType": 17.0,
+          "water": null,
+          "totalUsage": null,
+          "temp": null,
+          "humidity": null,
+          "machineNumber": 1,
+          "tranNumber": null,
+          "tranWeight": 66.0,
+          "tran2Number": null,
+          "tran2Weight": 66.0,
+          "templeCount": null,
+          "tranProdWeight": null,
+          "prodWeight": null,
+          "tranDesc": null,
+          "elasticity": null,
+          "permeability": null,
+          "QCoil": null,
+          "cst": null,
+          "meltability": null,
+          "drymatter": null,
+          "meltTime": null,
+          "QCDesc": null,
+          "bakeStartTime": null,
+          "bakeEndTime": null,
+          "nc1Type": "0",
+          "nc1Amount": null,
+          "nc2Type": "0",
+          "nc2Amount": null,
+          "nc3Type": "0",
+          "nc3Amount": null,
+          "nc4Type": "0",
+          "nc4Amount": null,
+          "nc5Type": "0",
+          "nc5Amount": null,
+          "nc6Type": "0",
+          "nc6Amount": null,
+          "NCSum": 0.0,
+          "totalMaterUsage": 217.0
+        }
+      ],
+      "row_count": 1649
+    },
+    "production_test": {
+      "columns": {
+        "bakeID": {
+          "type": "VARCHAR(11)",
+          "nullable": false,
+          "is_id": true,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "date": {
+          "type": "VARCHAR(8)",
+          "nullable": true,
+          "is_id": false,
+          "is_date": true,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "bake": {
+          "type": "INTEGER",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "bakeType": {
+          "type": "VARCHAR(255) COLLATE \"utf8mb4_0900_ai_ci\"",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": true,
+          "is_name": false
+        },
+        "ricotta": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "whitecheese": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "oil": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "citrate": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "phosphate": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "wheatStarch": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "cream": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "stablizer": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "salt": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "butterEssential": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "powderEssential": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "namaisin": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "sorbet": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "buttermilkPowder": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "betacarotene": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "vegetableButter": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "dryMilk": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "other2": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "returns": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "returnType": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": true,
+          "is_name": false
+        },
+        "waste": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "wasteType": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": true,
+          "is_name": false
+        },
+        "water": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "totalUsage": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": true,
+          "is_category": false,
+          "is_name": false
+        },
+        "temp": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "humidity": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": true,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "machineNumber": {
+          "type": "INTEGER",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "tranNumber": {
+          "type": "INTEGER",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "tranWeight": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": true,
+          "is_category": false,
+          "is_name": false
+        },
+        "tran2Number": {
+          "type": "INTEGER",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "tran2Weight": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": true,
+          "is_category": false,
+          "is_name": false
+        },
+        "templeCount": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "tranProdWeight": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": true,
+          "is_category": false,
+          "is_name": false
+        },
+        "prodWeight": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": true,
+          "is_category": false,
+          "is_name": false
+        },
+        "tranDesc": {
+          "type": "VARCHAR(255)",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "elasticity": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "permeability": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "QCoil": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "cst": {
+          "type": "VARCHAR(255)",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "meltability": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "drymatter": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "meltTime": {
+          "type": "VARCHAR(150)",
+          "nullable": true,
+          "is_id": false,
+          "is_date": true,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "QCDesc": {
+          "type": "VARCHAR(255)",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "bakeStartTime": {
+          "type": "VARCHAR(6) COLLATE \"utf8mb4_0900_ai_ci\"",
+          "nullable": true,
+          "is_id": false,
+          "is_date": true,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "bakeEndTime": {
+          "type": "VARCHAR(6) COLLATE \"utf8mb4_0900_ai_ci\"",
+          "nullable": true,
+          "is_id": false,
+          "is_date": true,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "nc1Type": {
+          "type": "VARCHAR(10) COLLATE \"utf8mb4_0900_ai_ci\"",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": true,
+          "is_name": false
+        },
+        "nc1Amount": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": true,
+          "is_category": false,
+          "is_name": false
+        },
+        "nc2Type": {
+          "type": "VARCHAR(10) COLLATE \"utf8mb4_0900_ai_ci\"",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": true,
+          "is_name": false
+        },
+        "nc2Amount": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": true,
+          "is_category": false,
+          "is_name": false
+        },
+        "nc3Type": {
+          "type": "VARCHAR(10) COLLATE \"utf8mb4_0900_ai_ci\"",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": true,
+          "is_name": false
+        },
+        "nc3Amount": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": true,
+          "is_category": false,
+          "is_name": false
+        },
+        "nc4Type": {
+          "type": "VARCHAR(10) COLLATE \"utf8mb4_0900_ai_ci\"",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": true,
+          "is_name": false
+        },
+        "nc4Amount": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": true,
+          "is_category": false,
+          "is_name": false
+        },
+        "nc5Type": {
+          "type": "VARCHAR(10) COLLATE \"utf8mb4_0900_ai_ci\"",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": true,
+          "is_name": false
+        },
+        "nc5Amount": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": true,
+          "is_category": false,
+          "is_name": false
+        },
+        "nc6Type": {
+          "type": "VARCHAR(10) COLLATE \"utf8mb4_0900_ai_ci\"",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": true,
+          "is_name": false
+        },
+        "nc6Amount": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": true,
+          "is_category": false,
+          "is_name": false
+        },
+        "NCSum": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "totalMaterUsage": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": true,
+          "is_category": false,
+          "is_name": false
+        }
+      },
+      "foreign_keys": [],
+      "sample_data": [
+        {
+          "bakeID": "14040501-01",
+          "date": "14040501",
+          "bake": 1,
+          "bakeType": "7000",
+          "ricotta": 35.0,
+          "whitecheese": null,
+          "oil": 64.0,
+          "citrate": 3.3,
+          "phosphate": 0.2,
+          "wheatStarch": 16.0,
+          "cream": 30.0,
+          "stablizer": 1.7,
+          "salt": 2.5,
+          "butterEssential": null,
+          "powderEssential": 0.2,
+          "namaisin": 0.013,
+          "sorbet": 0.1,
+          "buttermilkPowder": 3.0,
+          "betacarotene": null,
+          "vegetableButter": null,
+          "dryMilk": null,
+          "other2": null,
+          "returns": null,
+          "returnType": 0.0,
+          "waste": 0.0,
+          "wasteType": 0.0,
+          "water": 60.0,
+          "totalUsage": null,
+          "temp": null,
+          "humidity": null,
+          "machineNumber": 1,
+          "tranNumber": 5,
+          "tranWeight": 61.4,
+          "tran2Number": null,
+          "tran2Weight": null,
+          "templeCount": 67.0,
+          "tranProdWeight": 527.0,
+          "prodWeight": 444.16,
+          "tranDesc": "\u0628\u062c\u0627\u06cc \u067e\u0646\u06cc\u0631\u0627\u0648\u0644\u06cc\u0647 \u06af\u0644\u067e\u0627\u06cc\u06af\u0627\u0646. \u06cc\u0632\u062f \u0646\u0648\u0634\u062a\u0647 \u0634\u062f\u0647 \u0627\u0633\u062a ",
+          "elasticity": 5.0,
+          "permeability": 4.5,
+          "QCoil": 5.0,
+          "cst": null,
+          "meltability": 5.0,
+          "drymatter": null,
+          "meltTime": "12",
+          "QCDesc": null,
+          "bakeStartTime": "06:00",
+          "bakeEndTime": "07:00",
+          "nc1Type": "4",
+          "nc1Amount": 243.0,
+          "nc2Type": "1",
+          "nc2Amount": null,
+          "nc3Type": "3",
+          "nc3Amount": null,
+          "nc4Type": "0",
+          "nc4Amount": null,
+          "nc5Type": "0",
+          "nc5Amount": null,
+          "nc6Type": "0",
+          "nc6Amount": null,
+          "NCSum": 243.0,
+          "totalMaterUsage": 459.013
+        },
+        {
+          "bakeID": "14040501-02",
+          "date": "14040501",
+          "bake": 2,
+          "bakeType": "7000",
+          "ricotta": 35.0,
+          "whitecheese": null,
+          "oil": 64.0,
+          "citrate": 3.3,
+          "phosphate": 0.2,
+          "wheatStarch": 16.0,
+          "cream": 30.0,
+          "stablizer": 1.7,
+          "salt": 2.5,
+          "butterEssential": null,
+          "powderEssential": 0.2,
+          "namaisin": 0.013,
+          "sorbet": 0.1,
+          "buttermilkPowder": 3.0,
+          "betacarotene": null,
+          "vegetableButter": null,
+          "dryMilk": null,
+          "other2": null,
+          "returns": null,
+          "returnType": 0.0,
+          "waste": 21.0,
+          "wasteType": 7000.0,
+          "water": 65.0,
+          "totalUsage": null,
+          "temp": null,
+          "humidity": null,
+          "machineNumber": 2,
+          "tranNumber": 11,
+          "tranWeight": 61.4,
+          "tran2Number": null,
+          "tran2Weight": null,
+          "templeCount": 66.0,
+          "tranProdWeight": 548.6,
+          "prodWeight": 466.08,
+          "tranDesc": null,
+          "elasticity": 4.0,
+          "permeability": 4.0,
+          "QCoil": 5.0,
+          "cst": null,
+          "meltability": 5.0,
+          "drymatter": null,
+          "meltTime": "12",
+          "QCDesc": null,
+          "bakeStartTime": "07:00",
+          "bakeEndTime": "08:00",
+          "nc1Type": "0",
+          "nc1Amount": 240.0,
+          "nc2Type": "0",
+          "nc2Amount": null,
+          "nc3Type": "0",
+          "nc3Amount": null,
+          "nc4Type": "0",
+          "nc4Amount": null,
+          "nc5Type": "0",
+          "nc5Amount": null,
+          "nc6Type": "0",
+          "nc6Amount": null,
+          "NCSum": 240.0,
+          "totalMaterUsage": 482.013
+        },
+        {
+          "bakeID": "14040501-03",
+          "date": "14040501",
+          "bake": 3,
+          "bakeType": "7000",
+          "ricotta": 40.0,
+          "whitecheese": null,
+          "oil": 64.0,
+          "citrate": 3.3,
+          "phosphate": 0.2,
+          "wheatStarch": 16.0,
+          "cream": 30.0,
+          "stablizer": 1.7,
+          "salt": 2.5,
+          "butterEssential": null,
+          "powderEssential": 0.2,
+          "namaisin": 0.013,
+          "sorbet": 0.1,
+          "buttermilkPowder": 4.0,
+          "betacarotene": null,
+          "vegetableButter": null,
+          "dryMilk": null,
+          "other2": null,
+          "returns": null,
+          "returnType": 0.0,
+          "waste": 18.0,
+          "wasteType": 7000.0,
+          "water": 65.0,
+          "totalUsage": null,
+          "temp": null,
+          "humidity": null,
+          "machineNumber": 1,
+          "tranNumber": 17,
+          "tranWeight": 66.4,
+          "tran2Number": null,
+          "tran2Weight": null,
+          "templeCount": 67.0,
+          "tranProdWeight": 565.8,
+          "prodWeight": 477.96,
+          "tranDesc": null,
+          "elasticity": 5.0,
+          "permeability": 4.5,
+          "QCoil": 5.0,
+          "cst": null,
+          "meltability": 5.0,
+          "drymatter": null,
+          "meltTime": "9",
+          "QCDesc": null,
+          "bakeStartTime": "08:00",
+          "bakeEndTime": "09:00",
+          "nc1Type": "0",
+          "nc1Amount": 242.0,
+          "nc2Type": "0",
+          "nc2Amount": null,
+          "nc3Type": "0",
+          "nc3Amount": null,
+          "nc4Type": "0",
+          "nc4Amount": null,
+          "nc5Type": "0",
+          "nc5Amount": null,
+          "nc6Type": "0",
+          "nc6Amount": null,
+          "NCSum": 242.0,
+          "totalMaterUsage": 487.013
+        },
+        {
+          "bakeID": "14040501-04",
+          "date": "14040501",
+          "bake": 4,
+          "bakeType": "7000",
+          "ricotta": 45.0,
+          "whitecheese": null,
+          "oil": 64.0,
+          "citrate": 3.3,
+          "phosphate": 0.2,
+          "wheatStarch": 16.0,
+          "cream": 30.0,
+          "stablizer": 1.7,
+          "salt": 2.5,
+          "butterEssential": null,
+          "powderEssential": 0.2,
+          "namaisin": 0.013,
+          "sorbet": 0.1,
+          "buttermilkPowder": 3.0,
+          "betacarotene": null,
+          "vegetableButter": null,
+          "dryMilk": null,
+          "other2": null,
+          "returns": null,
+          "returnType": 0.0,
+          "waste": 17.0,
+          "wasteType": 6000.0,
+          "water": 64.0,
+          "totalUsage": null,
+          "temp": null,
+          "humidity": null,
+          "machineNumber": 2,
+          "tranNumber": 4,
+          "tranWeight": 61.4,
+          "tran2Number": null,
+          "tran2Weight": null,
+          "templeCount": 64.0,
+          "tranProdWeight": 545.0,
+          "prodWeight": 463.12,
+          "tranDesc": "\u062f\u0645\u0627\u06cc \u067e\u062e\u062a \u0686\u0647\u0627\u0631\u0645 \u062875\u0631\u0633\u06cc\u062f\u0647 \u0628 \u0639\u0644\u062a \u062a\u0633\u062a \u0645\u06cc\u06a9\u0631\u0648\u0628\u06cc",
+          "elasticity": 5.0,
+          "permeability": 3.9,
+          "QCoil": 5.0,
+          "cst": null,
+          "meltability": 4.5,
+          "drymatter": null,
+          "meltTime": "13",
+          "QCDesc": " \u062f\u0631 \u062f\u0645\u0627\u06cc 80 \u062f\u0631\u062c\u0647 \u06a9\u0634\u0633\u0627\u0646\u06cc \u062a\u0642\u0631\u06cc\u0628\u0627 0 \u0628\u0648\u062f\u0647 \u0648\u0628\u0635\u0648\u0631\u062a \u0645\u0627\u0633\u062a\u06cc \u0634\u06a9\u0644 \u0628\u0648\u062f",
+          "bakeStartTime": "09:00",
+          "bakeEndTime": "10:00",
+          "nc1Type": "0",
+          "nc1Amount": 240.0,
+          "nc2Type": "0",
+          "nc2Amount": null,
+          "nc3Type": "0",
+          "nc3Amount": null,
+          "nc4Type": "0",
+          "nc4Amount": null,
+          "nc5Type": "0",
+          "nc5Amount": null,
+          "nc6Type": "0",
+          "nc6Amount": null,
+          "NCSum": 240.0,
+          "totalMaterUsage": 487.013
+        },
+        {
+          "bakeID": "14040501-05",
+          "date": "14040501",
+          "bake": 5,
+          "bakeType": "7000",
+          "ricotta": 43.0,
+          "whitecheese": null,
+          "oil": 64.0,
+          "citrate": 3.3,
+          "phosphate": 0.2,
+          "wheatStarch": 16.0,
+          "cream": 32.0,
+          "stablizer": 1.7,
+          "salt": 2.5,
+          "butterEssential": null,
+          "powderEssential": 0.2,
+          "namaisin": 0.013,
+          "sorbet": 0.1,
+          "buttermilkPowder": 3.0,
+          "betacarotene": null,
+          "vegetableButter": null,
+          "dryMilk": null,
+          "other2": null,
+          "returns": null,
+          "returnType": 0.0,
+          "waste": 17.0,
+          "wasteType": 7000.0,
+          "water": 64.0,
+          "totalUsage": null,
+          "temp": null,
+          "humidity": null,
+          "machineNumber": 1,
+          "tranNumber": 6,
+          "tranWeight": 61.4,
+          "tran2Number": null,
+          "tran2Weight": null,
+          "templeCount": 68.0,
+          "tranProdWeight": 561.0,
+          "prodWeight": 477.84,
+          "tranDesc": null,
+          "elasticity": 5.0,
+          "permeability": 4.8,
+          "QCoil": 5.0,
+          "cst": null,
+          "meltability": 5.0,
+          "drymatter": null,
+          "meltTime": "12",
+          "QCDesc": null,
+          "bakeStartTime": "10:00",
+          "bakeEndTime": "11:00",
+          "nc1Type": "0",
+          "nc1Amount": 218.0,
+          "nc2Type": "0",
+          "nc2Amount": 11.0,
+          "nc3Type": "0",
+          "nc3Amount": 11.0,
+          "nc4Type": "0",
+          "nc4Amount": null,
+          "nc5Type": "0",
+          "nc5Amount": null,
+          "nc6Type": "0",
+          "nc6Amount": null,
+          "NCSum": 240.0,
+          "totalMaterUsage": 487.013
+        }
+      ],
+      "row_count": 96
+    },
+    "repo_nc": {
+      "columns": {
+        "id": {
+          "type": "VARCHAR(11)",
+          "nullable": false,
+          "is_id": true,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "ind": {
+          "type": "INTEGER",
+          "nullable": false,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "date": {
+          "type": "INTEGER",
+          "nullable": false,
+          "is_id": false,
+          "is_date": true,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "cheeseType": {
+          "type": "VARCHAR(10)",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": true,
+          "is_name": false
+        },
+        "delivery": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "returns": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "total": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": true,
+          "is_category": false,
+          "is_name": false
+        },
+        "usage": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": true,
+          "is_category": false,
+          "is_name": false
+        },
+        "templeCheese": {
+          "type": "VARCHAR(255) COLLATE \"utf8mb4_0900_ai_ci\"",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "repoprodWeight": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": true,
+          "is_category": false,
+          "is_name": false
+        }
+      },
+      "foreign_keys": [],
+      "sample_data": [
+        {
+          "id": "14031110-01",
+          "ind": 1,
+          "date": 14031110,
+          "cheeseType": "3",
+          "delivery": 0.0,
+          "returns": 0.0,
+          "total": 0.0,
+          "usage": 0.0,
+          "templeCheese": "-",
+          "repoprodWeight": null
+        },
+        {
+          "id": "14031110-01",
+          "ind": 1,
+          "date": 14031110,
+          "cheeseType": "3",
+          "delivery": 0.0,
+          "returns": 0.0,
+          "total": 0.0,
+          "usage": 0.0,
+          "templeCheese": "-",
+          "repoprodWeight": null
+        }
+      ],
+      "row_count": 2
+    },
+    "transtatus": {
+      "columns": {
+        "tranNumber": {
+          "type": "INTEGER",
+          "nullable": false,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "tranStatus": {
+          "type": "TINYINT",
+          "nullable": false,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": true,
+          "is_name": false
+        },
+        "tranFree": {
+          "type": "INTEGER",
+          "nullable": false,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "tranWeight": {
+          "type": "FLOAT",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": true,
+          "is_category": false,
+          "is_name": false
+        }
+      },
+      "foreign_keys": [],
+      "sample_data": [
+        {
+          "tranNumber": 1,
+          "tranStatus": 1,
+          "tranFree": 55,
+          "tranWeight": 61.4
+        },
+        {
+          "tranNumber": 2,
+          "tranStatus": 0,
+          "tranFree": 66,
+          "tranWeight": 61.4
+        },
+        {
+          "tranNumber": 3,
+          "tranStatus": 0,
+          "tranFree": 66,
+          "tranWeight": 66.4
+        },
+        {
+          "tranNumber": 4,
+          "tranStatus": 0,
+          "tranFree": 66,
+          "tranWeight": 61.4
+        },
+        {
+          "tranNumber": 5,
+          "tranStatus": 0,
+          "tranFree": 66,
+          "tranWeight": 61.4
+        }
+      ],
+      "row_count": 19
+    },
+    "users": {
+      "columns": {
+        "id": {
+          "type": "INTEGER",
+          "nullable": false,
+          "is_id": true,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "userId": {
+          "type": "VARCHAR(25)",
+          "nullable": false,
+          "is_id": true,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "name": {
+          "type": "VARCHAR(150)",
+          "nullable": false,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": true
+        },
+        "password": {
+          "type": "VARCHAR(250)",
+          "nullable": false,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "Acclevel": {
+          "type": "INTEGER",
+          "nullable": false,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "creator": {
+          "type": "VARCHAR(20)",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "createDate": {
+          "type": "VARCHAR(11)",
+          "nullable": true,
+          "is_id": false,
+          "is_date": true,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        }
+      },
+      "foreign_keys": [],
+      "sample_data": [
+        {
+          "id": 1,
+          "userId": "aminmz",
+          "name": "\u0627\u0645\u06cc\u0646 \u0645\u0647\u062f\u06cc \u0632\u0627\u062f\u0647",
+          "password": "81dc9bdb52d04dc20036dbd8313ed055",
+          "Acclevel": 1,
+          "creator": null,
+          "createDate": null
+        },
+        {
+          "id": 2,
+          "userId": "parsa",
+          "name": "\u067e\u0627\u0631\u0633\u0627 \u062e\u0633\u0631\u0648\u0627\u0646 \u0645\u0647\u0631",
+          "password": "fd5ebc8800a844680bc05ced027faaaf",
+          "Acclevel": 1,
+          "creator": null,
+          "createDate": null
+        },
+        {
+          "id": 3,
+          "userId": "azizi",
+          "name": "\u062d\u0633\u06cc\u0646 \u0639\u0632\u06cc\u0632\u06cc",
+          "password": "5ecf49c4ccd95a6524c10c3023573d3c",
+          "Acclevel": 1,
+          "creator": null,
+          "createDate": null
+        },
+        {
+          "id": 4,
+          "userId": "shaeri",
+          "name": "\u0645\u0639\u06cc\u0646 \u0634\u0627\u0639\u0631\u06cc",
+          "password": "543e395db928bd7ebe76ec8bd3461e62",
+          "Acclevel": 1,
+          "creator": null,
+          "createDate": null
+        },
+        {
+          "id": 5,
+          "userId": "m.shahbodaghi",
+          "name": "\u0645\u062d\u0633\u0646 \u0634\u0627\u0647 \u0628\u062f\u0627\u063a\u06cc",
+          "password": "60148a38ebac119b7d48431b82a3691b",
+          "Acclevel": 1,
+          "creator": null,
+          "createDate": null
+        }
+      ],
+      "row_count": 10
+    },
+    "workers": {
+      "columns": {
+        "id": {
+          "type": "INTEGER",
+          "nullable": false,
+          "is_id": true,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "firstName": {
+          "type": "VARCHAR(150)",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": true
+        },
+        "lastName": {
+          "type": "VARCHAR(150) COLLATE \"utf8mb4_0900_ai_ci\"",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": true
+        },
+        "name": {
+          "type": "VARCHAR(250) COLLATE \"utf8mb4_0900_ai_ci\"",
+          "nullable": true,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": true
+        },
+        "section": {
+          "type": "INTEGER",
+          "nullable": false,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": true,
+          "is_name": false
+        },
+        "creator": {
+          "type": "VARCHAR(20)",
+          "nullable": false,
+          "is_id": false,
+          "is_date": false,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        },
+        "createDate": {
+          "type": "VARCHAR(11)",
+          "nullable": false,
+          "is_id": false,
+          "is_date": true,
+          "is_amount": false,
+          "is_category": false,
+          "is_name": false
+        }
+      },
+      "foreign_keys": [],
+      "sample_data": [
+        {
+          "id": 6,
+          "firstName": "\u062d\u0633\u06cc\u0646",
+          "lastName": "\u0633\u06cc\u0627\u062d\u06cc",
+          "name": "\u062d\u0633\u06cc\u0646 \u0633\u06cc\u0627\u062d\u06cc",
+          "section": 1,
+          "creator": "",
+          "createDate": ""
+        },
+        {
+          "id": 7,
+          "firstName": "\u0633\u06cc\u062f\u062d\u0633\u0646",
+          "lastName": "\u0645\u0648\u0633\u0648\u06cc",
+          "name": "\u0633\u06cc\u062f\u062d\u0633\u0646 \u0645\u0648\u0633\u0648\u06cc",
+          "section": 1,
+          "creator": "",
+          "createDate": ""
+        },
+        {
+          "id": 8,
+          "firstName": "\u0645\u062d\u0645\u062f\u062d\u0633\u0646",
+          "lastName": "\u0631\u0633\u062a\u0645\u06cc",
+          "name": "\u0645\u062d\u0645\u062f\u062d\u0633\u0646 \u0631\u0633\u062a\u0645\u06cc",
+          "section": 1,
+          "creator": "",
+          "createDate": ""
+        },
+        {
+          "id": 9,
+          "firstName": "\u0633\u06cc\u062f\u0645\u0647\u062f\u06cc",
+          "lastName": "\u0645\u06cc\u0631 \u0639\u0628\u0627\u062f\u06cc",
+          "name": "\u0633\u06cc\u062f\u0645\u0647\u062f\u06cc \u0645\u06cc\u0631 \u0639\u0628\u0627\u062f\u06cc",
+          "section": 2,
+          "creator": "",
+          "createDate": ""
+        },
+        {
+          "id": 10,
+          "firstName": "\u0631\u0636\u0627",
+          "lastName": "\u0634\u06cc\u0631\u06cc\u0646 \u0622\u0628\u0627\u062f\u06cc \u0641\u0631\u0627\u0647\u0627\u0646\u06cc",
+          "name": "\u0631\u0636\u0627 \u0634\u06cc\u0631\u06cc\u0646 \u0622\u0628\u0627\u062f\u06cc \u0641\u0631\u0627\u0647\u0627\u0646\u06cc",
+          "section": 2,
+          "creator": "",
+          "createDate": ""
+        }
+      ],
+      "row_count": 38
+    }
+  },
+  "query_patterns": {
+    "aggregation_opportunities": [
+      {
+        "table": "pack_waste",
+        "amount_columns": [
+          "value"
+        ],
+        "category_columns": [
+          "type"
+        ],
+        "pattern": "SUM/AVG(value) GROUP BY type"
+      },
+      {
+        "table": "packaging_info",
+        "amount_columns": [
+          "TotalWeight",
+          "tranWeight",
+          "templeWeight"
+        ],
+        "category_columns": [
+          "bakeType"
+        ],
+        "pattern": "SUM/AVG(TotalWeight) GROUP BY bakeType"
+      },
+      {
+        "table": "production_info",
+        "amount_columns": [
+          "totalUsage",
+          "tranWeight",
+          "tran2Weight",
+          "tranProdWeight",
+          "prodWeight",
+          "nc1Amount",
+          "nc2Amount",
+          "nc3Amount",
+          "nc4Amount",
+          "nc5Amount",
+          "nc6Amount",
+          "totalMaterUsage"
+        ],
+        "category_columns": [
+          "bakeType",
+          "returnType",
+          "wasteType",
+          "nc1Type",
+          "nc2Type",
+          "nc3Type",
+          "nc4Type",
+          "nc5Type",
+          "nc6Type"
+        ],
+        "pattern": "SUM/AVG(totalUsage) GROUP BY bakeType"
+      },
+      {
+        "table": "production_test",
+        "amount_columns": [
+          "totalUsage",
+          "tranWeight",
+          "tran2Weight",
+          "tranProdWeight",
+          "prodWeight",
+          "nc1Amount",
+          "nc2Amount",
+          "nc3Amount",
+          "nc4Amount",
+          "nc5Amount",
+          "nc6Amount",
+          "totalMaterUsage"
+        ],
+        "category_columns": [
+          "bakeType",
+          "returnType",
+          "wasteType",
+          "nc1Type",
+          "nc2Type",
+          "nc3Type",
+          "nc4Type",
+          "nc5Type",
+          "nc6Type"
+        ],
+        "pattern": "SUM/AVG(totalUsage) GROUP BY bakeType"
+      },
+      {
+        "table": "repo_nc",
+        "amount_columns": [
+          "total",
+          "usage",
+          "repoprodWeight"
+        ],
+        "category_columns": [
+          "cheeseType"
+        ],
+        "pattern": "SUM/AVG(total) GROUP BY cheeseType"
+      },
+      {
+        "table": "transtatus",
+        "amount_columns": [
+          "tranWeight"
+        ],
+        "category_columns": [
+          "tranStatus"
+        ],
+        "pattern": "SUM/AVG(tranWeight) GROUP BY tranStatus"
+      }
+    ],
+    "join_opportunities": [],
+    "filtering_opportunities": [],
+    "visualization_opportunities": [
+      {
+        "table": "pack_waste",
+        "category": "type",
+        "value": "value",
+        "chart_types": [
+          "bar",
+          "pie",
+          "histogram"
+        ]
+      },
+      {
+        "table": "packaging_info",
+        "category": "bakeType",
+        "value": "TotalWeight",
+        "chart_types": [
+          "bar",
+          "pie",
+          "histogram"
+        ]
+      },
+      {
+        "table": "production_info",
+        "category": "bakeType",
+        "value": "totalUsage",
+        "chart_types": [
+          "bar",
+          "pie",
+          "histogram"
+        ]
+      },
+      {
+        "table": "production_test",
+        "category": "bakeType",
+        "value": "totalUsage",
+        "chart_types": [
+          "bar",
+          "pie",
+          "histogram"
+        ]
+      },
+      {
+        "table": "repo_nc",
+        "category": "cheeseType",
+        "value": "total",
+        "chart_types": [
+          "bar",
+          "pie",
+          "histogram"
+        ]
+      },
+      {
+        "table": "transtatus",
+        "category": "tranStatus",
+        "value": "tranWeight",
+        "chart_types": [
+          "bar",
+          "pie",
+          "histogram"
+        ]
+      }
+    ],
+    "time_series_opportunities": [
+      {
+        "table": "pack_waste",
+        "date_column": "date",
+        "value_columns": [
+          "value"
+        ],
+        "pattern": "SUM(value) GROUP BY DATE(date)"
+      },
+      {
+        "table": "packaging_info",
+        "date_column": "date",
+        "value_columns": [
+          "TotalWeight",
+          "tranWeight",
+          "templeWeight"
+        ],
+        "pattern": "SUM(TotalWeight) GROUP BY DATE(date)"
+      },
+      {
+        "table": "production_info",
+        "date_column": "date",
+        "value_columns": [
+          "totalUsage",
+          "tranWeight",
+          "tran2Weight",
+          "tranProdWeight",
+          "prodWeight",
+          "nc1Amount",
+          "nc2Amount",
+          "nc3Amount",
+          "nc4Amount",
+          "nc5Amount",
+          "nc6Amount",
+          "totalMaterUsage"
+        ],
+        "pattern": "SUM(totalUsage) GROUP BY DATE(date)"
+      },
+      {
+        "table": "production_test",
+        "date_column": "date",
+        "value_columns": [
+          "totalUsage",
+          "tranWeight",
+          "tran2Weight",
+          "tranProdWeight",
+          "prodWeight",
+          "nc1Amount",
+          "nc2Amount",
+          "nc3Amount",
+          "nc4Amount",
+          "nc5Amount",
+          "nc6Amount",
+          "totalMaterUsage"
+        ],
+        "pattern": "SUM(totalUsage) GROUP BY DATE(date)"
+      },
+      {
+        "table": "repo_nc",
+        "date_column": "date",
+        "value_columns": [
+          "total",
+          "usage",
+          "repoprodWeight"
+        ],
+        "pattern": "SUM(total) GROUP BY DATE(date)"
+      }
+    ]
+  },
+  "intelligent_prompts": {
+    "enhanced_system_prompt": "You are an expert SQL generator for a food production database.\n\nSCHEMA CONTEXT:\nTable `pack_waste` (391 rows): date, index, type, value, Wother1, Wother2, Wother3\nTable `packaging_info` (1302 rows): Packkey, index, date, tranNumber, bakeDate, bakeType, TotalWeight, tranWeight, templeCount, templeWeight, sample, bakeID, refer, referTemple\nTable `packs` (288 rows): date, type, carton, cartonCap, packet, other1, other2, other3\nTable `person_hyg` (2268 rows): per_hy_id, ind, date, personName, beard, nail, handLeg, robe, apron, gloves, shoe, headgear, food, lacquer, smoke, jewels, description\nTable `prices` (4 rows): date, NC, ricotta, buttermilkPowder, uf, cream, oil, wheatStarch, citrate, phosphate, stablizer, salt, butterEssential, powderEssential, water, vegetableButter, dryMilk, mpc, namaisin, sorbet, lastEdit, lastEdittor, id, w1000, w2000, w3000, w4000, w5000, w6000, w7000, w8000\nTable `production_info` (1649 rows): bakeID, date, bake, bakeType, ricotta, whitecheese, oil, citrate, phosphate, wheatStarch, cream, stablizer, salt, butterEssential, powderEssential, namaisin, sorbet, buttermilkPowder, betacarotene, vegetableButter, dryMilk, other2, returns, returnType, waste, wasteType, water, totalUsage, temp, humidity, machineNumber, tranNumber, tranWeight, tran2Number, tran2Weight, templeCount, tranProdWeight, prodWeight, tranDesc, elasticity, permeability, QCoil, cst, meltability, drymatter, meltTime, QCDesc, bakeStartTime, bakeEndTime, nc1Type, nc1Amount, nc2Type, nc2Amount, nc3Type, nc3Amount, nc4Type, nc4Amount, nc5Type, nc5Amount, nc6Type, nc6Amount, NCSum, totalMaterUsage\nTable `production_test` (96 rows): bakeID, date, bake, bakeType, ricotta, whitecheese, oil, citrate, phosphate, wheatStarch, cream, stablizer, salt, butterEssential, powderEssential, namaisin, sorbet, buttermilkPowder, betacarotene, vegetableButter, dryMilk, other2, returns, returnType, waste, wasteType, water, totalUsage, temp, humidity, machineNumber, tranNumber, tranWeight, tran2Number, tran2Weight, templeCount, tranProdWeight, prodWeight, tranDesc, elasticity, permeability, QCoil, cst, meltability, drymatter, meltTime, QCDesc, bakeStartTime, bakeEndTime, nc1Type, nc1Amount, nc2Type, nc2Amount, nc3Type, nc3Amount, nc4Type, nc4Amount, nc5Type, nc5Amount, nc6Type, nc6Amount, NCSum, totalMaterUsage\nTable `repo_nc` (2 rows): id, ind, date, cheeseType, delivery, returns, total, usage, templeCheese, repoprodWeight\nTable `transtatus` (19 rows): tranNumber, tranStatus, tranFree, tranWeight\nTable `users` (10 rows): id, userId, name, password, Acclevel, creator, createDate\nTable `workers` (38 rows): id, firstName, lastName, name, section, creator, createDate\n\nINTELLIGENT PATTERNS:\n\"Total value by type\" \u2192 SELECT type, SUM(value) FROM `pack_waste` GROUP BY type\n\"Total TotalWeight by bakeType\" \u2192 SELECT bakeType, SUM(TotalWeight) FROM `packaging_info` GROUP BY bakeType\n\"Total totalUsage by bakeType\" \u2192 SELECT bakeType, SUM(totalUsage) FROM `production_info` GROUP BY bakeType\n\nCORE PRINCIPLES:\n1. ALWAYS use exact column names from schema\n2. For aggregations, group by categorical columns\n3. For time series, use date columns with proper grouping\n4. For comparisons, use appropriate JOINs\n5. For visualizations, return label/value pairs\n6. Add appropriate LIMIT clauses (50 default)\n\nMODE DETECTION RULES:\n- SHORT_ANSWER: Single scalar value (COUNT, SUM, AVG, MAX, MIN)\n- TABLE: Multiple rows/columns, listings, comparisons\n- ANALYTICAL: Trends, patterns, insights with narrative\n- VISUALIZATION: Chart keywords (pie, bar, histogram, plot, chart)\n\nRESPONSE FORMAT: Return ONLY valid MySQL SQL without explanations.",
+    "schema_context": "Table `pack_waste` (391 rows): date, index, type, value, Wother1, Wother2, Wother3\nTable `packaging_info` (1302 rows): Packkey, index, date, tranNumber, bakeDate, bakeType, TotalWeight, tranWeight, templeCount, templeWeight, sample, bakeID, refer, referTemple\nTable `packs` (288 rows): date, type, carton, cartonCap, packet, other1, other2, other3\nTable `person_hyg` (2268 rows): per_hy_id, ind, date, personName, beard, nail, handLeg, robe, apron, gloves, shoe, headgear, food, lacquer, smoke, jewels, description\nTable `prices` (4 rows): date, NC, ricotta, buttermilkPowder, uf, cream, oil, wheatStarch, citrate, phosphate, stablizer, salt, butterEssential, powderEssential, water, vegetableButter, dryMilk, mpc, namaisin, sorbet, lastEdit, lastEdittor, id, w1000, w2000, w3000, w4000, w5000, w6000, w7000, w8000\nTable `production_info` (1649 rows): bakeID, date, bake, bakeType, ricotta, whitecheese, oil, citrate, phosphate, wheatStarch, cream, stablizer, salt, butterEssential, powderEssential, namaisin, sorbet, buttermilkPowder, betacarotene, vegetableButter, dryMilk, other2, returns, returnType, waste, wasteType, water, totalUsage, temp, humidity, machineNumber, tranNumber, tranWeight, tran2Number, tran2Weight, templeCount, tranProdWeight, prodWeight, tranDesc, elasticity, permeability, QCoil, cst, meltability, drymatter, meltTime, QCDesc, bakeStartTime, bakeEndTime, nc1Type, nc1Amount, nc2Type, nc2Amount, nc3Type, nc3Amount, nc4Type, nc4Amount, nc5Type, nc5Amount, nc6Type, nc6Amount, NCSum, totalMaterUsage\nTable `production_test` (96 rows): bakeID, date, bake, bakeType, ricotta, whitecheese, oil, citrate, phosphate, wheatStarch, cream, stablizer, salt, butterEssential, powderEssential, namaisin, sorbet, buttermilkPowder, betacarotene, vegetableButter, dryMilk, other2, returns, returnType, waste, wasteType, water, totalUsage, temp, humidity, machineNumber, tranNumber, tranWeight, tran2Number, tran2Weight, templeCount, tranProdWeight, prodWeight, tranDesc, elasticity, permeability, QCoil, cst, meltability, drymatter, meltTime, QCDesc, bakeStartTime, bakeEndTime, nc1Type, nc1Amount, nc2Type, nc2Amount, nc3Type, nc3Amount, nc4Type, nc4Amount, nc5Type, nc5Amount, nc6Type, nc6Amount, NCSum, totalMaterUsage\nTable `repo_nc` (2 rows): id, ind, date, cheeseType, delivery, returns, total, usage, templeCheese, repoprodWeight\nTable `transtatus` (19 rows): tranNumber, tranStatus, tranFree, tranWeight\nTable `users` (10 rows): id, userId, name, password, Acclevel, creator, createDate\nTable `workers` (38 rows): id, firstName, lastName, name, section, creator, createDate",
+    "pattern_examples": "\"Total value by type\" \u2192 SELECT type, SUM(value) FROM `pack_waste` GROUP BY type\n\"Total TotalWeight by bakeType\" \u2192 SELECT bakeType, SUM(TotalWeight) FROM `packaging_info` GROUP BY bakeType\n\"Total totalUsage by bakeType\" \u2192 SELECT bakeType, SUM(totalUsage) FROM `production_info` GROUP BY bakeType"
+  },
+  "deterministic_builders": [
+    {
+      "name": "aggregate_pack_waste_value_by_type",
+      "pattern": "total value|sum of value|value by type",
+      "sql_template": "SELECT `type`, SUM(`value`) as total_value FROM `pack_waste` GROUP BY `type` ORDER BY total_value DESC LIMIT 50",
+      "mode": "TABLE",
+      "description": "Aggregate value by type in pack_waste"
+    },
+    {
+      "name": "aggregate_packaging_info_TotalWeight_by_bakeType",
+      "pattern": "total TotalWeight|sum of TotalWeight|TotalWeight by bakeType",
+      "sql_template": "SELECT `bakeType`, SUM(`TotalWeight`) as total_TotalWeight FROM `packaging_info` GROUP BY `bakeType` ORDER BY total_TotalWeight DESC LIMIT 50",
+      "mode": "TABLE",
+      "description": "Aggregate TotalWeight by bakeType in packaging_info"
+    },
+    {
+      "name": "aggregate_production_info_totalUsage_by_bakeType",
+      "pattern": "total totalUsage|sum of totalUsage|totalUsage by bakeType",
+      "sql_template": "SELECT `bakeType`, SUM(`totalUsage`) as total_totalUsage FROM `production_info` GROUP BY `bakeType` ORDER BY total_totalUsage DESC LIMIT 50",
+      "mode": "TABLE",
+      "description": "Aggregate totalUsage by bakeType in production_info"
+    },
+    {
+      "name": "aggregate_production_test_totalUsage_by_bakeType",
+      "pattern": "total totalUsage|sum of totalUsage|totalUsage by bakeType",
+      "sql_template": "SELECT `bakeType`, SUM(`totalUsage`) as total_totalUsage FROM `production_test` GROUP BY `bakeType` ORDER BY total_totalUsage DESC LIMIT 50",
+      "mode": "TABLE",
+      "description": "Aggregate totalUsage by bakeType in production_test"
+    },
+    {
+      "name": "aggregate_repo_nc_total_by_cheeseType",
+      "pattern": "total total|sum of total|total by cheeseType",
+      "sql_template": "SELECT `cheeseType`, SUM(`total`) as total_total FROM `repo_nc` GROUP BY `cheeseType` ORDER BY total_total DESC LIMIT 50",
+      "mode": "TABLE",
+      "description": "Aggregate total by cheeseType in repo_nc"
+    },
+    {
+      "name": "aggregate_transtatus_tranWeight_by_tranStatus",
+      "pattern": "total tranWeight|sum of tranWeight|tranWeight by tranStatus",
+      "sql_template": "SELECT `tranStatus`, SUM(`tranWeight`) as total_tranWeight FROM `transtatus` GROUP BY `tranStatus` ORDER BY total_tranWeight DESC LIMIT 50",
+      "mode": "TABLE",
+      "description": "Aggregate tranWeight by tranStatus in transtatus"
+    },
+    {
+      "name": "timeseries_pack_waste_value",
+      "pattern": "value over time|value trend|value by month",
+      "sql_template": "SELECT DATE_FORMAT(`date`, '%Y-%m') as month, SUM(`value`) as total_value FROM `pack_waste` WHERE `date` >= DATE_SUB(CURDATE(), INTERVAL 12 MONTH) GROUP BY month ORDER BY month LIMIT 50",
+      "mode": "ANALYTICAL",
+      "description": "Time series analysis of value in pack_waste"
+    },
+    {
+      "name": "timeseries_packaging_info_TotalWeight",
+      "pattern": "TotalWeight over time|TotalWeight trend|TotalWeight by month",
+      "sql_template": "SELECT DATE_FORMAT(`date`, '%Y-%m') as month, SUM(`TotalWeight`) as total_TotalWeight FROM `packaging_info` WHERE `date` >= DATE_SUB(CURDATE(), INTERVAL 12 MONTH) GROUP BY month ORDER BY month LIMIT 50",
+      "mode": "ANALYTICAL",
+      "description": "Time series analysis of TotalWeight in packaging_info"
+    },
+    {
+      "name": "timeseries_production_info_totalUsage",
+      "pattern": "totalUsage over time|totalUsage trend|totalUsage by month",
+      "sql_template": "SELECT DATE_FORMAT(`date`, '%Y-%m') as month, SUM(`totalUsage`) as total_totalUsage FROM `production_info` WHERE `date` >= DATE_SUB(CURDATE(), INTERVAL 12 MONTH) GROUP BY month ORDER BY month LIMIT 50",
+      "mode": "ANALYTICAL",
+      "description": "Time series analysis of totalUsage in production_info"
+    },
+    {
+      "name": "timeseries_production_test_totalUsage",
+      "pattern": "totalUsage over time|totalUsage trend|totalUsage by month",
+      "sql_template": "SELECT DATE_FORMAT(`date`, '%Y-%m') as month, SUM(`totalUsage`) as total_totalUsage FROM `production_test` WHERE `date` >= DATE_SUB(CURDATE(), INTERVAL 12 MONTH) GROUP BY month ORDER BY month LIMIT 50",
+      "mode": "ANALYTICAL",
+      "description": "Time series analysis of totalUsage in production_test"
+    },
+    {
+      "name": "timeseries_repo_nc_total",
+      "pattern": "total over time|total trend|total by month",
+      "sql_template": "SELECT DATE_FORMAT(`date`, '%Y-%m') as month, SUM(`total`) as total_total FROM `repo_nc` WHERE `date` >= DATE_SUB(CURDATE(), INTERVAL 12 MONTH) GROUP BY month ORDER BY month LIMIT 50",
+      "mode": "ANALYTICAL",
+      "description": "Time series analysis of total in repo_nc"
+    },
+    {
+      "name": "count_pack_waste",
+      "pattern": "how many pack_waste|count of pack_waste|total pack_waste",
+      "sql_template": "SELECT COUNT(*) FROM `pack_waste` LIMIT 50",
+      "mode": "SHORT_ANSWER",
+      "description": "Count records in pack_waste"
+    },
+    {
+      "name": "count_packaging_info",
+      "pattern": "how many packaging_info|count of packaging_info|total packaging_info",
+      "sql_template": "SELECT COUNT(*) FROM `packaging_info` LIMIT 50",
+      "mode": "SHORT_ANSWER",
+      "description": "Count records in packaging_info"
+    },
+    {
+      "name": "count_packs",
+      "pattern": "how many packs|count of packs|total packs",
+      "sql_template": "SELECT COUNT(*) FROM `packs` LIMIT 50",
+      "mode": "SHORT_ANSWER",
+      "description": "Count records in packs"
+    },
+    {
+      "name": "count_person_hyg",
+      "pattern": "how many person_hyg|count of person_hyg|total person_hyg",
+      "sql_template": "SELECT COUNT(*) FROM `person_hyg` LIMIT 50",
+      "mode": "SHORT_ANSWER",
+      "description": "Count records in person_hyg"
+    },
+    {
+      "name": "count_prices",
+      "pattern": "how many prices|count of prices|total prices",
+      "sql_template": "SELECT COUNT(*) FROM `prices` LIMIT 50",
+      "mode": "SHORT_ANSWER",
+      "description": "Count records in prices"
+    },
+    {
+      "name": "count_production_info",
+      "pattern": "how many production_info|count of production_info|total production_info",
+      "sql_template": "SELECT COUNT(*) FROM `production_info` LIMIT 50",
+      "mode": "SHORT_ANSWER",
+      "description": "Count records in production_info"
+    },
+    {
+      "name": "count_production_test",
+      "pattern": "how many production_test|count of production_test|total production_test",
+      "sql_template": "SELECT COUNT(*) FROM `production_test` LIMIT 50",
+      "mode": "SHORT_ANSWER",
+      "description": "Count records in production_test"
+    },
+    {
+      "name": "count_repo_nc",
+      "pattern": "how many repo_nc|count of repo_nc|total repo_nc",
+      "sql_template": "SELECT COUNT(*) FROM `repo_nc` LIMIT 50",
+      "mode": "SHORT_ANSWER",
+      "description": "Count records in repo_nc"
+    },
+    {
+      "name": "count_transtatus",
+      "pattern": "how many transtatus|count of transtatus|total transtatus",
+      "sql_template": "SELECT COUNT(*) FROM `transtatus` LIMIT 50",
+      "mode": "SHORT_ANSWER",
+      "description": "Count records in transtatus"
+    },
+    {
+      "name": "count_users",
+      "pattern": "how many users|count of users|total users",
+      "sql_template": "SELECT COUNT(*) FROM `users` LIMIT 50",
+      "mode": "SHORT_ANSWER",
+      "description": "Count records in users"
+    },
+    {
+      "name": "count_workers",
+      "pattern": "how many workers|count of workers|total workers",
+      "sql_template": "SELECT COUNT(*) FROM `workers` LIMIT 50",
+      "mode": "SHORT_ANSWER",
+      "description": "Count records in workers"
+    }
+  ],
+  "confidence_rules": {
+    "schema_match_bonus": 0.3,
+    "pattern_match_bonus": 0.2,
+    "syntax_validity_bonus": 0.2,
+    "deterministic_builder_bonus": 0.3,
+    "execution_success_bonus": 0.2,
+    "data_returned_bonus": 0.1,
+    "schema_mismatch_penalty": -0.4,
+    "execution_failure_penalty": -0.5,
+    "no_data_penalty": -0.2
+  }
+}

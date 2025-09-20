@@ -1,7 +1,0 @@
-{
-  "customer": ["client", "buyer", "purchaser"],
-  "order": ["purchase", "sale", "transaction"],
-  "revenue": ["sales", "income", "turnover"],
-  "date": ["day", "timestamp", "created_at", "order_date"],
-  "amount": ["total", "value", "sum"]
-}

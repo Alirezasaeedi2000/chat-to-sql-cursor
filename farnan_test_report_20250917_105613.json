@@ -1,0 +1,243 @@
+{
+  "timestamp": "2025-09-17T10:56:13.550580",
+  "total_tests": 10,
+  "passed_tests": 8,
+  "partial_tests": 1,
+  "failed_tests": 1,
+  "overall_accuracy": 69.0,
+  "total_execution_time": 247.71947646141052,
+  "average_execution_time": 23.770566725730895,
+  "mode_distribution": {
+    "SHORT_ANSWER": 1,
+    "VISUALIZATION": 3,
+    "TABLE": 6
+  },
+  "detailed_results": [
+    {
+      "test_id": 1,
+      "question": "Show me production volumes for this month",
+      "status": "passed",
+      "accuracy_score": 8,
+      "max_score": 10,
+      "execution_time": 20.17437195777893,
+      "mode": "SHORT_ANSWER",
+      "confidence": 1.0,
+      "sql_generated": true,
+      "data_returned": true,
+      "visualization_generated": false,
+      "analysis_details": [
+        "\u2705 Query executed without errors",
+        "\u2705 SQL generated successfully",
+        "\u2705 Expected tables found: ['production_info']",
+        "\u2705 Aggregation functions found",
+        "\u2705 Correct mode: SHORT_ANSWER",
+        "\u2705 Data returned successfully",
+        "\u2705 High confidence: 1.00"
+      ]
+    },
+    {
+      "test_id": 2,
+      "question": "Which packaging types are used most frequently? Show me a pie chart",
+      "status": "passed",
+      "accuracy_score": 8,
+      "max_score": 10,
+      "execution_time": 24.650466442108154,
+      "mode": "VISUALIZATION",
+      "confidence": 0.0,
+      "sql_generated": true,
+      "data_returned": true,
+      "visualization_generated": true,
+      "analysis_details": [
+        "\u2705 Query executed without errors",
+        "\u2705 SQL generated successfully",
+        "\u2705 Expected tables found: ['packaging_info']",
+        "\u2705 Aggregation functions found",
+        "\u2705 Correct mode: VISUALIZATION/COMBO",
+        "\u2705 Visualization generated: pie",
+        "\u2705 Data returned successfully",
+        "\u26a0\ufe0f Low confidence: 0.00"
+      ]
+    },
+    {
+      "test_id": 3,
+      "question": "Analyze hygiene compliance rates by person over the last 6 months",
+      "status": "passed",
+      "accuracy_score": 7,
+      "max_score": 10,
+      "execution_time": 23.061490535736084,
+      "mode": "TABLE",
+      "confidence": 1.0,
+      "sql_generated": true,
+      "data_returned": false,
+      "visualization_generated": false,
+      "analysis_details": [
+        "\u2705 Query executed without errors",
+        "\u2705 SQL generated successfully",
+        "\u2705 Expected tables found: ['person_hyg']",
+        "\u2705 Aggregation functions found",
+        "\u2705 GROUP BY clause found",
+        "\u26a0\ufe0f Mode mismatch: expected analytical, got TABLE",
+        "\u26a0\ufe0f No data returned",
+        "\u2705 High confidence: 1.00"
+      ]
+    },
+    {
+      "test_id": 4,
+      "question": "What are the most expensive ingredients and how have their prices changed over time?",
+      "status": "failed",
+      "accuracy_score": 3,
+      "max_score": 10,
+      "execution_time": 27.14103603363037,
+      "mode": "TABLE",
+      "confidence": 0.0,
+      "sql_generated": true,
+      "data_returned": false,
+      "visualization_generated": false,
+      "analysis_details": [
+        "\u2705 Query executed without errors",
+        "\u2705 SQL generated successfully",
+        "\u26a0\ufe0f Expected tables not found: ['prices']",
+        "\u26a0\ufe0f Expected aggregation not found",
+        "\u26a0\ufe0f Mode mismatch: expected analytical, got TABLE",
+        "\u26a0\ufe0f No data returned",
+        "\u26a0\ufe0f Low confidence: 0.00"
+      ]
+    },
+    {
+      "test_id": 5,
+      "question": "Show me waste generation trends by type with a line chart",
+      "status": "passed",
+      "accuracy_score": 8,
+      "max_score": 10,
+      "execution_time": 22.670729637145996,
+      "mode": "VISUALIZATION",
+      "confidence": 1.0,
+      "sql_generated": true,
+      "data_returned": true,
+      "visualization_generated": true,
+      "analysis_details": [
+        "\u2705 Query executed without errors",
+        "\u2705 SQL generated successfully",
+        "\u2705 Expected tables found: ['pack_waste']",
+        "\u2705 Correct mode: VISUALIZATION/COMBO",
+        "\u2705 Visualization generated: line",
+        "\u2705 Data returned successfully",
+        "\u2705 High confidence: 1.00"
+      ]
+    },
+    {
+      "test_id": 6,
+      "question": "Compare production efficiency between different bake types",
+      "status": "passed",
+      "accuracy_score": 7,
+      "max_score": 10,
+      "execution_time": 23.51264500617981,
+      "mode": "TABLE",
+      "confidence": 0.6666666666666666,
+      "sql_generated": true,
+      "data_returned": true,
+      "visualization_generated": false,
+      "analysis_details": [
+        "\u2705 Query executed without errors",
+        "\u2705 SQL generated successfully",
+        "\u2705 Expected tables found: ['production_info']",
+        "\u2705 Aggregation functions found",
+        "\u26a0\ufe0f Mode mismatch: expected analytical, got TABLE",
+        "\u2705 Data returned successfully",
+        "\u2705 High confidence: 0.67"
+      ]
+    },
+    {
+      "test_id": 7,
+      "question": "What is the average production weight per batch by month? Show as bar chart",
+      "status": "passed",
+      "accuracy_score": 9,
+      "max_score": 10,
+      "execution_time": 23.434949159622192,
+      "mode": "VISUALIZATION",
+      "confidence": 1.0,
+      "sql_generated": true,
+      "data_returned": true,
+      "visualization_generated": true,
+      "analysis_details": [
+        "\u2705 Query executed without errors",
+        "\u2705 SQL generated successfully",
+        "\u26a0\ufe0f Expected tables not found: ['production_info']",
+        "\u2705 Aggregation functions found",
+        "\u2705 GROUP BY clause found",
+        "\u2705 Correct mode: VISUALIZATION/COMBO",
+        "\u2705 Visualization generated: bar",
+        "\u2705 Data returned successfully",
+        "\u2705 High confidence: 1.00"
+      ]
+    },
+    {
+      "test_id": 8,
+      "question": "Identify employees with the most hygiene violations and analyze patterns",
+      "status": "passed",
+      "accuracy_score": 7,
+      "max_score": 10,
+      "execution_time": 22.93016743659973,
+      "mode": "TABLE",
+      "confidence": 1.0,
+      "sql_generated": true,
+      "data_returned": false,
+      "visualization_generated": false,
+      "analysis_details": [
+        "\u2705 Query executed without errors",
+        "\u2705 SQL generated successfully",
+        "\u2705 Expected tables found: ['person_hyg']",
+        "\u2705 Aggregation functions found",
+        "\u2705 GROUP BY clause found",
+        "\u26a0\ufe0f Mode mismatch: expected analytical, got TABLE",
+        "\u26a0\ufe0f No data returned",
+        "\u2705 High confidence: 1.00"
+      ]
+    },
+    {
+      "test_id": 9,
+      "question": "Show me packaging waste distribution by type with a histogram",
+      "status": "passed",
+      "accuracy_score": 7,
+      "max_score": 10,
+      "execution_time": 19.1916024684906,
+      "mode": "TABLE",
+      "confidence": 1.0,
+      "sql_generated": true,
+      "data_returned": true,
+      "visualization_generated": false,
+      "analysis_details": [
+        "\u2705 Query executed without errors",
+        "\u2705 SQL generated successfully",
+        "\u2705 Expected tables found: ['pack_waste']",
+        "\u2705 Aggregation functions found",
+        "\u26a0\ufe0f Mode mismatch: expected visualization, got TABLE",
+        "\u26a0\ufe0f Expected visualization not generated: histogram",
+        "\u2705 Data returned successfully",
+        "\u2705 High confidence: 1.00"
+      ]
+    },
+    {
+      "test_id": 10,
+      "question": "Analyze the correlation between production volume and quality test results",
+      "status": "partial",
+      "accuracy_score": 5,
+      "max_score": 10,
+      "execution_time": 30.93820858001709,
+      "mode": "TABLE",
+      "confidence": 0.0,
+      "sql_generated": true,
+      "data_returned": false,
+      "visualization_generated": false,
+      "analysis_details": [
+        "\u2705 Query executed without errors",
+        "\u2705 SQL generated successfully",
+        "\u2705 Expected tables found: ['production_test']",
+        "\u2705 JOIN clause found",
+        "\u26a0\ufe0f Mode mismatch: expected analytical, got TABLE",
+        "\u26a0\ufe0f No data returned",
+        "\u26a0\ufe0f Low confidence: 0.00"
+      ]
+    }
+  ]
+}

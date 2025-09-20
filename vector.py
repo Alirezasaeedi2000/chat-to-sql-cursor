@@ -80,10 +80,53 @@ class VectorStoreManager:
             persist_directory=self.persist_directory,
         )
         self.query_expander = QueryExpander(synonyms_path)
+        
+        # Column mapping fallback for schema mismatches (corrected table names)
+        self.column_mappings = {
+            'packs': {
+                'dateDate': 'date',
+            },
+            'pack_waste': {
+                'dateDate': 'date',
+            },
+            'person_hyg': {
+                'per_hy': 'per_hy_id',
+            },
+            'prices': {
+                'dateDate': 'date',
+            },
+            'production_info': {
+                'bakeID': 'bakeID',
+            },
+            'production_test': {
+                'bakeID': 'bakeID',
+            },
+            'users': {
+                'userId': 'userId',
+            },
+        }
 
     @property
     def vector_store(self) -> Chroma:
         return self._vector_store
+    
+    def get_column_mapping(self, table_name: str, column_name: str) -> Optional[str]:
+        """Get column mapping fallback for schema mismatches."""
+        if table_name in self.column_mappings:
+            return self.column_mappings[table_name].get(column_name)
+        return None
+    
+    def suggest_column_mapping(self, table_name: str, invalid_column: str) -> Optional[str]:
+        """Suggest column mapping using Levenshtein distance for similar column names."""
+        if table_name not in self.column_mappings:
+            return None
+        
+        # Simple similarity matching
+        mappings = self.column_mappings[table_name]
+        for mapped_col, actual_col in mappings.items():
+            if invalid_column.lower() in mapped_col.lower() or mapped_col.lower() in invalid_column.lower():
+                return actual_col
+        return None
 
     def _schema_snippet(self, engine: Engine, table_name: str) -> str:
         inspector = inspect(engine)
@@ -91,10 +134,27 @@ class VectorStoreManager:
         pk = inspector.get_pk_constraint(table_name)
         pk_cols = pk.get("constrained_columns") or []
         
-        # Enhanced column descriptions with nullability and defaults
+        # Enhanced column descriptions with business context
         col_desc = []
         for c in cols:
-            col_info = f"{c['name']}({str(c.get('type'))})"
+            col_name = c['name']
+            col_type = str(c.get('type'))
+            col_info = f"{col_name}({col_type})"
+            
+            # Add business context annotations
+            if 'id' in col_name.lower() and col_name.lower() != 'id':
+                col_info += " [identifier]"
+            elif any(word in col_name.lower() for word in ['name', 'title', 'description']):
+                col_info += " [text]"
+            elif any(word in col_name.lower() for word in ['date', 'time', 'created', 'updated']):
+                col_info += " [datetime]"
+            elif any(word in col_name.lower() for word in ['price', 'cost', 'amount', 'total', 'sum']):
+                col_info += " [monetary]"
+            elif any(word in col_name.lower() for word in ['count', 'quantity', 'number', 'qty']):
+                col_info += " [numeric]"
+            elif any(word in col_name.lower() for word in ['status', 'type', 'category', 'level']):
+                col_info += " [categorical]"
+            
             if not c.get('nullable', True):
                 col_info += " NOT NULL"
             if c.get('default') is not None:
@@ -106,7 +166,7 @@ class VectorStoreManager:
             f"Primary key: {', '.join(pk_cols) if pk_cols else 'None'}."
         )
         
-        # Foreign keys with relationship semantics
+        # Enhanced foreign keys with business relationship semantics
         fks = inspector.get_foreign_keys(table_name)
         if fks:
             fk_desc = []
@@ -114,10 +174,26 @@ class VectorStoreManager:
                 constrained = ','.join(fk.get('constrained_columns', []))
                 referred_table = fk.get('referred_table')
                 referred_cols = ','.join(fk.get('referred_columns', []))
-                # Add semantic meaning
+                
+                # Add business relationship context
                 relationship = f"{constrained} -> {referred_table}({referred_cols})"
-                if 'id' in constrained.lower():
+                
+                # Business relationship mapping for Farnan database (corrected table names)
+                if table_name == 'production_info' and referred_table == 'workers':
+                    relationship += f" [production performed by worker]"
+                elif table_name == 'production_test' and referred_table == 'workers':
+                    relationship += f" [test conducted by worker]"
+                elif table_name == 'person_hyg' and referred_table == 'workers':
+                    relationship += f" [hygiene check performed by worker]"
+                elif table_name == 'packaging_info' and referred_table == 'workers':
+                    relationship += f" [packaging handled by worker]"
+                elif table_name == 'pack_waste' and referred_table == 'workers':
+                    relationship += f" [waste generated by worker]"
+                elif table_name == 'prices' and referred_table == 'workers':
+                    relationship += f" [price updated by worker]"
+                elif 'id' in constrained.lower():
                     relationship += f" [many-to-one: {table_name} belongs to {referred_table}]"
+                
                 fk_desc.append(relationship)
             snippet += f" Foreign keys: {'; '.join(fk_desc)}."
         
