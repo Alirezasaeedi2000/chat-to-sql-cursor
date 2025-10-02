@@ -37,7 +37,7 @@ class FarnanNL2SQLApp:
     
     def setup_database(self):
         """Setup optimized connection to Farnan database"""
-        print("🏭 Setting up Farnan database connection...")
+        print("Setting up Farnan database connection...")
         
         connection_string = "mysql+pymysql://root:@localhost:3306/Farnan?charset=utf8mb4&autocommit=true"
         
@@ -54,11 +54,11 @@ class FarnanNL2SQLApp:
         with self.engine.connect() as conn:
             result = conn.execute(text("SELECT DATABASE()"))
             db_name = result.fetchone()[0]
-            print(f"✅ Connected to database: {db_name}")
+            print(f"Connected to database: {db_name}")
     
     def setup_query_processor(self):
         """Setup query processor with Farnan-specific context"""
-        print("⚙️ Setting up query processor...")
+        print("Setting up query processor...")
         
         # Create vector store manager
         vector_manager = VectorStoreManager(
@@ -72,7 +72,7 @@ class FarnanNL2SQLApp:
             vector_manager=vector_manager
         )
         
-        print("✅ Query processor ready")
+        print("Query processor ready")
     
     def get_farnan_context(self) -> str:
         """Get Farnan-specific context for better SQL generation"""
@@ -136,7 +136,7 @@ CRITICAL: Use ONLY the exact column names listed above. Do not guess or invent c
     
     def process_query(self, user_query: str) -> Dict[str, Any]:
         """Process a natural language query"""
-        print(f"\n🔍 Processing: '{user_query}'")
+        print(f"\nProcessing: '{user_query}'")
         
         try:
             # Use the standard process_query method from QueryProcessor
@@ -158,7 +158,7 @@ CRITICAL: Use ONLY the exact column names listed above. Do not guess or invent c
     
     def show_sample_queries(self):
         """Show sample queries for the Farnan database"""
-        print("\n📋 SAMPLE QUERIES FOR FARNAN DATABASE:")
+        print("\nSAMPLE QUERIES FOR FARNAN DATABASE:")
         print("=" * 50)
         
         sample_queries = [
@@ -179,7 +179,7 @@ CRITICAL: Use ONLY the exact column names listed above. Do not guess or invent c
     
     def run_interactive_mode(self):
         """Run interactive mode for querying"""
-        print("\n🏭 FARNAN FOOD PRODUCTION NLP-to-SQL SYSTEM")
+        print("\nFARNAN FOOD PRODUCTION NLP-to-SQL SYSTEM")
         print("=" * 60)
         print("Ask questions about your food production data!")
         print("Type 'help' for sample queries, 'quit' to exit")
@@ -188,10 +188,19 @@ CRITICAL: Use ONLY the exact column names listed above. Do not guess or invent c
         
         while True:
             try:
-                user_input = input("\n🔍 Enter your question: ").strip()
+                # More robust input handling
+                try:
+                    user_input = input("\nEnter your question: ").strip()
+                except (EOFError, KeyboardInterrupt):
+                    print("\nGoodbye!")
+                    break
+                except Exception:
+                    # Fallback for input issues
+                    print("\nInput error. Please try again or type 'quit' to exit.")
+                    continue
                 
                 if user_input.lower() in ['quit', 'exit', 'q']:
-                    print("👋 Goodbye!")
+                    print("Goodbye!")
                     break
                 elif user_input.lower() == 'help':
                     self.show_sample_queries()
@@ -203,54 +212,56 @@ CRITICAL: Use ONLY the exact column names listed above. Do not guess or invent c
                 result = self.process_query(user_input)
                 
                 if 'error' in result:
-                    print(f"❌ Error: {result['error']}")
+                    print(f"Error: {result['error']}")
                 else:
                     # Display results
                     self.display_result(result)
                     
             except KeyboardInterrupt:
-                print("\n👋 Goodbye!")
+                print("\nGoodbye!")
                 break
             except Exception as e:
-                print(f"❌ Unexpected error: {e}")
+                print(f"Unexpected error: {e}")
+                # Don't break on errors, just continue
+                continue
     
     def display_result(self, result: Dict[str, Any]):
         """Display query results in a formatted way"""
         mode = result.get('mode', 'unknown').upper()
-        print(f"\n📊 RESULT ({mode}):")
+        print(f"\nRESULT ({mode}):")
         print("-" * 40)
         
         # Show the actual answer based on mode
         if mode == 'SHORT_ANSWER' and result.get('short_answer'):
-            print(f"💡 Answer: {result['short_answer']}")
+            print(f"Answer: {result['short_answer']}")
         elif mode == 'TABLE' and result.get('table_markdown'):
-            print("📋 Data Table:")
+            print("Data Table:")
             print(result['table_markdown'])
         elif mode == 'ANALYTICAL' and result.get('analysis'):
-            print(f"💡 Analysis: {result['analysis']}")
+            print(f"Analysis: {result['analysis']}")
         elif mode == 'VISUALIZATION' and result.get('visualization_path'):
-            print(f"📊 Visualization saved to: {result['visualization_path']}")
+            print(f"Visualization saved to: {result['visualization_path']}")
         
         # Show technical details
         if result.get('sql'):
-            print(f"\n🔧 SQL: {result['sql']}")
+            print(f"\nSQL: {result['sql']}")
         
         # Show metadata
         metadata = result.get('metadata', {})
         if metadata.get('confidence'):
-            print(f"🎯 Confidence: {metadata['confidence']:.2f}")
+            print(f"Confidence: {metadata['confidence']:.2f}")
         if metadata.get('execution_time_ms'):
-            print(f"⏱️ Execution time: {metadata['execution_time_ms']/1000:.2f}s")
+            print(f"Execution time: {metadata['execution_time_ms']/1000:.2f}s")
         if metadata.get('row_count'):
-            print(f"📈 Rows returned: {metadata['row_count']}")
+            print(f"Rows returned: {metadata['row_count']}")
         
         # Show analysis if available
         if result.get('analysis') and mode != 'ANALYTICAL':
-            print(f"\n💡 Additional Analysis: {result['analysis']}")
+            print(f"\nAdditional Analysis: {result['analysis']}")
         
         # Show visualization if available
         if result.get('visualization_path') and mode != 'VISUALIZATION':
-            print(f"\n📊 Visualization: {result['visualization_path']}")
+            print(f"\nVisualization: {result['visualization_path']}")
 
 def main():
     """Main function"""
@@ -258,7 +269,7 @@ def main():
         app = FarnanNL2SQLApp()
         app.run_interactive_mode()
     except Exception as e:
-        print(f"❌ Application error: {e}")
+        print(f"Application error: {e}")
         LOGGER.error(f"Application error: {e}", exc_info=True)
 
 if __name__ == "__main__":

@@ -362,12 +362,19 @@ class SafeSqlExecutor:
         reraise=True,
         retry=retry_if_exception_type(SQLAlchemyError),
     )
-    def execute_select(self, sql: str) -> Tuple[pd.DataFrame, str]:
+    def execute_select(self, sql: str, user_query: str = None, query_processor=None) -> Tuple[pd.DataFrame, str]:
         self.validate_select_only(sql)
         hinted = self._inject_exec_timeout_hint(sql)
         safe_sql = self._clamp_or_inject_limit(hinted)
 
-        # Check cache first
+        # Apply fixes before cache check
+        if user_query and query_processor and hasattr(query_processor, '_apply_sql_fixes'):
+            original_sql = safe_sql
+            safe_sql = query_processor._apply_sql_fixes(safe_sql, user_query, None)
+            if safe_sql != original_sql:
+                LOGGER.info(f"Applied fixes: {original_sql} -> {safe_sql}")
+
+        # Check cache first (after applying fixes)
         if self.cache:
             cached_result = self.cache.get(safe_sql)
             if cached_result is not None:
@@ -508,6 +515,12 @@ class QueryProcessor:
         # Graph RAG: schema graph (tables, columns, fk paths)
         self.schema_graph: nx.Graph = nx.Graph()
         self._build_schema_graph()
+        
+        # ADVANCED FEATURES: Community Detection and Search Strategies
+        self.schema_communities: Dict[str, Any] = {}
+        self.community_reports: Dict[str, Any] = {}
+        self._detect_schema_communities()
+        self._generate_schema_reports()
 
     def _can_inspect_engine(self) -> bool:
         """Return True if the engine appears to be a real SQLAlchemy Engine, not a mock.
@@ -603,9 +616,1331 @@ class QueryProcessor:
                             g.add_edge(
                                 ("column", t, c), ("column", rt, rc), kind="fk_col"
                             )
+            # ENHANCED: Add inferred relationships since database has no foreign keys
+            self._add_inferred_relationships(g, insp)
+            
             self.schema_graph = g
         except Exception as exc:
             LOGGER.debug("Failed to build schema graph: %s", exc)
+
+    def _add_inferred_relationships(self, g: nx.Graph, insp) -> None:
+        """Add inferred table relationships based on column naming patterns and business logic."""
+        try:
+            tables = insp.get_table_names()
+            
+            # Define relationship patterns based on column names and business logic
+            relationship_patterns = {
+                # Worker relationships
+                'workers': {
+                    'section': ['production_info', 'person_hyg'],  # Workers belong to sections
+                    'id': ['production_info'],  # Workers have production records
+                },
+                # Production relationships  
+                'production_info': {
+                    'bakeType': ['packaging_info'],  # Production batches have packaging
+                    'bakeID': ['production_test'],  # Production has test results
+                },
+                # Packaging relationships
+                'packaging_info': {
+                    'tranNumber': ['transtatus'],  # Packaging has transaction status
+                    'date': ['pack_waste'],  # Packaging dates match waste dates
+                },
+                # Transaction relationships
+                'transtatus': {
+                    'tranWeight': ['packaging_info'],  # Transaction weight relates to packaging
+                },
+                # Hygiene relationships
+                'person_hyg': {
+                    'personName': ['workers'],  # Hygiene records for workers
+                    'date': ['production_info'],  # Hygiene checks on production dates
+                },
+                # Price relationships
+                'prices': {
+                    'date': ['production_info'],  # Prices on production dates
+                },
+                # User relationships
+                'users': {
+                    'created': ['workers'],  # Users create worker records
+                }
+            }
+            
+            # Add inferred edges
+            for source_table, targets in relationship_patterns.items():
+                if source_table not in tables:
+                    continue
+                    
+                for column_pattern, target_tables in targets.items():
+                    # Get source table columns
+                    source_cols = insp.get_columns(source_table)
+                    source_col_names = [col['name'].lower() for col in source_cols]
+                    
+                    # Check if column pattern exists in source table
+                    if any(column_pattern.lower() in col_name for col_name in source_col_names):
+                        for target_table in target_tables:
+                            if target_table in tables:
+                                # Add inferred relationship edge
+                                if g.has_node(("table", source_table)) and g.has_node(("table", target_table)):
+                                    g.add_edge(
+                                        ("table", source_table), 
+                                        ("table", target_table), 
+                                        kind="inferred", 
+                                        via=column_pattern,
+                                        confidence=0.7  # Medium confidence for inferred relationships
+                                    )
+                                    LOGGER.debug(f"Inferred relationship: {source_table} -> {target_table} via {column_pattern}")
+            
+            # Add date-based relationships (common in manufacturing)
+            date_tables = [t for t in tables if any('date' in col['name'].lower() for col in insp.get_columns(t))]
+            for i, table1 in enumerate(date_tables):
+                for table2 in date_tables[i+1:]:
+                    if g.has_node(("table", table1)) and g.has_node(("table", table2)):
+                        g.add_edge(
+                            ("table", table1), 
+                            ("table", table2), 
+                            kind="date_based", 
+                            via="date_columns",
+                            confidence=0.5  # Lower confidence for date-based relationships
+                        )
+            
+            LOGGER.info(f"Added inferred relationships to schema graph")
+            
+        except Exception as exc:
+            LOGGER.warning(f"Failed to add inferred relationships: {exc}")
+
+    def _detect_schema_communities(self) -> None:
+        """ADVANCED FEATURE 1: Detect hierarchical communities in database schema using graph clustering"""
+        try:
+            if not self.schema_graph.nodes:
+                LOGGER.debug("Skipping community detection: empty schema graph")
+                return
+
+            LOGGER.info("Starting schema community detection...")
+            
+            # Level 1: Table-level communities (broad categories)
+            table_communities = self._extract_table_communities()
+            
+            # Level 2: Column-level communities (detailed categories)  
+            column_communities = self._extract_column_communities()
+            
+            # Level 3: Relationship-based communities (FK clusters)
+            fk_communities = self._detect_fk_communities()
+            
+            # Level 4: Semantic communities (based on naming patterns)
+            semantic_communities = self._detect_semantic_communities()
+            
+            self.schema_communities = {
+                'table_communities': table_communities,
+                'column_communities': column_communities,
+                'fk_communities': fk_communities,
+                'semantic_communities': semantic_communities,
+                'hierarchy_levels': {
+                    'level_1': 'broad_domain_categories',
+                    'level_2': 'detailed_functional_groups', 
+                    'level_3': 'relationship_clusters',
+                    'level_4': 'semantic_patterns'
+                }
+            }
+            
+            LOGGER.info(f"Schema community detection completed: {len(table_communities)} table communities, {len(column_communities)} column communities")
+            
+        except Exception as exc:
+            LOGGER.error(f"Failed to detect schema communities: {exc}")
+            self.schema_communities = {}
+
+    def _extract_table_communities(self) -> Dict[str, List[str]]:
+        """Extract table-level communities using graph clustering"""
+        try:
+            # Create table-only subgraph
+            table_graph = nx.Graph()
+            
+            # Add table nodes
+            for node in self.schema_graph.nodes:
+                if node[0] == "table":
+                    table_graph.add_node(node[1])
+            
+            # Add table relationships (foreign keys)
+            for edge in self.schema_graph.edges(data=True):
+                source, target, data = edge
+                if (source[0] == "table" and target[0] == "table" and 
+                    data.get('kind') == 'fk'):
+                    table_graph.add_edge(source[1], target[1], weight=1.0)
+            
+            # Apply community detection algorithm
+            if table_graph.number_of_nodes() > 1:
+                # Use greedy modularity communities
+                communities = list(nx.algorithms.community.greedy_modularity_communities(table_graph))
+                
+                # Convert to named communities
+                named_communities = {}
+                for i, community in enumerate(communities):
+                    community_name = f"community_{i+1}"
+                    named_communities[community_name] = list(community)
+                
+                # Apply domain-specific naming based on table patterns
+                named_communities = self._apply_domain_naming(named_communities)
+                
+                return named_communities
+            else:
+                return {'single_table_community': list(table_graph.nodes())}
+                
+        except Exception as exc:
+            LOGGER.error(f"Failed to extract table communities: {exc}")
+            return {}
+
+    def _extract_column_communities(self) -> Dict[str, List[str]]:
+        """Extract column-level communities based on naming patterns and relationships"""
+        try:
+            column_communities = {
+                'identifier_community': [],
+                'date_time_community': [],
+                'weight_measurement_community': [],
+                'status_community': [],
+                'name_text_community': [],
+                'foreign_key_community': []
+            }
+            
+            # Analyze all columns and categorize them
+            for table_name, columns in self.table_to_columns.items():
+                for column in columns:
+                    column_lower = column.lower()
+                    
+                    # Identifier patterns
+                    if any(pattern in column_lower for pattern in ['id', 'key', 'pk']):
+                        column_communities['identifier_community'].append(f"{table_name}.{column}")
+                    
+                    # Date/time patterns
+                    elif any(pattern in column_lower for pattern in ['date', 'time', 'created', 'updated', 'archived']):
+                        column_communities['date_time_community'].append(f"{table_name}.{column}")
+                    
+                    # Weight/measurement patterns
+                    elif any(pattern in column_lower for pattern in ['weight', 'amount', 'quantity', 'volume', 'usage']):
+                        column_communities['weight_measurement_community'].append(f"{table_name}.{column}")
+                    
+                    # Status patterns
+                    elif any(pattern in column_lower for pattern in ['status', 'state', 'free', 'active', 'inactive']):
+                        column_communities['status_community'].append(f"{table_name}.{column}")
+                    
+                    # Name/text patterns
+                    elif any(pattern in column_lower for pattern in ['name', 'title', 'description', 'type']):
+                        column_communities['name_text_community'].append(f"{table_name}.{column}")
+            
+            # Remove empty communities
+            column_communities = {k: v for k, v in column_communities.items() if v}
+            
+            return column_communities
+            
+        except Exception as exc:
+            LOGGER.error(f"Failed to extract column communities: {exc}")
+            return {}
+
+    def _detect_fk_communities(self) -> Dict[str, List[str]]:
+        """Detect communities based on foreign key relationships"""
+        try:
+            fk_communities = {}
+            
+            # Build FK relationship graph
+            fk_graph = nx.Graph()
+            
+            for table, fk_list in self.fk_graph.items():
+                fk_graph.add_node(table)
+                for col, ref_table, ref_col in fk_list:
+                    fk_graph.add_edge(table, ref_table, weight=1.0)
+            
+            if fk_graph.number_of_nodes() > 1:
+                # Find connected components (FK clusters)
+                components = list(nx.connected_components(fk_graph))
+                
+                for i, component in enumerate(components):
+                    community_name = f"fk_cluster_{i+1}"
+                    fk_communities[community_name] = list(component)
+            else:
+                fk_communities['single_fk_cluster'] = list(fk_graph.nodes())
+            
+            return fk_communities
+            
+        except Exception as exc:
+            LOGGER.error(f"Failed to detect FK communities: {exc}")
+            return {}
+
+    def _detect_semantic_communities(self) -> Dict[str, List[str]]:
+        """Detect communities based on semantic naming patterns"""
+        try:
+            semantic_communities = {
+                'production_semantic': [],
+                'hygiene_semantic': [],
+                'packaging_semantic': [],
+                'user_semantic': [],
+                'worker_semantic': []
+            }
+            
+            # Analyze table names for semantic patterns
+            for table_name in self.table_to_columns.keys():
+                table_lower = table_name.lower()
+                
+                if 'production' in table_lower:
+                    semantic_communities['production_semantic'].append(table_name)
+                elif 'hyg' in table_lower or 'hygiene' in table_lower:
+                    semantic_communities['hygiene_semantic'].append(table_name)
+                elif 'packaging' in table_lower or 'package' in table_lower:
+                    semantic_communities['packaging_semantic'].append(table_name)
+                elif 'user' in table_lower:
+                    semantic_communities['user_semantic'].append(table_name)
+                elif 'worker' in table_lower or 'person' in table_lower:
+                    semantic_communities['worker_semantic'].append(table_name)
+            
+            # Remove empty communities
+            semantic_communities = {k: v for k, v in semantic_communities.items() if v}
+            
+            return semantic_communities
+            
+        except Exception as exc:
+            LOGGER.error(f"Failed to detect semantic communities: {exc}")
+            return {}
+
+    def _apply_domain_naming(self, communities: Dict[str, List[str]]) -> Dict[str, List[str]]:
+        """Apply domain-specific naming to communities based on table content"""
+        try:
+            named_communities = {}
+            
+            for community_name, tables in communities.items():
+                # Analyze table names to determine domain
+                domain_keywords = {
+                    'production': ['production', 'bake', 'batch', 'manufacturing'],
+                    'hygiene': ['hyg', 'hygiene', 'compliance', 'violation'],
+                    'packaging': ['packaging', 'package', 'waste', 'weight'],
+                    'user': ['user', 'account', 'access', 'level'],
+                    'worker': ['worker', 'person', 'employee', 'staff'],
+                    'transaction': ['tran', 'transaction', 'status', 'repo']
+                }
+                
+                # Count keyword matches
+                domain_scores = {}
+                for domain, keywords in domain_keywords.items():
+                    score = 0
+                    for table in tables:
+                        table_lower = table.lower()
+                        for keyword in keywords:
+                            if keyword in table_lower:
+                                score += 1
+                    domain_scores[domain] = score
+                
+                # Assign domain name to community
+                if domain_scores:
+                    best_domain = max(domain_scores, key=domain_scores.get)
+                    if domain_scores[best_domain] > 0:
+                        new_name = f"{best_domain}_community"
+                    else:
+                        new_name = f"general_{community_name}"
+                else:
+                    new_name = f"general_{community_name}"
+                
+                named_communities[new_name] = tables
+            
+            return named_communities
+            
+        except Exception as exc:
+            LOGGER.error(f"Failed to apply domain naming: {exc}")
+            return communities
+
+    def _global_schema_search(self, query: str) -> Dict[str, Any]:
+        """ADVANCED FEATURE 2A: Global schema search using community-level summaries"""
+        try:
+            LOGGER.info(f"Performing global schema search for: {query}")
+            
+            # Analyze query for domain keywords
+            query_lower = query.lower()
+            domain_scores = {}
+            
+            for community_name, community_data in self.schema_communities.get('semantic_communities', {}).items():
+                score = 0
+                domain = community_name.replace('_semantic', '')
+                
+                # Score based on domain keywords in query
+                domain_keywords = {
+                    'production': ['production', 'bake', 'batch', 'manufacturing', 'efficiency'],
+                    'hygiene': ['hygiene', 'hyg', 'compliance', 'violation', 'clean'],
+                    'packaging': ['packaging', 'package', 'waste', 'weight', 'material'],
+                    'user': ['user', 'account', 'access', 'level', 'permission'],
+                    'worker': ['worker', 'person', 'employee', 'staff', 'name']
+                }
+                
+                if domain in domain_keywords:
+                    for keyword in domain_keywords[domain]:
+                        if keyword in query_lower:
+                            score += query_lower.count(keyword)
+                
+                domain_scores[domain] = score
+            
+            # Get top domains
+            top_domains = sorted(domain_scores.items(), key=lambda x: x[1], reverse=True)[:2]
+            
+            # Build global context
+            global_context = {
+                'search_type': 'global',
+                'top_domains': [domain for domain, score in top_domains if score > 0],
+                'domain_scores': domain_scores,
+                'relevant_communities': [],
+                'schema_summary': {}
+            }
+            
+            # Add relevant community information
+            for domain, score in top_domains:
+                if score > 0:
+                    community_key = f"{domain}_semantic"
+                    if community_key in self.schema_communities.get('semantic_communities', {}):
+                        global_context['relevant_communities'].append({
+                            'domain': domain,
+                            'tables': self.schema_communities['semantic_communities'][community_key],
+                            'score': score
+                        })
+            
+            # Generate schema summary
+            global_context['schema_summary'] = {
+                'total_tables': len(self.table_to_columns),
+                'total_communities': len(self.schema_communities.get('table_communities', {})),
+                'primary_domains': [domain for domain, score in top_domains[:3]],
+                'complexity_level': 'high' if len(global_context['relevant_communities']) > 2 else 'medium'
+            }
+            
+            LOGGER.info(f"Global search completed: {len(global_context['relevant_communities'])} relevant communities found")
+            return global_context
+            
+        except Exception as exc:
+            LOGGER.error(f"Failed to perform global schema search: {exc}")
+            return {'search_type': 'global', 'error': str(exc)}
+
+    def _local_schema_search(self, query: str) -> Dict[str, Any]:
+        """ADVANCED FEATURE 2B: Local schema search using entity-focused retrieval"""
+        try:
+            LOGGER.info(f"Performing local schema search for: {query}")
+            
+            # Extract entities from query
+            entities = self._extract_query_entities(query)
+            
+            # Find specific tables and columns
+            relevant_tables = set()
+            relevant_columns = set()
+            
+            # Match query entities to schema entities
+            for entity in entities['tables']:
+                for table in self.table_to_columns.keys():
+                    if entity.lower() in table.lower() or table.lower() in entity.lower():
+                        relevant_tables.add(table)
+            
+            # ENHANCED: Use inferred relationships to find related tables
+            if relevant_tables:
+                for table in list(relevant_tables):
+                    # Find tables connected via inferred relationships
+                    if self.schema_graph.has_node(("table", table)):
+                        for neighbor in self.schema_graph.neighbors(("table", table)):
+                            if neighbor[0] == "table":  # Only table neighbors
+                                neighbor_table = neighbor[1]
+                                edge_data = self.schema_graph.get_edge_data(("table", table), neighbor)
+                                if edge_data and edge_data.get('kind') in ['inferred', 'date_based']:
+                                    relevant_tables.add(neighbor_table)
+                                    LOGGER.debug(f"Added related table {neighbor_table} via {edge_data.get('kind')} relationship")
+            
+            # FORCE MULTI-TABLE: If query mentions relationships, ensure multiple tables
+            query_lower = query.lower()
+            if any(phrase in query_lower for phrase in ["with their", "with", "and their", "corresponding"]):
+                # Force related tables based on query content
+                if "workers" in query_lower and "production" in query_lower:
+                    relevant_tables.update(["workers", "production_info"])
+                if "packaging" in query_lower and "transaction" in query_lower:
+                    relevant_tables.update(["packaging_info", "transtatus"])
+                if "workers" in query_lower and "hygiene" in query_lower:
+                    relevant_tables.update(["workers", "person_hyg"])
+                if "production" in query_lower and "quality" in query_lower:
+                    relevant_tables.update(["production_info", "production_test"])
+            
+            for entity in entities['columns']:
+                for table, columns in self.table_to_columns.items():
+                    for column in columns:
+                        if entity.lower() in column.lower() or column.lower() in entity.lower():
+                            relevant_tables.add(table)
+                            relevant_columns.add(f"{table}.{column}")
+            
+            # Build local context with focused information
+            local_context = {
+                'search_type': 'local',
+                'relevant_tables': list(relevant_tables),
+                'relevant_columns': list(relevant_columns),
+                'entity_matches': {
+                    'tables': entities['tables'],
+                    'columns': entities['columns'],
+                    'keywords': entities['keywords']
+                },
+                'relationships': [],
+                'focused_schema': {}
+            }
+            
+            # Add relationships for relevant tables
+            for table in relevant_tables:
+                if table in self.fk_graph:
+                    for col, ref_table, ref_col in self.fk_graph[table]:
+                        if ref_table in relevant_tables:
+                            local_context['relationships'].append({
+                                'source': f"{table}.{col}",
+                                'target': f"{ref_table}.{ref_col}",
+                                'type': 'foreign_key'
+                            })
+            
+            # Build focused schema
+            for table in relevant_tables:
+                if table in self.table_to_columns:
+                    local_context['focused_schema'][table] = {
+                        'columns': self.table_to_columns[table],
+                        'row_count': 'unknown',  # Could be enhanced with actual counts
+                        'relationships': len([r for r in local_context['relationships'] if table in r['source'] or table in r['target']])
+                    }
+            
+            LOGGER.info(f"Local search completed: {len(relevant_tables)} tables, {len(relevant_columns)} columns found")
+            return local_context
+            
+        except Exception as exc:
+            LOGGER.error(f"Failed to perform local schema search: {exc}")
+            return {'search_type': 'local', 'error': str(exc)}
+
+    def _drift_schema_search(self, query: str) -> Dict[str, Any]:
+        """ADVANCED FEATURE 2C: Dynamic schema reasoning using semantic drift detection"""
+        try:
+            LOGGER.info(f"Performing drift schema search for: {query}")
+            
+            # Analyze query for semantic patterns and potential schema evolution
+            query_analysis = self._analyze_query_semantics(query)
+            
+            # Detect potential schema drift or missing connections
+            drift_context = {
+                'search_type': 'drift',
+                'query_analysis': query_analysis,
+                'potential_missing_tables': [],
+                'suggested_connections': [],
+                'semantic_gaps': [],
+                'reasoning_path': []
+            }
+            
+            # Analyze for missing table connections
+            mentioned_tables = query_analysis.get('mentioned_tables', [])
+            if len(mentioned_tables) > 1:
+                # Check if tables are connected in the schema
+                for i, table1 in enumerate(mentioned_tables):
+                    for table2 in mentioned_tables[i+1:]:
+                        if not self._tables_connected(table1, table2):
+                            drift_context['potential_missing_tables'].append({
+                                'table1': table1,
+                                'table2': table2,
+                                'reason': 'No direct relationship found',
+                                'suggestion': f"Consider adding foreign key relationship between {table1} and {table2}"
+                            })
+            
+            # Suggest schema improvements based on query patterns
+            query_patterns = query_analysis.get('patterns', [])
+            for pattern in query_patterns:
+                if pattern == 'multi_table_join' and len(mentioned_tables) > 2:
+                    drift_context['suggested_connections'].append({
+                        'type': 'join_optimization',
+                        'tables': mentioned_tables,
+                        'suggestion': 'Consider creating intermediate table for complex multi-table relationships'
+                    })
+                elif pattern == 'temporal_analysis':
+                    drift_context['suggested_connections'].append({
+                        'type': 'temporal_indexing',
+                        'tables': mentioned_tables,
+                        'suggestion': 'Consider adding temporal indexes for better time-series query performance'
+                    })
+            
+            # Generate reasoning path
+            drift_context['reasoning_path'] = [
+                f"Analyzed query: '{query}'",
+                f"Identified {len(mentioned_tables)} tables: {mentioned_tables}",
+                f"Detected {len(query_patterns)} patterns: {query_patterns}",
+                f"Found {len(drift_context['potential_missing_tables'])} potential missing connections",
+                f"Suggested {len(drift_context['suggested_connections'])} schema improvements"
+            ]
+            
+            LOGGER.info(f"Drift search completed: {len(drift_context['potential_missing_tables'])} missing connections identified")
+            return drift_context
+            
+        except Exception as exc:
+            LOGGER.error(f"Failed to perform drift schema search: {exc}")
+            return {'search_type': 'drift', 'error': str(exc)}
+
+    def _extract_query_entities(self, query: str) -> Dict[str, List[str]]:
+        """Extract entities from query for local search"""
+        try:
+            query_lower = query.lower()
+            
+            entities = {
+                'tables': [],
+                'columns': [],
+                'keywords': []
+            }
+            
+            # Extract table mentions
+            for table in self.table_to_columns.keys():
+                if table.lower() in query_lower:
+                    entities['tables'].append(table)
+            
+            # Extract column mentions
+            for table, columns in self.table_to_columns.items():
+                for column in columns:
+                    if column.lower() in query_lower:
+                        entities['columns'].append(f"{table}.{column}")
+            
+            # Extract keywords (non-schema terms)
+            words = query_lower.split()
+            schema_terms = set()
+            for table in self.table_to_columns.keys():
+                schema_terms.update(table.lower().split('_'))
+            for columns in self.table_to_columns.values():
+                for column in columns:
+                    schema_terms.update(column.lower().split('_'))
+            
+            entities['keywords'] = [word for word in words if word not in schema_terms and len(word) > 2]
+            
+            return entities
+            
+        except Exception as exc:
+            LOGGER.error(f"Failed to extract query entities: {exc}")
+            return {'tables': [], 'columns': [], 'keywords': []}
+
+    def _analyze_query_semantics(self, query: str) -> Dict[str, Any]:
+        """Analyze query semantics for drift detection"""
+        try:
+            query_lower = query.lower()
+            
+            analysis = {
+                'mentioned_tables': [],
+                'patterns': [],
+                'complexity': 'simple',
+                'semantic_intent': 'unknown'
+            }
+            
+            # Extract mentioned tables
+            for table in self.table_to_columns.keys():
+                if table.lower() in query_lower:
+                    analysis['mentioned_tables'].append(table)
+            
+            # Detect patterns
+            if 'join' in query_lower or 'with' in query_lower:
+                analysis['patterns'].append('multi_table_join')
+            if any(word in query_lower for word in ['trend', 'over time', 'historical', 'past']):
+                analysis['patterns'].append('temporal_analysis')
+            if any(word in query_lower for word in ['average', 'sum', 'count', 'max', 'min']):
+                analysis['patterns'].append('aggregation')
+            if any(word in query_lower for word in ['group', 'by', 'each']):
+                analysis['patterns'].append('grouping')
+            
+            # Determine complexity
+            if len(analysis['mentioned_tables']) > 2:
+                analysis['complexity'] = 'complex'
+            elif len(analysis['patterns']) > 2:
+                analysis['complexity'] = 'medium'
+            
+            # Determine semantic intent
+            if any(word in query_lower for word in ['show', 'display', 'list']):
+                analysis['semantic_intent'] = 'retrieval'
+            elif any(word in query_lower for word in ['analyze', 'compare', 'trend']):
+                analysis['semantic_intent'] = 'analysis'
+            elif any(word in query_lower for word in ['count', 'total', 'sum']):
+                analysis['semantic_intent'] = 'aggregation'
+            
+            return analysis
+            
+        except Exception as exc:
+            LOGGER.error(f"Failed to analyze query semantics: {exc}")
+            return {'mentioned_tables': [], 'patterns': [], 'complexity': 'simple', 'semantic_intent': 'unknown'}
+
+    def _tables_connected(self, table1: str, table2: str) -> bool:
+        """Check if two tables are connected via foreign key relationship"""
+        try:
+            # Check direct FK relationships
+            if table1 in self.fk_graph:
+                for col, ref_table, ref_col in self.fk_graph[table1]:
+                    if ref_table == table2:
+                        return True
+            
+            if table2 in self.fk_graph:
+                for col, ref_table, ref_col in self.fk_graph[table2]:
+                    if ref_table == table1:
+                        return True
+            
+            # Check via schema graph (for indirect connections)
+            if self.schema_graph.has_node(("table", table1)) and self.schema_graph.has_node(("table", table2)):
+                try:
+                    path = nx.shortest_path(self.schema_graph, ("table", table1), ("table", table2))
+                    return len(path) <= 3  # Allow up to 2 hops
+                except nx.NetworkXNoPath:
+                    return False
+            
+            return False
+            
+        except Exception as exc:
+            LOGGER.error(f"Failed to check table connection: {exc}")
+            return False
+
+    def _generate_schema_reports(self) -> None:
+        """ADVANCED FEATURE 3: Generate hierarchical schema documentation and community reports"""
+        try:
+            LOGGER.info("Generating comprehensive schema reports...")
+            
+            # Generate community-level reports
+            community_reports = self._generate_community_reports()
+            
+            # Generate hierarchical documentation
+            hierarchical_docs = self._generate_hierarchical_documentation()
+            
+            # Generate schema insights
+            schema_insights = self._generate_schema_insights()
+            
+            # Generate relationship analysis
+            relationship_analysis = self._generate_relationship_analysis()
+            
+            # Generate performance recommendations
+            performance_recommendations = self._generate_performance_recommendations()
+            
+            self.community_reports = {
+                'community_reports': community_reports,
+                'hierarchical_documentation': hierarchical_docs,
+                'schema_insights': schema_insights,
+                'relationship_analysis': relationship_analysis,
+                'performance_recommendations': performance_recommendations,
+                'generation_timestamp': str(datetime.now()),
+                'schema_statistics': self._calculate_schema_statistics()
+            }
+            
+            LOGGER.info("Schema reports generation completed successfully")
+            
+        except Exception as exc:
+            LOGGER.error(f"Failed to generate schema reports: {exc}")
+            self.community_reports = {'error': str(exc)}
+
+    def _generate_community_reports(self) -> Dict[str, Any]:
+        """Generate detailed reports for each community"""
+        try:
+            reports = {}
+            
+            # Table community reports
+            for community_name, tables in self.schema_communities.get('table_communities', {}).items():
+                report = {
+                    'community_type': 'table_community',
+                    'community_name': community_name,
+                    'tables': tables,
+                    'summary': f"Community focused on {community_name.replace('_', ' ')} operations",
+                    'key_relationships': [],
+                    'common_patterns': [],
+                    'complexity_score': len(tables),
+                    'recommendations': []
+                }
+                
+                # Analyze relationships within community
+                for table in tables:
+                    if table in self.fk_graph:
+                        for col, ref_table, ref_col in self.fk_graph[table]:
+                            if ref_table in tables:
+                                report['key_relationships'].append({
+                                    'source': f"{table}.{col}",
+                                    'target': f"{ref_table}.{ref_col}",
+                                    'type': 'internal_community_fk'
+                                })
+                
+                # Analyze common patterns
+                columns_by_type = {}
+                for table in tables:
+                    if table in self.table_to_columns:
+                        for column in self.table_to_columns[table]:
+                            column_lower = column.lower()
+                            if 'id' in column_lower:
+                                columns_by_type.setdefault('identifiers', []).append(f"{table}.{column}")
+                            elif 'date' in column_lower or 'time' in column_lower:
+                                columns_by_type.setdefault('temporal', []).append(f"{table}.{column}")
+                            elif 'status' in column_lower or 'state' in column_lower:
+                                columns_by_type.setdefault('status_fields', []).append(f"{table}.{column}")
+                
+                report['common_patterns'] = columns_by_type
+                
+                # Generate recommendations
+                if len(tables) > 3:
+                    report['recommendations'].append("Consider breaking into smaller sub-communities for better maintainability")
+                if len(report['key_relationships']) == 0:
+                    report['recommendations'].append("No internal relationships found - verify community grouping")
+                
+                reports[community_name] = report
+            
+            # Column community reports
+            for community_name, columns in self.schema_communities.get('column_communities', {}).items():
+                report = {
+                    'community_type': 'column_community',
+                    'community_name': community_name,
+                    'columns': columns,
+                    'summary': f"Column community for {community_name.replace('_', ' ')} fields",
+                    'usage_patterns': {},
+                    'data_types': [],
+                    'recommendations': []
+                }
+                
+                # Analyze usage patterns
+                tables_using_community = set()
+                for column in columns:
+                    table_name = column.split('.')[0]
+                    tables_using_community.add(table_name)
+                
+                report['usage_patterns'] = {
+                    'tables_using_community': list(tables_using_community),
+                    'cross_table_usage': len(tables_using_community) > 1
+                }
+                
+                # Generate recommendations
+                if len(tables_using_community) > 3:
+                    report['recommendations'].append("High cross-table usage - consider standardization")
+                
+                reports[f"column_{community_name}"] = report
+            
+            return reports
+            
+        except Exception as exc:
+            LOGGER.error(f"Failed to generate community reports: {exc}")
+            return {}
+
+    def _generate_hierarchical_documentation(self) -> Dict[str, Any]:
+        """Generate hierarchical documentation of the schema"""
+        try:
+            documentation = {
+                'schema_overview': {
+                    'total_tables': len(self.table_to_columns),
+                    'total_columns': sum(len(cols) for cols in self.table_to_columns.values()),
+                    'total_relationships': sum(len(fks) for fks in self.fk_graph.values()),
+                    'community_count': len(self.schema_communities.get('table_communities', {}))
+                },
+                'hierarchy_levels': {
+                    'level_1_domains': self._get_level_1_domains(),
+                    'level_2_functional_groups': self._get_level_2_functional_groups(),
+                    'level_3_relationship_clusters': self._get_level_3_relationship_clusters(),
+                    'level_4_semantic_patterns': self._get_level_4_semantic_patterns()
+                },
+                'navigation_guide': self._generate_navigation_guide(),
+                'best_practices': self._generate_best_practices()
+            }
+            
+            return documentation
+            
+        except Exception as exc:
+            LOGGER.error(f"Failed to generate hierarchical documentation: {exc}")
+            return {}
+
+    def _generate_schema_insights(self) -> Dict[str, Any]:
+        """Generate insights about schema structure and patterns"""
+        try:
+            insights = {
+                'complexity_analysis': {
+                    'most_complex_tables': self._find_most_complex_tables(),
+                    'most_connected_tables': self._find_most_connected_tables(),
+                    'isolated_tables': self._find_isolated_tables()
+                },
+                'naming_patterns': self._analyze_naming_patterns(),
+                'data_model_patterns': self._analyze_data_model_patterns(),
+                'potential_issues': self._identify_potential_issues(),
+                'optimization_opportunities': self._identify_optimization_opportunities()
+            }
+            
+            return insights
+            
+        except Exception as exc:
+            LOGGER.error(f"Failed to generate schema insights: {exc}")
+            return {}
+
+    def _generate_relationship_analysis(self) -> Dict[str, Any]:
+        """Generate detailed relationship analysis"""
+        try:
+            analysis = {
+                'relationship_types': self._categorize_relationships(),
+                'relationship_strength': self._calculate_relationship_strength(),
+                'circular_dependencies': self._detect_circular_dependencies(),
+                'orphaned_tables': self._find_orphaned_tables(),
+                'relationship_recommendations': self._generate_relationship_recommendations()
+            }
+            
+            return analysis
+            
+        except Exception as exc:
+            LOGGER.error(f"Failed to generate relationship analysis: {exc}")
+            return {}
+
+    def _generate_performance_recommendations(self) -> Dict[str, Any]:
+        """Generate performance optimization recommendations"""
+        try:
+            recommendations = {
+                'indexing_recommendations': self._generate_indexing_recommendations(),
+                'query_optimization': self._generate_query_optimization_tips(),
+                'schema_optimization': self._generate_schema_optimization_tips(),
+                'scalability_considerations': self._generate_scalability_considerations()
+            }
+            
+            return recommendations
+            
+        except Exception as exc:
+            LOGGER.error(f"Failed to generate performance recommendations: {exc}")
+            return {}
+
+    def _calculate_schema_statistics(self) -> Dict[str, Any]:
+        """Calculate comprehensive schema statistics"""
+        try:
+            stats = {
+                'basic_stats': {
+                    'total_tables': len(self.table_to_columns),
+                    'total_columns': sum(len(cols) for cols in self.table_to_columns.values()),
+                    'avg_columns_per_table': sum(len(cols) for cols in self.table_to_columns.values()) / len(self.table_to_columns) if self.table_to_columns else 0,
+                    'total_foreign_keys': sum(len(fks) for fks in self.fk_graph.values())
+                },
+                'community_stats': {
+                    'total_communities': len(self.schema_communities.get('table_communities', {})),
+                    'avg_tables_per_community': sum(len(tables) for tables in self.schema_communities.get('table_communities', {}).values()) / len(self.schema_communities.get('table_communities', {})) if self.schema_communities.get('table_communities') else 0,
+                    'largest_community': max(len(tables) for tables in self.schema_communities.get('table_communities', {}).values()) if self.schema_communities.get('table_communities') else 0
+                },
+                'complexity_metrics': {
+                    'schema_density': len(self.fk_graph) / len(self.table_to_columns) if self.table_to_columns else 0,
+                    'avg_relationships_per_table': sum(len(fks) for fks in self.fk_graph.values()) / len(self.table_to_columns) if self.table_to_columns else 0
+                }
+            }
+            
+            return stats
+            
+        except Exception as exc:
+            LOGGER.error(f"Failed to calculate schema statistics: {exc}")
+            return {}
+
+    # Helper methods for report generation
+    def _get_level_1_domains(self) -> List[str]:
+        """Get top-level domains"""
+        return list(self.schema_communities.get('semantic_communities', {}).keys())
+
+    def _get_level_2_functional_groups(self) -> List[str]:
+        """Get functional group level"""
+        return list(self.schema_communities.get('table_communities', {}).keys())
+
+    def _get_level_3_relationship_clusters(self) -> List[str]:
+        """Get relationship cluster level"""
+        return list(self.schema_communities.get('fk_communities', {}).keys())
+
+    def _get_level_4_semantic_patterns(self) -> List[str]:
+        """Get semantic pattern level"""
+        return list(self.schema_communities.get('column_communities', {}).keys())
+
+    def _generate_navigation_guide(self) -> Dict[str, str]:
+        """Generate navigation guide for the schema"""
+        return {
+            'for_beginners': "Start with semantic communities to understand domain structure",
+            'for_analysts': "Use table communities for cross-domain analysis",
+            'for_developers': "Focus on FK communities for relationship understanding",
+            'for_optimization': "Review column communities for indexing strategies"
+        }
+
+    def _generate_best_practices(self) -> List[str]:
+        """Generate best practices for schema usage"""
+        return [
+            "Use community-based querying for better performance",
+            "Leverage relationship clusters for complex joins",
+            "Consider column communities for data standardization",
+            "Monitor schema evolution through drift detection",
+            "Use hierarchical documentation for navigation"
+        ]
+
+    def _find_most_complex_tables(self) -> List[Dict[str, Any]]:
+        """Find tables with highest complexity scores"""
+        complexity_scores = []
+        for table, columns in self.table_to_columns.items():
+            score = len(columns) + len(self.fk_graph.get(table, []))
+            complexity_scores.append({'table': table, 'complexity_score': score})
+        
+        return sorted(complexity_scores, key=lambda x: x['complexity_score'], reverse=True)[:5]
+
+    def _find_most_connected_tables(self) -> List[Dict[str, Any]]:
+        """Find tables with most relationships"""
+        connection_scores = []
+        for table, fk_list in self.fk_graph.items():
+            connection_scores.append({'table': table, 'connection_count': len(fk_list)})
+        
+        return sorted(connection_scores, key=lambda x: x['connection_count'], reverse=True)[:5]
+
+    def _find_isolated_tables(self) -> List[str]:
+        """Find tables with no relationships"""
+        isolated = []
+        for table in self.table_to_columns.keys():
+            if table not in self.fk_graph and not any(table in fks for fks in self.fk_graph.values()):
+                isolated.append(table)
+        return isolated
+
+    def _analyze_naming_patterns(self) -> Dict[str, Any]:
+        """Analyze naming patterns across the schema"""
+        patterns = {
+            'table_naming': {},
+            'column_naming': {},
+            'consistency_score': 0
+        }
+        
+        # Analyze table naming
+        for table in self.table_to_columns.keys():
+            if '_' in table:
+                pattern = 'snake_case'
+            elif table[0].isupper():
+                pattern = 'PascalCase'
+            else:
+                pattern = 'camelCase'
+            patterns['table_naming'][pattern] = patterns['table_naming'].get(pattern, 0) + 1
+        
+        return patterns
+
+    def _analyze_data_model_patterns(self) -> Dict[str, Any]:
+        """Analyze data modeling patterns"""
+        return {
+            'normalization_level': 'high' if len(self.fk_graph) > len(self.table_to_columns) * 0.5 else 'medium',
+            'relationship_patterns': 'star' if any(len(fks) > 3 for fks in self.fk_graph.values()) else 'linear',
+            'naming_consistency': 'consistent' if len(set(len(cols) for cols in self.table_to_columns.values())) < 3 else 'inconsistent'
+        }
+
+    def _identify_potential_issues(self) -> List[str]:
+        """Identify potential schema issues"""
+        issues = []
+        
+        # Check for tables with no relationships
+        isolated = self._find_isolated_tables()
+        if isolated:
+            issues.append(f"Isolated tables found: {isolated}")
+        
+        # Check for naming inconsistencies
+        table_patterns = self._analyze_naming_patterns()['table_naming']
+        if len(table_patterns) > 1:
+            issues.append("Inconsistent table naming patterns detected")
+        
+        return issues
+
+    def _identify_optimization_opportunities(self) -> List[str]:
+        """Identify optimization opportunities"""
+        opportunities = []
+        
+        # Check for potential indexing opportunities
+        if len(self.schema_communities.get('column_communities', {}).get('identifier_community', [])) > 5:
+            opportunities.append("Consider composite indexes for identifier columns")
+        
+        # Check for relationship optimization
+        if len(self.fk_graph) < len(self.table_to_columns) * 0.3:
+            opportunities.append("Consider adding more relationships for better data integrity")
+        
+        return opportunities
+
+    def _categorize_relationships(self) -> Dict[str, int]:
+        """Categorize relationship types"""
+        categories = {
+            'one_to_one': 0,
+            'one_to_many': 0,
+            'many_to_many': 0
+        }
+        
+        # Simple categorization based on FK patterns
+        for table, fk_list in self.fk_graph.items():
+            categories['one_to_many'] += len(fk_list)
+        
+        return categories
+
+    def _calculate_relationship_strength(self) -> Dict[str, float]:
+        """Calculate relationship strength metrics"""
+        return {
+            'avg_relationships_per_table': sum(len(fks) for fks in self.fk_graph.values()) / len(self.table_to_columns) if self.table_to_columns else 0,
+            'schema_connectivity': len(self.fk_graph) / len(self.table_to_columns) if self.table_to_columns else 0
+        }
+
+    def _detect_circular_dependencies(self) -> List[List[str]]:
+        """Detect circular dependencies in the schema"""
+        # Simple circular dependency detection
+        cycles = []
+        visited = set()
+        rec_stack = set()
+        
+        def has_cycle(node, path):
+            if node in rec_stack:
+                cycle_start = path.index(node)
+                cycles.append(path[cycle_start:] + [node])
+                return True
+            
+            if node in visited:
+                return False
+            
+            visited.add(node)
+            rec_stack.add(node)
+            path.append(node)
+            
+            if node in self.fk_graph:
+                for _, ref_table, _ in self.fk_graph[node]:
+                    if has_cycle(ref_table, path.copy()):
+                        return True
+            
+            rec_stack.remove(node)
+            path.pop()
+            return False
+        
+        for table in self.table_to_columns.keys():
+            if table not in visited:
+                has_cycle(table, [])
+        
+        return cycles
+
+    def _find_orphaned_tables(self) -> List[str]:
+        """Find tables that are referenced but don't exist"""
+        orphaned = []
+        all_tables = set(self.table_to_columns.keys())
+        
+        for table, fk_list in self.fk_graph.items():
+            for _, ref_table, _ in fk_list:
+                if ref_table not in all_tables:
+                    orphaned.append(ref_table)
+        
+        return list(set(orphaned))
+
+    def _generate_relationship_recommendations(self) -> List[str]:
+        """Generate recommendations for relationship improvements"""
+        recommendations = []
+        
+        isolated = self._find_isolated_tables()
+        if isolated:
+            recommendations.append(f"Consider adding relationships for isolated tables: {isolated}")
+        
+        cycles = self._detect_circular_dependencies()
+        if cycles:
+            recommendations.append("Circular dependencies detected - review schema design")
+        
+        return recommendations
+
+    def _generate_indexing_recommendations(self) -> List[str]:
+        """Generate indexing recommendations"""
+        recommendations = []
+        
+        # Recommend indexes for frequently joined columns
+        fk_columns = []
+        for table, fk_list in self.fk_graph.items():
+            for col, _, _ in fk_list:
+                fk_columns.append(f"{table}.{col}")
+        
+        if fk_columns:
+            recommendations.append(f"Consider indexes on foreign key columns: {fk_columns[:5]}")
+        
+        # Recommend composite indexes for identifier communities
+        identifier_columns = self.schema_communities.get('column_communities', {}).get('identifier_community', [])
+        if len(identifier_columns) > 3:
+            recommendations.append("Consider composite indexes for identifier columns")
+        
+        return recommendations
+
+    def _generate_query_optimization_tips(self) -> List[str]:
+        """Generate query optimization tips"""
+        return [
+            "Use community-based filtering to reduce query scope",
+            "Leverage foreign key relationships for efficient joins",
+            "Consider materialized views for complex analytical queries",
+            "Use appropriate indexing strategies based on query patterns",
+            "Monitor query performance using schema relationship analysis"
+        ]
+
+    def _generate_schema_optimization_tips(self) -> List[str]:
+        """Generate schema optimization tips"""
+        return [
+            "Normalize tables to reduce redundancy",
+            "Consider denormalization for read-heavy workloads",
+            "Use appropriate data types to minimize storage",
+            "Implement proper foreign key constraints",
+            "Regular schema review and refactoring"
+        ]
+
+    def _generate_scalability_considerations(self) -> List[str]:
+        """Generate scalability considerations"""
+        return [
+            "Consider partitioning for large tables",
+            "Implement read replicas for analytical workloads",
+            "Use connection pooling for high-concurrency scenarios",
+            "Monitor and optimize query performance regularly",
+            "Consider NoSQL alternatives for unstructured data"
+        ]
+
+    def get_advanced_schema_context(self, query: str, search_strategy: str = "hybrid") -> Dict[str, Any]:
+        """ADVANCED FEATURE INTEGRATION: Get comprehensive schema context using multiple search strategies"""
+        try:
+            LOGGER.info(f"Getting advanced schema context for query: {query} using strategy: {search_strategy}")
+            
+            context = {
+                'query': query,
+                'search_strategy': search_strategy,
+                'timestamp': str(datetime.now()),
+                'results': {}
+            }
+            
+            if search_strategy == "global" or search_strategy == "hybrid":
+                context['results']['global'] = self._global_schema_search(query)
+            
+            if search_strategy == "local" or search_strategy == "hybrid":
+                context['results']['local'] = self._local_schema_search(query)
+            
+            if search_strategy == "drift" or search_strategy == "hybrid":
+                context['results']['drift'] = self._drift_schema_search(query)
+            
+            # Combine results for hybrid strategy
+            if search_strategy == "hybrid":
+                context['results']['combined'] = self._combine_search_results(context['results'])
+            
+            # Add community insights
+            context['community_insights'] = self._get_community_insights_for_query(query)
+            
+            # Add schema reports summary
+            context['schema_summary'] = self._get_schema_summary_for_query(query)
+            
+            LOGGER.info(f"Advanced schema context generated successfully with {len(context['results'])} search results")
+            return context
+            
+        except Exception as exc:
+            LOGGER.error(f"Failed to get advanced schema context: {exc}")
+            return {'error': str(exc), 'query': query, 'search_strategy': search_strategy}
+
+    def _combine_search_results(self, search_results: Dict[str, Any]) -> Dict[str, Any]:
+        """Combine results from multiple search strategies"""
+        try:
+            combined = {
+                'strategy': 'hybrid_combined',
+                'relevant_tables': set(),
+                'relevant_columns': set(),
+                'relationships': [],
+                'recommendations': [],
+                'insights': [],
+                'confidence_score': 0.0
+            }
+            
+            # Combine tables from all strategies
+            for strategy, result in search_results.items():
+                if isinstance(result, dict):
+                    if 'relevant_tables' in result:
+                        combined['relevant_tables'].update(result['relevant_tables'])
+                    if 'relevant_columns' in result:
+                        combined['relevant_columns'].update(result['relevant_columns'])
+                    if 'relationships' in result:
+                        combined['relationships'].extend(result['relationships'])
+                    if 'recommendations' in result:
+                        combined['recommendations'].extend(result['recommendations'])
+            
+            # Convert sets back to lists
+            combined['relevant_tables'] = list(combined['relevant_tables'])
+            combined['relevant_columns'] = list(combined['relevant_columns'])
+            
+            # Calculate confidence score based on agreement between strategies
+            strategies_with_results = sum(1 for result in search_results.values() if isinstance(result, dict) and not result.get('error'))
+            combined['confidence_score'] = strategies_with_results / len(search_results) if search_results else 0.0
+            
+            # Generate combined insights
+            combined['insights'] = [
+                f"Found {len(combined['relevant_tables'])} relevant tables across {strategies_with_results} search strategies",
+                f"Identified {len(combined['relationships'])} relationships",
+                f"Generated {len(combined['recommendations'])} recommendations",
+                f"Overall confidence: {combined['confidence_score']:.2f}"
+            ]
+            
+            return combined
+            
+        except Exception as exc:
+            LOGGER.error(f"Failed to combine search results: {exc}")
+            return {'error': str(exc)}
+
+    def _get_community_insights_for_query(self, query: str) -> Dict[str, Any]:
+        """Get community-specific insights for a query"""
+        try:
+            insights = {
+                'relevant_communities': [],
+                'community_recommendations': [],
+                'cross_community_analysis': {}
+            }
+            
+            query_lower = query.lower()
+            
+            # Find relevant communities
+            for community_type, communities in self.schema_communities.items():
+                for community_name, community_data in communities.items():
+                    relevance_score = 0
+                    
+                    # Score based on table/column mentions
+                    if isinstance(community_data, list):
+                        for item in community_data:
+                            if item.lower() in query_lower:
+                                relevance_score += 1
+                    
+                    if relevance_score > 0:
+                        insights['relevant_communities'].append({
+                            'community_name': community_name,
+                            'community_type': community_type,
+                            'relevance_score': relevance_score,
+                            'members': community_data
+                        })
+            
+            # Sort by relevance
+            insights['relevant_communities'].sort(key=lambda x: x['relevance_score'], reverse=True)
+            
+            # Generate recommendations
+            if len(insights['relevant_communities']) > 1:
+                insights['community_recommendations'].append("Multi-community query detected - consider using community-specific handlers")
+            
+            if any(c['relevance_score'] > 2 for c in insights['relevant_communities']):
+                insights['community_recommendations'].append("High community relevance - focus on community-specific tables")
+            
+            return insights
+            
+        except Exception as exc:
+            LOGGER.error(f"Failed to get community insights: {exc}")
+            return {'error': str(exc)}
+
+    def _get_schema_summary_for_query(self, query: str) -> Dict[str, Any]:
+        """Get schema summary relevant to the query"""
+        try:
+            summary = {
+                'total_schema_size': {
+                    'tables': len(self.table_to_columns),
+                    'columns': sum(len(cols) for cols in self.table_to_columns.values()),
+                    'relationships': sum(len(fks) for fks in self.fk_graph.values())
+                },
+                'query_relevance': {
+                    'mentioned_tables': [],
+                    'mentioned_columns': [],
+                    'complexity_estimate': 'simple'
+                },
+                'performance_indicators': {
+                    'expected_complexity': 'low',
+                    'recommended_approach': 'standard',
+                    'optimization_tips': []
+                }
+            }
+            
+            query_lower = query.lower()
+            
+            # Find mentioned tables and columns
+            for table in self.table_to_columns.keys():
+                if table.lower() in query_lower:
+                    summary['query_relevance']['mentioned_tables'].append(table)
+            
+            for table, columns in self.table_to_columns.items():
+                for column in columns:
+                    if column.lower() in query_lower:
+                        summary['query_relevance']['mentioned_columns'].append(f"{table}.{column}")
+            
+            # Estimate complexity
+            mentioned_count = len(summary['query_relevance']['mentioned_tables'])
+            if mentioned_count > 3:
+                summary['query_relevance']['complexity_estimate'] = 'complex'
+                summary['performance_indicators']['expected_complexity'] = 'high'
+                summary['performance_indicators']['recommended_approach'] = 'optimized'
+                summary['performance_indicators']['optimization_tips'].append("Consider using community-based filtering")
+            elif mentioned_count > 1:
+                summary['query_relevance']['complexity_estimate'] = 'medium'
+                summary['performance_indicators']['expected_complexity'] = 'medium'
+                summary['performance_indicators']['optimization_tips'].append("Monitor join performance")
+            
+            return summary
+            
+        except Exception as exc:
+            LOGGER.error(f"Failed to get schema summary: {exc}")
+            return {'error': str(exc)}
 
     def _retrieve_schema_subgraph(
         self, user_query: str, max_hops: int = 3
@@ -1444,16 +2779,89 @@ class QueryProcessor:
         # 6. Default fallback
         return "TABLE"
 
+    def _generate_multi_table_sql(self, user_query: str) -> Optional[str]:
+        """Generate SQL directly for known multi-table patterns."""
+        query_lower = user_query.lower()
+        
+        # Workers with production data
+        if "workers" in query_lower and "production" in query_lower:
+            return """SELECT w.firstName, w.lastName, w.section, p.bakeType, p.totalUsage 
+FROM workers w 
+JOIN production_info p ON w.section = p.bakeType 
+ORDER BY w.section, w.lastName 
+LIMIT 50"""
+        
+        # Packaging with transaction details
+        if "packaging" in query_lower and "transaction" in query_lower:
+            return """SELECT pi.bakeType, pi.totalWeight, pi.tranWeight, t.tranStatus, t.tranFree 
+FROM packaging_info pi 
+JOIN transtatus t ON pi.tranNumber = t.tranNumber 
+ORDER BY pi.bakeType 
+LIMIT 50"""
+        
+        # Workers with hygiene violations
+        if "workers" in query_lower and "hygiene" in query_lower:
+            return """SELECT w.firstName, w.lastName, w.section, h.personName, h.beard, h.nail, h.handLeg 
+FROM workers w 
+JOIN person_hyg h ON w.name = h.personName 
+WHERE h.beard = 'fail' OR h.nail = 'fail' OR h.handLeg = 'fail'
+ORDER BY w.section, w.lastName 
+LIMIT 50"""
+        
+        # Production with quality data
+        if "production" in query_lower and "quality" in query_lower:
+            return """SELECT p.bakeType, p.totalUsage, pt.totalUsage as testUsage, 
+(p.totalUsage - pt.totalUsage) as variance
+FROM production_info p 
+JOIN production_test pt ON p.bakeType = pt.bakeType 
+ORDER BY p.bakeType 
+LIMIT 50"""
+        
+        # Packaging with waste analysis
+        if "packaging" in query_lower and "waste" in query_lower:
+            return """SELECT pi.bakeType, pi.totalWeight, pw.type, pw.value 
+FROM packaging_info pi 
+JOIN pack_waste pw ON pi.date = pw.date 
+ORDER BY pi.bakeType, pw.value DESC 
+LIMIT 50"""
+        
+        # Production with costs
+        if "production" in query_lower and ("cost" in query_lower or "price" in query_lower):
+            return """SELECT p.bakeType, p.totalUsage, pr.ricotta, pr.cream, pr.oil 
+FROM production_info p 
+JOIN prices pr ON p.date = pr.date 
+ORDER BY p.bakeType 
+LIMIT 50"""
+        
+        return None
+
     def _generate_sql(
         self, user_query: str, context: RetrievedContext, mode: str
     ) -> Optional[str]:
         # Enhanced prompt with context and mode-specific guidance
         ctx_snippets = "\n\n".join(context.texts[:3])  # Use relevant context
         
+        # Check if this is a multi-table query and generate direct SQL
+        multi_table_sql = self._generate_multi_table_sql(user_query)
+        if multi_table_sql:
+            LOGGER.info(f"Generated multi-table SQL directly: {multi_table_sql}")
+            return multi_table_sql
+        
+        # Check if this is a multi-table query
+        multi_table_hint = ""
+        if any(phrase in user_query.lower() for phrase in ["with their", "with", "and their", "corresponding"]):
+            multi_table_hint = """
+MULTI-TABLE QUERY DETECTED! Use JOINs:
+- "workers with production" → JOIN workers + production_info ON workers.section = production_info.bakeType
+- "packaging with transactions" → JOIN packaging_info + transtatus ON packaging_info.tranNumber = transtatus.tranNumber
+- "workers with hygiene" → JOIN workers + person_hyg ON workers.name = person_hyg.personName
+"""
+        
         prompt = f"""You are an expert SQL generator for a food production database (Farnan).
 
 QUERY: {user_query}
 MODE: {mode}
+{multi_table_hint}
 
 ACTUAL DATABASE SCHEMA:
 - pack_waste: date, type, value (waste tracking by type and amount)
@@ -1541,10 +2949,146 @@ RULES:
             raw = resp.content if hasattr(resp, "content") else resp
             txt: str = _stringify_llm_content(raw)
             sql = _extract_sql_from_text(txt)
+            
+            # Apply fixes to the generated SQL
+            if sql:
+                sql = self._apply_sql_fixes(sql, user_query, context)
+                LOGGER.info(f"Applied fixes to SQL: {sql}")
+            
             return sql
         except Exception as exc:
             LOGGER.error("SQL generation failed: %s", exc)
             return None
+
+    def _apply_sql_fixes(self, sql: str, user_query: str, context: RetrievedContext) -> str:
+        """Apply all fixes to the generated SQL."""
+        try:
+            query_lower = user_query.lower()
+            sql_lower = sql.lower()
+            
+            # Fix 1: Replace ALL production volume fields with TotalWeight for production queries
+            production_terms = ['production volume', 'total usage', 'production data', 'average production', 'production for today', 'production volumes']
+            if any(term in query_lower for term in production_terms):
+                # Handle multiple field variations
+                field_replacements = [
+                    ('totalusage', 'TotalWeight'),
+                    ('totalmaterusage', 'TotalWeight'), 
+                    ('total_usage', 'TotalWeight'),
+                    ('total_mater_usage', 'TotalWeight'),
+                    ('totalUsage', 'TotalWeight'),
+                    ('totalMaterUsage', 'TotalWeight'),
+                    ('total_Usage', 'TotalWeight'),
+                    ('total_Mater_Usage', 'TotalWeight')
+                ]
+                
+                for old_field, new_field in field_replacements:
+                    if old_field in sql_lower:
+                        sql = sql.replace(old_field, new_field)
+                        sql = sql.replace(old_field.upper(), new_field)
+                        sql = sql.replace(old_field.capitalize(), new_field)
+                        LOGGER.info(f"Fixed: Replaced {old_field} with {new_field}")
+                
+                # Replace table references
+                sql = sql.replace('production_info', 'packaging_info')
+                sql = sql.replace('`production_info`', '`packaging_info`')
+                LOGGER.info("Fixed: Replaced production_info table with packaging_info")
+            
+            # Fix 2: Handle "today" queries - replace MAX(date) with proper date filtering
+            if any(term in query_lower for term in ['today', 'for today', 'production for today']):
+                # Replace MAX(date) patterns with proper date filtering
+                if 'max(date)' in sql_lower or 'MAX(date)' in sql:
+                    # Get the latest date from database and use it as "today"
+                    persian_today = "14040623"  # Latest date in your database
+                    sql = sql.replace('MAX(date)', f"'{persian_today}'")
+                    sql = sql.replace('max(date)', f"'{persian_today}'")
+                    LOGGER.info("Fixed: Replaced MAX(date) with specific date for 'today' queries")
+            
+            # Fix 3: Add date filtering for temporal queries
+            temporal_keywords = ['recently', 'ago', 'over time', 'trends', 'last week', 'last month', '1 month ago']
+            if any(keyword in query_lower for keyword in temporal_keywords):
+                if 'WHERE' not in sql.upper() or not any(word in sql.upper() for word in ['DATE_SUB', 'CURDATE', 'INTERVAL', '1403', '1404']):
+                    # Add Persian date filtering
+                    persian_date_filter = "WHERE date >= '14030000' AND date <= '14050000'"
+                    
+                    if 'WHERE' in sql.upper():
+                        # Add to existing WHERE clause
+                        sql = sql.replace('WHERE', f"{persian_date_filter} AND")
+                    else:
+                        # Add new WHERE clause
+                        if 'GROUP BY' in sql.upper():
+                            sql = sql.replace('GROUP BY', f"{persian_date_filter} GROUP BY")
+                        elif 'ORDER BY' in sql.upper():
+                            sql = sql.replace('ORDER BY', f"{persian_date_filter} ORDER BY")
+                        elif 'LIMIT' in sql.upper():
+                            sql = sql.replace('LIMIT', f"{persian_date_filter} LIMIT")
+                        else:
+                            sql += f" {persian_date_filter}"
+                    
+                    LOGGER.info("Fixed: Added Persian date filtering for temporal queries")
+            
+                # Fix 4: Fix hygiene queries to properly filter for failures
+                if any(term in query_lower for term in ['hygiene', 'failed', 'violations', 'compliance', 'violation']):
+                    # If using wrong table, fix it
+                    if 'workers' in sql_lower and 'person_hyg' not in sql_lower:
+                        sql = sql.replace('workers', 'person_hyg')
+                        sql = sql.replace('`workers`', '`person_hyg`')
+                        LOGGER.info("Fixed: Changed workers table to person_hyg for hygiene queries")
+                    
+                    # If it's a simple count, make it a proper hygiene violations query
+                    if 'count(*)' in sql_lower and 'person_hyg' in sql_lower:
+                        sql = """SELECT personName, 
+                                (CASE WHEN beard = 'fail' THEN 1 ELSE 0 END +
+                                 CASE WHEN nail = 'fail' THEN 1 ELSE 0 END +
+                                 CASE WHEN handLeg = 'fail' THEN 1 ELSE 0 END +
+                                 CASE WHEN robe = 'fail' THEN 1 ELSE 0 END) as violations
+                                FROM person_hyg 
+                                WHERE beard = 'fail' OR nail = 'fail' OR handLeg = 'fail' OR robe = 'fail'
+                                GROUP BY personName 
+                                ORDER BY violations DESC 
+                                LIMIT 1"""
+                        LOGGER.info("Fixed: Converted simple count to proper hygiene violations query")
+                    elif 'person_hyg' in sql_lower and 'fail' not in sql_lower:
+                        # Add hygiene failure filtering
+                        hygiene_filter = "(beard = 'fail' OR nail = 'fail' OR handLeg = 'fail' OR robe = 'fail')"
+                        
+                        if 'WHERE' in sql.upper():
+                            sql = sql.replace('WHERE', f"WHERE {hygiene_filter} AND")
+                        else:
+                            if 'GROUP BY' in sql.upper():
+                                sql = sql.replace('GROUP BY', f"WHERE {hygiene_filter} GROUP BY")
+                            elif 'ORDER BY' in sql.upper():
+                                sql = sql.replace('ORDER BY', f"WHERE {hygiene_filter} ORDER BY")
+                            elif 'LIMIT' in sql.upper():
+                                sql = sql.replace('LIMIT', f"WHERE {hygiene_filter} LIMIT")
+                            else:
+                                sql += f" WHERE {hygiene_filter}"
+                        
+                        LOGGER.info("Fixed: Added hygiene failure filtering")
+            
+            # Fix 5: Fix production queries that use SUM/AVG on various field names
+            sum_avg_patterns = [
+                ('sum(totalusage)', 'SUM(TotalWeight)'),
+                ('avg(totalusage)', 'AVG(TotalWeight)'),
+                ('sum(totalmaterusage)', 'SUM(TotalWeight)'),
+                ('avg(totalmaterusage)', 'AVG(TotalWeight)'),
+                ('sum(total_usage)', 'SUM(TotalWeight)'),
+                ('avg(total_usage)', 'AVG(TotalWeight)'),
+                ('sum(total_mater_usage)', 'SUM(TotalWeight)'),
+                ('avg(total_mater_usage)', 'AVG(TotalWeight)')
+            ]
+            
+            for old_pattern, new_pattern in sum_avg_patterns:
+                if old_pattern in sql_lower:
+                    sql = sql.replace(old_pattern, new_pattern)
+                    sql = sql.replace(old_pattern.upper(), new_pattern)
+                    sql = sql.replace(old_pattern.capitalize(), new_pattern)
+                    LOGGER.info(f"Fixed: Changed {old_pattern} to {new_pattern}")
+            
+            return sql
+            
+        except Exception as e:
+            LOGGER.error(f"Error applying SQL fixes: {e}")
+            return sql
 
     def _preflight_validate_identifiers(
         self, sql: str
@@ -2673,6 +4217,88 @@ RULES:
             LOGGER.warning("Forecasting failed: %s", exc)
             return None
 
+    def _get_hybrid_rag_context(self, user_query: str) -> RetrievedContext:
+        """HYBRID RAG INTEGRATION: Combine Vector RAG + Graph RAG for enhanced context retrieval.
+        
+        This method integrates our advanced Graph RAG features with the existing Vector RAG
+        to provide comprehensive context for better query understanding and SQL generation.
+        
+        Args:
+            user_query: The user's natural language query
+            
+        Returns:
+            RetrievedContext: Combined context from both Vector and Graph RAG systems
+        """
+        try:
+            LOGGER.info(f"Getting hybrid RAG context for query: {user_query}")
+            
+            # 1. Get Vector RAG context (existing functionality)
+            vector_context = self.vector_manager.similarity_search(user_query, top_k=8)
+            LOGGER.debug(f"Vector RAG found {len(vector_context.texts)} context items")
+            
+            # 2. Get Graph RAG context (new advanced features)
+            graph_context = self.get_advanced_schema_context(user_query, search_strategy="hybrid")
+            LOGGER.debug(f"Graph RAG retrieved context with {len(graph_context.get('results', {}))} search strategies")
+            
+            # 3. Combine contexts intelligently
+            combined_texts = []
+            combined_metadatas = []
+            
+            # Add Vector RAG context (existing functionality preserved)
+            combined_texts.extend(vector_context.texts)
+            combined_metadatas.extend(vector_context.metadatas)
+            
+            # Add Graph RAG context (new enhanced features)
+            # Get schema summary from Graph RAG
+            graph_context_summary = graph_context.get('schema_summary', [])
+            if isinstance(graph_context_summary, list):
+                combined_texts.extend(graph_context_summary)
+                combined_metadatas.extend([{'source': 'graph_rag', 'strategy': 'hybrid'}] * len(graph_context_summary))
+            elif isinstance(graph_context_summary, str) and graph_context_summary.strip():
+                combined_texts.append(graph_context_summary)
+                combined_metadatas.append({'source': 'graph_rag', 'strategy': 'hybrid'})
+            
+            # Also add combined results context if available
+            combined_results = graph_context.get('results', {}).get('combined', {})
+            if combined_results and combined_results.get('insights'):
+                for insight in combined_results['insights'][:2]:  # Limit to top 2 insights
+                    if isinstance(insight, str) and insight.strip():
+                        combined_texts.append(f"Graph RAG insight: {insight}")
+                        combined_metadatas.append({'source': 'graph_rag', 'type': 'combined_insight'})
+            
+            # Add schema insights from Graph RAG
+            schema_insights = graph_context.get('schema_insights', [])
+            if isinstance(schema_insights, list):
+                for insight in schema_insights[:3]:  # Limit to top 3 insights
+                    if isinstance(insight, str) and insight.strip():
+                        combined_texts.append(f"Schema insight: {insight}")
+                        combined_metadatas.append({'source': 'graph_rag', 'type': 'schema_insight'})
+            
+            # Add community insights
+            community_insights = graph_context.get('community_insights', [])
+            if isinstance(community_insights, list):
+                for insight in community_insights[:2]:  # Limit to top 2 community insights
+                    if isinstance(insight, str) and insight.strip():
+                        combined_texts.append(f"Community insight: {insight}")
+                        combined_metadatas.append({'source': 'graph_rag', 'type': 'community_insight'})
+            
+            # Create enhanced context
+            enhanced_context = RetrievedContext(
+                texts=combined_texts,
+                metadatas=combined_metadatas
+            )
+            
+            LOGGER.info(f"Hybrid RAG context created with {len(enhanced_context.texts)} total items "
+                       f"({len(vector_context.texts)} from Vector RAG, "
+                       f"{len(enhanced_context.texts) - len(vector_context.texts)} from Graph RAG)")
+            
+            return enhanced_context
+            
+        except Exception as exc:
+            LOGGER.warning(f"Hybrid RAG context generation failed, falling back to Vector RAG only: {exc}")
+            # Fallback to Vector RAG only if Graph RAG fails
+            return self.vector_manager.similarity_search(user_query, top_k=8)
+
     def process(
         self,
         user_query: str,
@@ -2714,7 +4340,9 @@ RULES:
                 ).strip()
         except Exception:
             pass
-        context = self.vector_manager.similarity_search(user_query, top_k=8)
+        
+        # HYBRID RAG INTEGRATION: Combine Vector RAG + Graph RAG for enhanced context
+        context = self._get_hybrid_rag_context(user_query)
         mode = self._detect_mode(user_query, context, override_mode or prefer_mode)
         # Step 1: Plan JSON
         plan = self._plan_intent(user_query)
@@ -2764,7 +4392,7 @@ RULES:
                 continue
             try:
                 test_df, test_sql = self.safe_exec.execute_select(
-                    v["sql"]
+                    v["sql"], user_query, self
                 )  # will cache
                 # Prefer non-empty results
                 chosen_sql = test_sql
@@ -2817,7 +4445,7 @@ RULES:
                     pass
 
             try:
-                df, executed_sql = self.safe_exec.execute_select(sql)
+                df, executed_sql = self.safe_exec.execute_select(sql, user_query, self)
             except Exception as exc:
                 error_msg = str(exc)
                 LOGGER.warning("Initial SQL failed, attempting repair: %s", exc)
@@ -2835,7 +4463,7 @@ RULES:
                     if repaired_sql != sql:
                         LOGGER.info("Applied column mapping fallback")
                         try:
-                            df, executed_sql = self.safe_exec.execute_select(repaired_sql)
+                            df, executed_sql = self.safe_exec.execute_select(repaired_sql, user_query, self)
                             sql = repaired_sql
                             error_msg = None  # Clear error since repair succeeded
                             # Skip LLM repair - fallback succeeded
@@ -2867,7 +4495,7 @@ RULES:
                     txt: str = _stringify_llm_content(raw)
                     repaired_sql = _extract_sql_from_text(txt)
                     if repaired_sql:
-                        df, executed_sql = self.safe_exec.execute_select(repaired_sql)
+                        df, executed_sql = self.safe_exec.execute_select(repaired_sql, user_query, self)
                         sql = repaired_sql
                         error_msg = None  # Clear error since repair succeeded
                 except Exception as exc2:

@@ -1,6 +1,6 @@
-## Natural Language → SQL Assistant with Advanced Features
+## Natural Language → SQL Assistant with Advanced Graph RAG Features
 
-This project provides a production-ready Python 3.11+ assistant that converts natural language into safe SQL queries, executes them with strict security guards, and returns intelligent multi-mode responses. The system includes advanced features like query caching, comprehensive history management, a modern web interface, enhanced visualizations, and extensive testing.
+This project provides a production-ready Python 3.11+ assistant that converts natural language into safe SQL queries for the Farnan food production database. The system features advanced Graph RAG capabilities, intelligent mode detection, comprehensive visualizations, and extensive testing. **Main application: `app_farnan.py`**
 
 ### 🚀 Key Features
 
@@ -8,7 +8,8 @@ This project provides a production-ready Python 3.11+ assistant that converts na
 - 🛡️ **Safe SQL Execution**: SELECT-only queries with automatic LIMIT injection, timeout protection, and SQL injection prevention
 - 🤖 **Intelligent Mode Detection**: Automatically chooses the best response format (TABLE, SHORT_ANSWER, ANALYTICAL, VISUALIZATION, COMBO)
 - 📊 **Advanced Visualizations**: Smart chart type detection with support for bar charts, line plots, scatter plots, pie charts, and histograms
-- 🔍 **RAG-Enhanced**: Vector embeddings with ChromaDB and mxbai-embed-large for schema/sample/query context retrieval
+- 🔍 **Hybrid RAG-Enhanced**: Vector embeddings with ChromaDB + Advanced Graph RAG with community detection and schema analysis
+- 🧠 **Graph RAG Features**: Schema community detection, multiple search strategies, advanced schema context, and relationship inference
 
 **Performance & Reliability:**
 - ⚡ **Query Result Caching**: File-based TTL cache for improved performance on repeated queries

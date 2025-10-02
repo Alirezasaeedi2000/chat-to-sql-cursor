@@ -16,6 +16,8 @@ parts/
 sdist/
 var/
 wheels/
+pip-wheel-metadata/
+share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
@@ -37,25 +39,40 @@ venv.bak/
 *.swo
 *~
 
-# Database
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Database files
 *.db
 *.sqlite
 *.sqlite3
 
-# Logs
-*.log
-logs/
-
-# Cache files
+# Vector stores and cache
+.vector_store*/
 outputs/cache/
-.vector_store/
-.chroma/
+outputs/logs/
+outputs/plots/
+outputs/exports/
 
-# Temporary files
-temp/
-tmp/
-*.tmp
+# Large data files
+*.xlsx
+*.csv
+*.json
+eform.sql
 
-# OS
-.DS_Store
-Thumbs.db
+# Test results and reports
+test_*_results.json
+*_test_report_*.json
+*_analysis_*.json
+
+# Jupyter notebooks
+*.ipynb
+
+# Backup directories
+*-BACKUP-*
